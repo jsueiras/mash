@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mash.data.com/mashModel" xmlns:tns="http://www.mash.data.com/mashModel" elementFormDefault="qualified">
+
+   <complexType name="Root">
+       <sequence>
+          <element name="id" type="string" minOccurs="0"></element>
+       </sequence>
+   </complexType>
+   <complexType name="Act">
+     <complexContent>
+   		<extension base="tns:Root">
+        <sequence>
+   		    <element name="ocurrenceDate" type="date"></element>
+   	   </sequence>
+   	   </extension>
+   	   </complexContent>
+   </complexType>
+   <complexType name="Entity">
+      <complexContent>
+   		<extension base="tns:Root">
+      </extension>
+      </complexContent>		
+   </complexType>
+   <complexType name="Role">
+     
+   </complexType>
+
+  <complexType name="Crime">
+   	<complexContent>
+   		<extension base="tns:Act">
+   			<sequence>
+   				<element name="victim" type="string"></element>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+   <complexType name="Referral">
+   	<complexContent>
+   		<extension base="tns:Act">
+   			<sequence>
+   			    <element name="type" type="string" minOccurs="0" />
+   				<element name="subjectOf" type="string" minOccurs="0" />
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+   
+  
+   
+    <complexType name="Person">
+   	<complexContent>
+   		<extension base="tns:Entity">
+   			<sequence>
+   				<element name="firstName" type="string"></element>
+   				<element name="lastName" type="string"></element>
+   				<element name="dateOfBirth" type="date"></element>
+   				<element name="homeAddress" type="tns:Location"></element>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+   
+   <complexType name="Location">
+   	<complexContent>
+   		<extension base="tns:Entity">
+   			<sequence>
+   				<element name="uprn" type="string" minOccurs="0"></element>
+   				<element name="numberOrName" type="string"  minOccurs="0"></element>
+   				<element name="street" type="string" minOccurs="0"></element>
+   				<element name="city" type="string"  minOccurs="0"></element>
+   				<element name="county" type="string"  minOccurs="0"></element>
+   				<element name="postcode" type="string"  minOccurs="0"></element>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+
+   <element name="referral" type="tns:Referral">
+      
+   </element>
+   
+    <element name="crime" type="tns:Crime">
+      
+   </element>
+   
+   
+</schema>
