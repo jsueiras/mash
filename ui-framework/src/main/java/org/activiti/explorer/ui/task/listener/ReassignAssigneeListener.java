@@ -19,6 +19,7 @@ import java.util.List;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.IdentityLinkType;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.custom.SelectUsersPopupWindow;
@@ -26,7 +27,6 @@ import org.activiti.explorer.ui.event.SubmitEvent;
 import org.activiti.explorer.ui.event.SubmitEventListener;
 import org.activiti.explorer.ui.task.TaskDetailPanel;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 

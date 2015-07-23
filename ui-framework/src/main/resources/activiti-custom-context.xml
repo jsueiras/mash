@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
        
-<!--      
+  
   <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="location" value="classpath:db.properties" />
     <property name="ignoreUnresolvablePlaceholders" value="true" />
@@ -37,7 +37,8 @@
       <list>
         <bean class="org.activiti.explorer.form.UserFormType"/>
         <bean class="org.activiti.explorer.form.ProcessDefinitionFormType"/> 
-        <bean class="org.activiti.explorer.form.MonthFormType"/>   
+        <bean class="org.activiti.explorer.form.MonthFormType"/>
+        <bean class="org.activiti.explorer.ui.form.custom.PersonFormType"/>
       </list>
     </property>
     
@@ -63,5 +64,5 @@
     <property name="identityService" ref="identityService" />
   </bean>
     
- -->
+ 
 </beans>

@@ -12,9 +12,9 @@
  */
 package org.activiti.explorer.ui.custom;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Upload.FailedListener;
 import com.vaadin.ui.Upload.FinishedEvent;
 import com.vaadin.ui.Upload.FinishedListener;

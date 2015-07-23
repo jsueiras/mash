@@ -16,11 +16,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.NotificationManager;
 import org.activiti.explorer.util.StringUtil;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.ProgressListener;
 import com.vaadin.ui.Upload.Receiver;

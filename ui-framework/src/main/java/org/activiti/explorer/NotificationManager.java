@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import org.activiti.explorer.ui.MainWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Notification;
 
 
@@ -63,16 +62,16 @@ public class NotificationManager implements Serializable {
             MessageFormat.format(i18nManager.getMessage(descriptionKey), params), 
             Notification.TYPE_WARNING_MESSAGE);
     notification.setDelayMsec(5000); // click to hide
-    //mainWindow.showNotification(notification);
+    mainWindow.showNotification(notification);
   }
   
   public void showInformationNotification(String key) {
-   // mainWindow.showNotification(i18nManager.getMessage(key), Notification.TYPE_HUMANIZED_MESSAGE);
+      mainWindow.showNotification(i18nManager.getMessage(key), Notification.TYPE_HUMANIZED_MESSAGE);
   }
   
   public void showInformationNotification(String key, Object ... params) {
- //   mainWindow.showNotification(MessageFormat.format(i18nManager.getMessage(key), params),
-  //          Notification.TYPE_HUMANIZED_MESSAGE);
+      mainWindow.showNotification(MessageFormat.format(i18nManager.getMessage(key), params),
+       Notification.TYPE_HUMANIZED_MESSAGE);
   }
   
   public void setMainWindow(ExplorerApp mainWindow) {

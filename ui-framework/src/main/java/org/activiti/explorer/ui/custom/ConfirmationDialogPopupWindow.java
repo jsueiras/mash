@@ -13,12 +13,12 @@
 
 package org.activiti.explorer.ui.custom;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.event.ConfirmationEvent;
 import org.activiti.explorer.ui.event.ConfirmationEventListener;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -44,9 +44,9 @@ public class ConfirmationDialogPopupWindow extends PopupWindow {
   protected Button noButton;
   
   public ConfirmationDialogPopupWindow(String title, String description) {
-    setWidth(400, UNITS_PIXELS);
+    //setWidth(400, UNITS_PIXELS);
     setModal(true);
-    setResizable(false);
+    setResizable(true);
     
     addStyleName(Reindeer.PANEL_LIGHT);
     
@@ -85,7 +85,7 @@ public class ConfirmationDialogPopupWindow extends PopupWindow {
     yesButton = new Button(i18nManager.getMessage(Messages.CONFIRMATION_DIALOG_YES));
     layout.addComponent(yesButton, 0, 1);
     layout.setComponentAlignment(yesButton, Alignment.BOTTOM_RIGHT);
-    yesButton.addListener(new ClickListener() {
+    yesButton.addClickListener(new ClickListener() {
       private static final long serialVersionUID = 1L;
       public void buttonClick(ClickEvent event) {
         close();
@@ -96,7 +96,7 @@ public class ConfirmationDialogPopupWindow extends PopupWindow {
     noButton = new Button(i18nManager.getMessage(Messages.CONFIRMATION_DIALOG_NO));
     layout.addComponent(noButton, 1, 1);
     layout.setComponentAlignment(noButton, Alignment.BOTTOM_LEFT);
-    noButton.addListener(new ClickListener() {
+    noButton.addClickListener(new ClickListener() {
       private static final long serialVersionUID = 1L;
       public void buttonClick(ClickEvent event) {
         close();

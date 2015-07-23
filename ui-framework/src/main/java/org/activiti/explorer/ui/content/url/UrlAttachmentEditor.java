@@ -14,13 +14,13 @@
 package org.activiti.explorer.ui.content.url;
 
 import org.activiti.engine.task.Attachment;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.content.AttachmentEditor;
 import org.activiti.explorer.ui.content.AttachmentEditorComponent;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.server.Resource;
 
 

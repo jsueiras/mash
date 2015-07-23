@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.activiti.explorer.Environments;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ViewManager;
@@ -24,7 +25,6 @@ import org.activiti.explorer.identity.LoggedInUser;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.profile.ChangePasswordPopupWindow;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -91,22 +91,22 @@ public class MainMenuBar extends HorizontalLayout {
   protected void initButtons() {
     // TODO: fixed widths based on i18n strings?
     Button taskButton = addMenuButton(ViewManager.MAIN_NAVIGATION_TASK, i18nManager.getMessage(Messages.MAIN_MENU_TASKS), Images.MAIN_MENU_TASKS, false, 80);
-    taskButton.addListener(new ShowTasksClickListener());
+    taskButton.addClickListener(new ShowTasksClickListener());
     menuItemButtons.put(ViewManager.MAIN_NAVIGATION_TASK, taskButton);
     
     Button processButton = addMenuButton(ViewManager.MAIN_NAVIGATION_PROCESS, i18nManager.getMessage(Messages.MAIN_MENU_PROCESS), Images.MAIN_MENU_PROCESS, false, 80);
-    processButton.addListener(new ShowProcessDefinitionsClickListener());
+    processButton.addClickListener(new ShowProcessDefinitionsClickListener());
     menuItemButtons.put(ViewManager.MAIN_NAVIGATION_PROCESS, processButton);
     
     Button reportingButton = addMenuButton(ViewManager.MAIN_NAVIGATION_REPORT, i18nManager.getMessage(Messages.MAIN_MENU_REPORTS), Images.MAIN_MENU_REPORTS, false, 80);
     reportingButton.addListener(new ShowReportsClickListener());
     menuItemButtons.put(ViewManager.MAIN_NAVIGATION_REPORT, reportingButton);
-
-    if (ExplorerApp.get().getLoggedInUser().isAdmin()) {
-      Button manageButton = addMenuButton(ViewManager.MAIN_NAVIGATION_MANAGE, i18nManager.getMessage(Messages.MAIN_MENU_MANAGEMENT), Images.MAIN_MENU_MANAGE, false, 90);
-      manageButton.addListener(new ShowManagementClickListener());
-      menuItemButtons.put(ViewManager.MAIN_NAVIGATION_MANAGE, manageButton);
-    }
+//
+//    if (ExplorerApp.get().getLoggedInUser().isAdmin()) {
+//      Button manageButton = addMenuButton(ViewManager.MAIN_NAVIGATION_MANAGE, i18nManager.getMessage(Messages.MAIN_MENU_MANAGEMENT), Images.MAIN_MENU_MANAGE, false, 90);
+//      manageButton.addListener(new ShowManagementClickListener());
+//      menuItemButtons.put(ViewManager.MAIN_NAVIGATION_MANAGE, manageButton);
+//    }
   }
 
   protected void initTitle() {

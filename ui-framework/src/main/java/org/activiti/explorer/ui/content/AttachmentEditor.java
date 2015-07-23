@@ -16,9 +16,9 @@ package org.activiti.explorer.ui.content;
 import java.io.Serializable;
 
 import org.activiti.engine.task.Attachment;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.server.Resource;
 
 

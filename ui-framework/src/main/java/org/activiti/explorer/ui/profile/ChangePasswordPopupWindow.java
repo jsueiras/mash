@@ -16,13 +16,13 @@ package org.activiti.explorer.ui.profile;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.identity.User;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.identity.LoggedInUser;
 import org.activiti.explorer.ui.custom.PopupWindow;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.ShortcutAction;

@@ -38,7 +38,6 @@ public class LongValidator extends AbstractStringValidator {
 
 @Override
 protected boolean isValidValue(String value) {
-	// TODO Auto-generated method stub
-	return false;
+	return isValidString(value);
 }
 }

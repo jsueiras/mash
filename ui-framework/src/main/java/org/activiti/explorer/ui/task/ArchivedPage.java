@@ -15,12 +15,12 @@ package org.activiti.explorer.ui.task;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.navigation.TaskNavigator;
 import org.activiti.explorer.navigation.UriFragment;
 import org.activiti.explorer.ui.task.data.ArchivedListQuery;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Component;
 
 /**

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.web.client.RestTemplate;
 
 import com.mash.data.service.Repository;
+import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Referral;
 
@@ -15,6 +16,8 @@ public class DefaultRepository implements Repository {
 	private static final String PERSON_PATH = "person/";
 
 	private static final String REFERRAL_PATH = "referral/";
+
+	private static final String ACT_PATH = "act/";
 
 	RestTemplate restTemplate;
 	
@@ -29,7 +32,7 @@ public class DefaultRepository implements Repository {
 	public Person findPersonById(String id) {
 		
 		
-	   return restTemplate.getForObject(baseUrl + PERSON_PATH + id , Person.class);
+	   return restTemplate.getForObject(baseUrl + PERSON_PATH + id , Person.class );
 	}
 
 	@Override
@@ -45,9 +48,14 @@ public class DefaultRepository implements Repository {
 	}
 
 	@Override
-	public String saveReferral(Referral referral) {
-		// TODO Auto-generated method stub
-		return null;
+	public Referral saveReferral(Referral referral) {
+		return restTemplate.postForObject(baseUrl + REFERRAL_PATH,referral,Referral.class);
+	}
+
+	@Override
+	public List<Act> findEvents() {
+		 Act[] ps = restTemplate.getForObject(baseUrl + ACT_PATH, Act[].class);
+		 return Arrays.asList(ps);
 	}
 
 }

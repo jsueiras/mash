@@ -18,6 +18,7 @@ import java.io.InputStream;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Attachment;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.content.GenericAttachmentRenderer;
@@ -25,7 +26,6 @@ import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.ui.util.InputStreamStreamSource;
 import org.activiti.explorer.util.ImageUtil;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;

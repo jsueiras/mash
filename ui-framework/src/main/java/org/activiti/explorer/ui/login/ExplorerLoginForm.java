@@ -12,12 +12,12 @@
  */
 package org.activiti.explorer.ui.login;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.identity.LoggedInUser;
 import org.springframework.web.util.HtmlUtils;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;

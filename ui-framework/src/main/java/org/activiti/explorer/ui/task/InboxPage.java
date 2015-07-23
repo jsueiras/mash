@@ -12,12 +12,11 @@
  */
 package org.activiti.explorer.ui.task;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.navigation.TaskNavigator;
 import org.activiti.explorer.navigation.UriFragment;
 import org.activiti.explorer.ui.task.data.InboxListQuery;
-
-import com.mash.ui_framework.ExplorerApp;
 
 /**
  * The page displaying all tasks currently in ones inbox.

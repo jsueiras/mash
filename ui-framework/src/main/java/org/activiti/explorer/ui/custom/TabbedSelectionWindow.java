@@ -16,11 +16,11 @@ package org.activiti.explorer.ui.custom;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;

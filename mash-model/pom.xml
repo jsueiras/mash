@@ -14,23 +14,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
-  <!-- MarkLogic Repository -->
-	<repositories>
-		<repository>
-			<id>MarkLogic-releases</id>
-			<name>MarkLogic Releases</name>
-			<url>http://developer.marklogic.com/maven2</url>
-		</repository>
-	</repositories>
+  
   
 
   <dependencies>
-  <!-- MarkLogic -->
-	<dependency>
-	<groupId>com.marklogic</groupId>
-	<artifactId>java-client-api</artifactId>
-	<version>3.0.2</version>
-</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -38,4 +25,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  
 </project>

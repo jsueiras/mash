@@ -1,5 +1,6 @@
 package org.activiti.explorer.conf;
 
+import java.io.FileInputStream;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.explorer.form.MonthFormType;
 import org.activiti.explorer.form.ProcessDefinitionFormType;
 import org.activiti.explorer.form.UserFormType;
+import org.activiti.explorer.ui.form.custom.PersonFormType;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.slf4j.Logger;
@@ -103,15 +105,20 @@ public class ActivitiEngineConfiguration {
   	formTypes.add(new UserFormType());
   	formTypes.add(new ProcessDefinitionFormType());
   	formTypes.add(new MonthFormType());
+  	formTypes.add(new PersonFormType());
   	processEngineConfiguration.setCustomFormTypes(formTypes);
   	
   	return processEngineConfiguration;
   }
   
+  
+  
   @Bean
   public RepositoryService repositoryService() {
   	return processEngine().getRepositoryService();
   }
+  
+ 
   
   @Bean
   public RuntimeService runtimeService() {

@@ -18,8 +18,6 @@ import java.util.Locale;
 
 import org.springframework.context.MessageSource;
 
-import com.mash.ui_framework.ExplorerApp;
-
 
 /**
  * @author Joram Barrez

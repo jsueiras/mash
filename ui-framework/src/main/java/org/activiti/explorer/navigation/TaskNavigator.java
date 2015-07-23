@@ -23,10 +23,9 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.task.Task;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ViewManager;
-
-import com.mash.ui_framework.ExplorerApp;
 
 /**
  * @author Frederik Heremans

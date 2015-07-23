@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.mash.data.service.Repository;
+import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Person;
 
 public class DefaultRepositoryTest {
@@ -23,12 +24,16 @@ public class DefaultRepositoryTest {
 	}
 	
 	@Test
-	public void testGetPersonList() {
+	public void testGetPeople() {
 		
 	   Repository rep = new DefaultRepository("http://localhost:8080/service/data/");
-	   List<Person> p = rep.findPersonsByName("name");
-	   assertEquals(1, p.size());
+	   List<Person> p = rep.findPersonsByName(null);
+	   assertNotNull(p);
 	   
 	}
+	
+	
+	
+	
 
 }

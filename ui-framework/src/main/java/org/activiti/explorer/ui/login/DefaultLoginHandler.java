@@ -23,10 +23,9 @@ import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.explorer.Constants;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.identity.LoggedInUser;
 import org.activiti.explorer.identity.LoggedInUserImpl;
-
-import com.mash.ui_framework.ExplorerApp;
 
 /**
  * Default login handler, using activiti's {@link IdentityService}.

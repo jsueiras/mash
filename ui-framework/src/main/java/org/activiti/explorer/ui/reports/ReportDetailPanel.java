@@ -30,7 +30,7 @@ import org.activiti.explorer.ui.form.FormPropertiesForm;
 import org.activiti.explorer.ui.form.FormPropertiesForm.FormPropertiesEvent;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 
-import com.mash.ui_framework.ExplorerApp;
+import org.activiti.explorer.ExplorerApp;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

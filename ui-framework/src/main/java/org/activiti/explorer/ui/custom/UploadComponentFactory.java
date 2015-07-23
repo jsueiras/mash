@@ -14,9 +14,8 @@
 package org.activiti.explorer.ui.custom;
 
 import org.activiti.explorer.Environments;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.ui.ComponentFactory;
-
-import com.mash.ui_framework.ExplorerApp;
 
 
 /**

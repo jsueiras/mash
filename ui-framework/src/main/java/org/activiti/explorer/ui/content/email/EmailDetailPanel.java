@@ -22,11 +22,11 @@ import org.activiti.engine.impl.util.json.JSONObject;
 import org.activiti.engine.impl.util.json.JSONTokener;
 import org.activiti.engine.task.Attachment;
 import org.activiti.explorer.Constants;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;

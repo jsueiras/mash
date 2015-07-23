@@ -13,11 +13,11 @@
 
 package org.activiti.explorer.ui.mainlayout;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ViewManager;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;

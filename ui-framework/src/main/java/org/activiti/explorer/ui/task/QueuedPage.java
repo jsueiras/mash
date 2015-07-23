@@ -12,12 +12,11 @@
  */
 package org.activiti.explorer.ui.task;
 
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.navigation.TaskNavigator;
 import org.activiti.explorer.navigation.UriFragment;
 import org.activiti.explorer.ui.task.data.QueuedListQuery;
-
-import com.mash.ui_framework.ExplorerApp;
 
 /**
  * Page showing all the queued tasks of one person.

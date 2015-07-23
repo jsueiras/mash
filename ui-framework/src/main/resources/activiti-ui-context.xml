@@ -40,6 +40,7 @@
         <bean class="org.activiti.explorer.ui.form.BooleanFormPropertyRenderer" />
         <bean class="org.activiti.explorer.ui.form.ProcessDefinitionFormPropertyRenderer" />
          <bean class="org.activiti.explorer.ui.form.MonthFormPropertyRenderer" />
+        <bean class="org.activiti.explorer.ui.form.custom.PersonFormPropertyRenderer" />
        </list>
     </property>
   </bean>
@@ -51,7 +52,11 @@
     <property name="environment" value="${activiti.ui.environment}" />
   </bean>
   
-
+  
+  <bean name="processDefinitionFilterFactory" class="org.activiti.explorer.ui.process.ProcessDefinitionFilterFactory">
+    <property name="componentFactories" ref="componentFactories" />
+  </bean>
+  
   
   <!-- Session scoped UI beans -->
   
@@ -64,7 +69,7 @@
     <property name="i18nManager" ref="i18nManager" />
   </bean>
   -->
-  <bean name="explorerApp" class="com.mash.ui_framework.ExplorerApp" scope="prototype">
+  <bean name="explorerApp" class="org.activiti.explorer.ExplorerApp" scope="prototype">
     <property name="environment" value="${activiti.ui.environment}" />
     <property name="useJavascriptDiagram" value="${activiti.ui.jsdiagram}" />
     <property name="i18nManager" ref="i18nManager" />
@@ -77,8 +82,13 @@
     <property name="workflowDefinitionConversionFactory" ref="workflowDefinitionConversionFactory" />
     <property name="loginHandler" ref="activitiloginHandler" />
     <property name="simpleWorkflowJsonConverter" ref="simpleWorkflowJsonConverter" />
+     <property name="mashRepository" ref="mashDefaultRepository" />
+   
   </bean>
   
+  <bean id="mashDefaultRepository" class="com.mash.data.service.impl.DefaultRepository" >
+    <constructor-arg name="baseUrl" value="http://localhost:8080/service/data/"></constructor-arg>
+  </bean>
   
   <bean id="simpleWorkflowJsonConverter" class="org.activiti.workflow.simple.converter.json.SimpleWorkflowJsonConverter" />
   

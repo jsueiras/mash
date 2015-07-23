@@ -1,36 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mash.data.com/mashModel" xmlns:tns="http://www.mash.data.com/mashModel" elementFormDefault="qualified">
 
-   <complexType name="Root">
+   <complexType name="Root" abstract="true">
        <sequence>
           <element name="id" type="string" minOccurs="0"></element>
        </sequence>
    </complexType>
-   <complexType name="Act">
+   <complexType name="Act" abstract="true">
      <complexContent>
    		<extension base="tns:Root">
         <sequence>
-   		    <element name="ocurrenceDate" type="date"></element>
+   		    <element name="ocurrenceDate" type="date" minOccurs="0"></element>
+   	        <element name="participants" type="tns:Participations" minOccurs="0"></element>
    	   </sequence>
    	   </extension>
    	   </complexContent>
    </complexType>
-   <complexType name="Entity">
+   <complexType name="Entity" abstract="true">
       <complexContent>
    		<extension base="tns:Root">
       </extension>
       </complexContent>		
    </complexType>
-   <complexType name="Role">
+   <complexType name="Role" abstract="true"/>
      
+     <complexType name="Relation" abstract="true">
+      <complexContent>
+   		<extension base="tns:Role">
+   		   <sequence>
+   		      <element ref="tns:person"/>
+   		   </sequence>
+      </extension>
+      </complexContent>		
+   </complexType>
+   
+   
+     <complexType name="Parent">
+      <complexContent>
+   		<extension base="tns:Relation">
+   		   
+      </extension>
+      </complexContent>		
+   </complexType>
+   
+    <complexType name="Sibiling">
+      <complexContent>
+   		<extension base="tns:Relation">
+   		   
+      </extension>
+      </complexContent>		
+   </complexType>
+   
+   
+     
+   
+   
+   <complexType name="Participation" abstract="true">
+       
+   </complexType>
+   <complexType name="Victim">
+      <complexContent>
+   		<extension base="tns:Participation">
+   		   <choice>
+   		      <element ref="tns:crime"/>
+   		      <element ref="tns:person"/>
+   		   </choice>
+      </extension>
+      </complexContent>		
+   </complexType>
+   
+    <complexType name="SubjectOf">
+      <complexContent>
+   		<extension base="tns:Participation">
+   		   <choice>
+   		      <element ref="tns:referral"/>
+   		      <element ref="tns:person"/>
+   		   </choice>
+      </extension>
+      </complexContent>		
    </complexType>
 
   <complexType name="Crime">
    	<complexContent>
    		<extension base="tns:Act">
-   			<sequence>
-   				<element name="victim" type="string"></element>
-   			</sequence>
+   			
    		</extension>
    	</complexContent>
    </complexType>
@@ -39,7 +92,7 @@
    		<extension base="tns:Act">
    			<sequence>
    			    <element name="type" type="string" minOccurs="0" />
-   				<element name="subjectOf" type="string" minOccurs="0" />
+   				
    			</sequence>
    		</extension>
    	</complexContent>
@@ -51,10 +104,12 @@
    	<complexContent>
    		<extension base="tns:Entity">
    			<sequence>
-   				<element name="firstName" type="string"></element>
-   				<element name="lastName" type="string"></element>
-   				<element name="dateOfBirth" type="date"></element>
-   				<element name="homeAddress" type="tns:Location"></element>
+   				<element name="firstName" type="string" minOccurs="0"></element>
+   				<element name="lastName" type="string" minOccurs="0"></element>
+   				<element name="dateOfBirth" type="date" minOccurs="0"></element>
+   				<element name="homeAddress" type="tns:Location" minOccurs="0"></element>
+   				<element name="participations" type="tns:Participations" minOccurs="0"></element>
+   				<element name="household" type="tns:Household" minOccurs="0"></element>
    			</sequence>
    		</extension>
    	</complexContent>
@@ -75,13 +130,41 @@
    	</complexContent>
    </complexType>
 
-   <element name="referral" type="tns:Referral">
+  
+  <element name="person" type="tns:Person"/>
       
-   </element>
-   
-    <element name="crime" type="tns:Crime">
+   <element name="referral" type="tns:Referral"/>
       
-   </element>
    
+    <element name="crime" type="tns:Crime"/>
+      
+  
    
+     
+ 
+   
+  <complexType name="Participations">
+     <sequence>
+        <element ref="tns:participation"  minOccurs="0" maxOccurs="unbounded"></element>
+     </sequence>
+  </complexType>
+  
+   <complexType name="Household">
+     <sequence>
+        <element ref="tns:relation"  minOccurs="0" maxOccurs="unbounded"></element>
+     </sequence>
+  </complexType>
+  
+    <element name="relation" abstract="true" type="tns:Relation"/>
+    
+    <element name="parent" type="tns:Parent" substitutionGroup="tns:relation"/>
+    <element name="sibiling" type="tns:Sibiling" substitutionGroup="tns:relation"/>
+   
+   <element name="participation" abstract="true" 
+             type="tns:Participation"/>
+   
+   <element name="victim" substitutionGroup="tns:participation" 
+             type="tns:Victim"/>
+   <element name="subjectOf" substitutionGroup="tns:participation" 
+             type="tns:SubjectOf"/>
 </schema>

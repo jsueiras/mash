@@ -19,10 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.activiti.explorer.Constants;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.util.time.HumanTime;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Label;
 
 

@@ -14,8 +14,7 @@ package org.activiti.explorer.ui;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.explorer.Environments;
-
-import com.mash.ui_framework.ExplorerApp;
+import org.activiti.explorer.ExplorerApp;
 
 
 

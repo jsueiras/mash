@@ -19,8 +19,8 @@ import java.util.Map;
 
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.FormType;
+import org.activiti.explorer.ExplorerApp;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;

@@ -19,10 +19,10 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.AbstractLazyLoadingQuery;
 import org.activiti.explorer.data.LazyLoadingQuery;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.data.Item;
 
 

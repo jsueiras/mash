@@ -14,7 +14,8 @@ package org.activiti.explorer.ui;
 
 import java.io.Serializable;
 
-import com.mash.ui_framework.ExplorerApp;
+import org.activiti.explorer.ExplorerApp;
+
 import com.vaadin.ui.Component;
 
 

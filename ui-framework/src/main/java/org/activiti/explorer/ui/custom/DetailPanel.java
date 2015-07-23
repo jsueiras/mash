@@ -37,6 +37,8 @@ public class DetailPanel extends VerticalLayout {
   private static final long serialVersionUID = 1L;
   
   protected Panel mainPanel;
+
+private VerticalLayout verticalLayout;
   
   public DetailPanel() {
     setSizeFull();
@@ -53,8 +55,7 @@ public class DetailPanel extends VerticalLayout {
     mainPanel.setSizeFull();
     cssLayout.addComponent(mainPanel);
     
-    // Use default layout
-    VerticalLayout verticalLayout = new VerticalLayout();
+    verticalLayout = new VerticalLayout();
     verticalLayout.setWidth(100, UNITS_PERCENTAGE);
     verticalLayout.setMargin(true);
     mainPanel.setContent(verticalLayout);
@@ -81,14 +82,14 @@ public class DetailPanel extends VerticalLayout {
   
   @Override
   public void addComponent(Component c) {
-     //mainPanel.addComponent(c);
+     verticalLayout.addComponent(c);
   }
   
   /**
    * Add component to detail-container.
    */
   public void addDetailComponent(Component c) {
-    //mainPanel.addComponent(c);
+      verticalLayout.addComponent(c);
  }
   
   @Override

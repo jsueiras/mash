@@ -2,6 +2,7 @@ package com.mash.data.service;
 
 import java.util.List;
 
+import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Referral;
 
@@ -13,7 +14,9 @@ public interface Repository {
 	
 	public Referral findReferralById(String id);
 	
-	public String saveReferral(Referral referral);
+	public Referral saveReferral(Referral referral);
+	
+	public List<Act> findEvents();
 	
 
 }

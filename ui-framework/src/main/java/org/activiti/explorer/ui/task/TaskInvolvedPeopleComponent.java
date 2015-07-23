@@ -21,6 +21,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ViewManager;
@@ -32,7 +33,6 @@ import org.activiti.explorer.ui.task.listener.ChangeOwnershipListener;
 import org.activiti.explorer.ui.task.listener.ReassignAssigneeListener;
 import org.activiti.explorer.ui.task.listener.RemoveInvolvedPersonListener;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

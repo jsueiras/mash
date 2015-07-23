@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.identity.User;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.identity.LoggedInUser;
@@ -28,7 +29,6 @@ import org.activiti.explorer.ui.event.SubmitEvent;
 import org.activiti.explorer.ui.event.SubmitEventListener;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.data.Item;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -77,11 +77,14 @@ public class SelectUsersPopupWindow extends PopupWindow {
   protected Button selectUserButton;
   protected Table selectedUsersTable;
   protected Button doneButton;
+  protected VerticalLayout vLayout;
   
   public SelectUsersPopupWindow(String title, boolean multiSelect) {
     this.title = title;
     this.multiSelect = multiSelect;
     this.i18nManager = ExplorerApp.get().getI18nManager();
+    this.vLayout = new VerticalLayout();
+    setContent(vLayout);
   }
   
   public SelectUsersPopupWindow(String title, boolean multiSelect, Collection<String> ignoredUserIds) {
@@ -148,7 +151,7 @@ public class SelectUsersPopupWindow extends PopupWindow {
   }
 
   private void addComponent(Component searchLayout) {
-	// TODO Auto-generated method stub
+	   vLayout.addComponent(searchLayout);
 	
 }
 

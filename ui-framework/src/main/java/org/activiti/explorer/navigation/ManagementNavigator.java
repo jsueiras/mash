@@ -12,7 +12,7 @@
  */
 package org.activiti.explorer.navigation;
 
-import com.mash.ui_framework.ExplorerApp;
+import org.activiti.explorer.ExplorerApp;
 
 
 /**

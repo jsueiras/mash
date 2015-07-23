@@ -15,6 +15,7 @@ package org.activiti.explorer.ui.reports;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ui.Images;
@@ -23,7 +24,6 @@ import org.activiti.explorer.ui.form.FormPropertiesForm;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.util.time.HumanTime;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;

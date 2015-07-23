@@ -15,11 +15,11 @@ package org.activiti.explorer.ui.form;
 import java.util.Calendar;
 
 import org.activiti.engine.form.FormProperty;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.form.MonthFormType;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
 

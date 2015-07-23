@@ -15,12 +15,12 @@ package org.activiti.explorer.ui.task.listener;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.TaskService;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.NotificationManager;
 import org.activiti.explorer.ViewManager;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 

@@ -14,9 +14,9 @@
 package org.activiti.explorer.ui.content;
 
 import org.activiti.engine.task.Attachment;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.ui.custom.PopupWindow;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.VerticalLayout;

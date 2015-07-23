@@ -18,6 +18,7 @@ import java.util.List;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.identity.Group;
+import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.ViewManager;
@@ -33,7 +34,6 @@ import org.activiti.explorer.ui.task.data.InvolvedListQuery;
 import org.activiti.explorer.ui.task.data.QueuedListQuery;
 import org.activiti.explorer.ui.task.data.TasksListQuery;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;

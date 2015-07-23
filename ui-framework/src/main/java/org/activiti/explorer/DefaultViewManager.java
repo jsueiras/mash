@@ -27,10 +27,13 @@ import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ui.AbstractPage;
 import org.activiti.explorer.ui.MainWindow;
+import org.activiti.explorer.ui.process.ProcessDefinitionPage;
+import org.activiti.explorer.ui.process.ProcessMenuBar;
 import org.activiti.explorer.ui.profile.ProfilePopupWindow;
 import org.activiti.explorer.ui.reports.ReportsMenuBar;
 import org.activiti.explorer.ui.reports.RunReportsPage;
 import org.activiti.explorer.ui.reports.SavedReportsPage;
+import org.activiti.explorer.ui.search.RunSearchesPage;
 import org.activiti.explorer.ui.task.ArchivedPage;
 import org.activiti.explorer.ui.task.InboxPage;
 import org.activiti.explorer.ui.task.InvolvedPage;
@@ -40,7 +43,6 @@ import org.activiti.explorer.ui.task.TasksPage;
 import org.activiti.workflow.simple.definition.WorkflowDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mash.ui_framework.ExplorerApp;
 import com.vaadin.ui.Window;
 
 
@@ -191,7 +193,7 @@ public class DefaultViewManager implements ViewManager, Serializable {
   // Process
   
   public void showDeployedProcessDefinitionPage() {
-    //switchView(new ProcessDefinitionPage(), ViewManager.MAIN_NAVIGATION_PROCESS, ProcessMenuBar.DEPLOYED_PROCESS_DEFINITIONS);
+    switchView(new ProcessDefinitionPage(), ViewManager.MAIN_NAVIGATION_PROCESS, ProcessMenuBar.DEPLOYED_PROCESS_DEFINITIONS);
   }
   
   public void showDeployedProcessDefinitionPage(String processDefinitionId) {
@@ -225,11 +227,11 @@ public class DefaultViewManager implements ViewManager, Serializable {
   // Reporting
   
   public void showRunReportPage() {
-    switchView(new RunReportsPage(), ViewManager.MAIN_NAVIGATION_REPORT, ReportsMenuBar.ENTRY_RUN_REPORTS);
+    switchView(new RunSearchesPage(), ViewManager.MAIN_NAVIGATION_REPORT, ReportsMenuBar.ENTRY_RUN_REPORTS);
   }
   
   public void showRunReportPage(String reportId) {
-    switchView(new RunReportsPage(reportId), ViewManager.MAIN_NAVIGATION_REPORT, ReportsMenuBar.ENTRY_RUN_REPORTS);
+    switchView(new RunSearchesPage(), ViewManager.MAIN_NAVIGATION_REPORT, ReportsMenuBar.ENTRY_RUN_REPORTS);
   }
 
 
