@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person xmlns="http://www.mash.data.com/mashModel">
+	<firstName>first</firstName>
+	<lastName>dfdfsda</lastName>
+	<homeAddress>
+		<city>Sutton</city>
+	</homeAddress>
+</person>
