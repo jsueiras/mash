@@ -1,5 +1,7 @@
 package com.mash.model;
 
+import com.mash.model.catalog.Persons;
+
 /**
  * Hello world!
  *
@@ -10,4 +12,6 @@ public class App
     {
         System.out.println( "Hello World!" );
     }
+    
+    
 }

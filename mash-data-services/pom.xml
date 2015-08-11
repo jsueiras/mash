@@ -11,6 +11,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.springframework.version>4.1.4.RELEASE</org.springframework.version>
  		<java.version>1.8</java.version>     
+ 	    <project.source.version>1.8</project.source.version>
+		<project.target.version>1.8</project.target.version>
+ 		
     </properties>
 	
 
@@ -32,6 +35,11 @@
             <artifactId>spring-web</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
+         <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-oxm</artifactId>
+        <version>${org.springframework.version}</version>
+    </dependency>
            <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
@@ -97,4 +105,19 @@
 			<url>https://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<encoding>${project.encoding}</encoding>
+					<source>${project.source.version}</source>
+					<target>${project.target.version}</target>
+				</configuration>
+			</plugin>
+			</plugins>
+	</build>
 </project>

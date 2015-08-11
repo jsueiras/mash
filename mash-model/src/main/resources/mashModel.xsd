@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mash.data.com/mashModel" xmlns:tns="http://www.mash.data.com/mashModel" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mash.data.com/mashModel" 
+xmlns:tns="http://www.mash.data.com/mashModel"
+ xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+  jaxb:version="2.0"
+  xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+  jaxb:extensionBindingPrefixes="xjc" elementFormDefault="qualified">
 
+  <annotation>
+        <appinfo>
+            <jaxb:globalBindings>
+                <xjc:simple />
+            </jaxb:globalBindings>
+        </appinfo>
+    </annotation>
    <complexType name="Root" abstract="true">
        <sequence>
           <element name="id" type="string" minOccurs="0"></element>
@@ -130,14 +142,14 @@
    	</complexContent>
    </complexType>
 
+
   
   <element name="person" type="tns:Person"/>
       
-   <element name="referral" type="tns:Referral"/>
-      
-   
-    <element name="crime" type="tns:Crime"/>
-      
+     
+   <element name="persons" type="tns:Persons"/>
+  
+   <element name="acts" type="tns:Acts"/>
   
    
      
@@ -149,13 +161,33 @@
      </sequence>
   </complexType>
   
+    
+  <complexType name="Persons">
+     <sequence>
+        <element ref="tns:person"  minOccurs="0" maxOccurs="unbounded"></element>
+     </sequence>
+  </complexType>
+  
+   <complexType name="Acts">
+     <sequence>
+        <element ref="tns:act"  minOccurs="0" maxOccurs="unbounded"></element>
+     </sequence>
+  </complexType>
+  
    <complexType name="Household">
      <sequence>
         <element ref="tns:relation"  minOccurs="0" maxOccurs="unbounded"></element>
      </sequence>
   </complexType>
   
+   <element name="act" abstract="true" type="tns:Act"/>
+   <element name="crime" type="tns:Crime" substitutionGroup="tns:act"/>
+   <element name="referral" type="tns:Referral" substitutionGroup="tns:act"/>
+    
+    
+    
     <element name="relation" abstract="true" type="tns:Relation"/>
+   
     
     <element name="parent" type="tns:Parent" substitutionGroup="tns:relation"/>
     <element name="sibiling" type="tns:Sibiling" substitutionGroup="tns:relation"/>

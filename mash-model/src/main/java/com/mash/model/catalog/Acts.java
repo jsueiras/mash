@@ -14,20 +14,21 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Household complex type.
+ * <p>Java class for Acts complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Household">
+ * &lt;complexType name="Acts">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.mash.data.com/mashModel}relation" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://www.mash.data.com/mashModel}act" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,43 +38,44 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Household", propOrder = {
-    "relations"
+@XmlType(name = "Acts", propOrder = {
+    "acts"
 })
-public class Household {
+@XmlRootElement(name = "acts")
+public class Acts {
 
-    @XmlElementRef(name = "relation", namespace = "http://www.mash.data.com/mashModel", type = JAXBElement.class, required = false)
-    protected List<JAXBElement<? extends Relation>> relations;
+    @XmlElementRef(name = "act", namespace = "http://www.mash.data.com/mashModel", type = JAXBElement.class, required = false)
+    protected List<JAXBElement<? extends Act>> acts;
 
     /**
-     * Gets the value of the relations property.
+     * Gets the value of the acts property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the relations property.
+     * This is why there is not a <CODE>set</CODE> method for the acts property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getRelations().add(newItem);
+     *    getActs().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link Relation }{@code >}
-     * {@link JAXBElement }{@code <}{@link Sibiling }{@code >}
-     * {@link JAXBElement }{@code <}{@link Parent }{@code >}
+     * {@link JAXBElement }{@code <}{@link Crime }{@code >}
+     * {@link JAXBElement }{@code <}{@link Act }{@code >}
+     * {@link JAXBElement }{@code <}{@link Referral }{@code >}
      * 
      * 
      */
-    public List<JAXBElement<? extends Relation>> getRelations() {
-        if (relations == null) {
-            relations = new ArrayList<JAXBElement<? extends Relation>>();
+    public List<JAXBElement<? extends Act>> getActs() {
+        if (acts == null) {
+            acts = new ArrayList<JAXBElement<? extends Act>>();
         }
-        return this.relations;
+        return this.acts;
     }
 
 }

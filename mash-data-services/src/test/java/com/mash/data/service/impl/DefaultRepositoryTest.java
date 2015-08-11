@@ -32,6 +32,15 @@ public class DefaultRepositoryTest {
 	   
 	}
 	
+	@Test
+	public void testEvents() {
+		
+	   Repository rep = new DefaultRepository("http://localhost:8080/service/data/");
+	   List<Act> p = rep.findEvents();
+	   assertNotNull(p);
+	   
+	}
+	
 	
 	
 	

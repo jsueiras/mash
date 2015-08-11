@@ -17,8 +17,11 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 
+import com.mash.model.catalog.Act;
+import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Referral;
 
 
@@ -34,33 +37,25 @@ public class Application extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer.defaultContentType(MediaType.APPLICATION_JSON);
-			configurer.favorPathExtension(true);
-		configurer.mediaType("xml", MediaType.TEXT_XML);
+		configurer.defaultContentType(MediaType.APPLICATION_XML);
+			//configurer.favorPathExtension(true);
+		//configurer.mediaType("xml", MediaType.APPLICATION_XML);
 	}
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
 		List<MediaType> mediaType = new ArrayList<>();
-		mediaType.add(MediaType.TEXT_XML);
+		mediaType.add(MediaType.APPLICATION_XML);
 		
 		MarshallingHttpMessageConverter xmlConverter = new MarshallingHttpMessageConverter();
 		xmlConverter.setSupportedMediaTypes(mediaType);
-		 JAXBContext jaxbContext = null;
-		try {
-			jaxbContext = JAXBContext.newInstance(Referral.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			
-			
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setPackagesToScan("com.mash.model.catalog");
+
 	 
-		XStreamMarshaller xstreamMarshaller = new XStreamMarshaller();
-		xmlConverter.setMarshaller(xstreamMarshaller);
-		xmlConverter.setUnmarshaller(xstreamMarshaller);
+		xmlConverter.setMarshaller(marshaller);
+		xmlConverter.setUnmarshaller(marshaller);
 
 		converters.add(xmlConverter);
 	}

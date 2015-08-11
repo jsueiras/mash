@@ -1,13 +1,16 @@
 package com.mash.data.service;
 
 import java.util.ArrayList;
+
 import org.springframework.http.MediaType;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.websocket.server.PathParam;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
@@ -26,9 +29,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.marklogic.client.DatabaseClientFactory.Authentication;
 import com.mash.model.catalog.Act;
+import com.mash.model.catalog.Acts;
 import com.mash.model.catalog.Crime;
 import com.mash.model.catalog.Location;
+import com.mash.model.catalog.ObjectFactory;
 import com.mash.model.catalog.Person;
+import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
 import com.mash.data.service.marklogic.JAXBStore;
 
@@ -70,7 +76,10 @@ public class DataController {
 
     	}
 
-    	@RequestMapping(value = "/person/{id}", method = RequestMethod.GET )
+    	@RequestMapping(value = "/person/{id}", method = RequestMethod.GET ,
+    			produces = {
+    			MediaType.APPLICATION_XML_VALUE }
+    	)
     	Person readPerson (@PathVariable String id) {
     		return getPersonMock();
     		
@@ -87,11 +96,12 @@ public class DataController {
 
     	@RequestMapping(value = "/person", method = RequestMethod.GET,
     			produces = {
-    			MediaType.TEXT_XML_VALUE }
+    			MediaType.APPLICATION_XML_VALUE }
     		    )
-    	Collection<Person> getPeople() {
-    		List<Person>  list = new ArrayList<Person>();
-    		list.add(getPersonMock());
+    	Persons getPeople() {
+    		
+    		Persons  list = new Persons();
+    		list.getPersons().add(getPersonMock());
     		return list;
     		
     	}
@@ -130,16 +140,26 @@ public class DataController {
      	 }
     	  
 
-      	@RequestMapping(value = "/act", method = RequestMethod.GET)
-      	Collection<Act> getReferrals() {
-      		List<Act>  list = new ArrayList<Act>();
+      	@RequestMapping(value = "/act", method = RequestMethod.GET
+      			,produces = {
+    			MediaType.APPLICATION_XML_VALUE }
+    		    )
+      	Acts getReferrals() {
+      		ObjectFactory of = new ObjectFactory();
+
+      		Acts  list = new Acts();
+      	
       		Crime crime = new Crime();
       		crime.setId("crime");
       		Referral referral = new Referral();
       		crime.setId("referral");
       		referral.setId("subject");
-      		list.add(crime);
-      		list.add(referral);
+      		 List<JAXBElement<? extends Act>> acts = list.getActs();
+			JAXBElement<Crime> crimeElement = of.createCrime(crime);
+      		 
+      		 
+      		acts.add(crimeElement);
+      		acts.add(of.createReferral(referral));
       		return list;
       		
       	}
