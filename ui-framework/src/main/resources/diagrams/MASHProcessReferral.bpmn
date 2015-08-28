@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="triage" name="Triage" isExecutable="true">
+    <userTask id="triageTask" name="Triage" activiti:async="true" activiti:assignee="${initiator}">
+      <extensionElements>
+        <activiti:formProperty id="personName" name="Person Name" type="string"></activiti:formProperty>
+        <activiti:formProperty id="action" name="Referral Needed?" type="boolean" required="true"></activiti:formProperty>
+        <activiti:formProperty id="cohort" name="Cohort" type="enum">
+          <activiti:value id="t_children" name="Children"></activiti:value>
+          <activiti:value id="t_adults" name="Adults"></activiti:value>
+          <activiti:value id="t_police" name="Police"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <userTask id="treshold" name="Treshold for referral" activiti:async="true" activiti:exclusive="false" activiti:candidateGroups="${cohort}"></userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <startEvent id="start" name="Start" activiti:initiator="initiator"></startEvent>
+    <sequenceFlow id="flow5" sourceRef="start" targetRef="triageTask"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="treshold" targetRef="endevent1"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="treshold">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action == true}]]></conditionExpression>
+    </sequenceFlow>
+    <scriptTask id="scripttask1" name="Script Task" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>java.lang.System.out.println("Log end")</script>
+    </scriptTask>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="scripttask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="scripttask1" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="triageTask" targetRef="exclusivegateway1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_triage">
+    <bpmndi:BPMNPlane bpmnElement="triage" id="BPMNPlane_triage">
+      <bpmndi:BPMNShape bpmnElement="triageTask" id="BPMNShape_triageTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="270.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="treshold" id="BPMNShape_treshold">
+        <omgdc:Bounds height="55.0" width="105.0" x="580.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="860.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="180.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="430.0" y="267.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="825.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="215.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="685.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="860.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="470.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="450.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="449.0" y="427.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="427.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="877.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="877.0" y="305.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="375.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

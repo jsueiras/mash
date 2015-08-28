@@ -44,6 +44,9 @@ public class ProcessTestMyProcess {
 		assertNotNull(processInstance.getId());
 		System.out.println("id " + processInstance.getId() + " "
 				+ processInstance.getProcessDefinitionId());
+		
+		java.util.ArrayList agencies = new java.util.ArrayList();
+		agencies.add("Agency1");
 	}
 	
 	 private void waitAndCompleteUserTask() throws InterruptedException

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<person xmlns="http://www.mash.data.com/mashModel">
-	<firstName>first</firstName>
-	<lastName>dfdfsda</lastName>
-	<homeAddress>
-		<city>Sutton</city>
-	</homeAddress>
-</person>
+<tns:person xmlns:tns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
+    <tns:id>xxxx</tns:id>
+	<tns:firstName>first</tns:firstName>
+	<tns:lastName>dfdfsda</tns:lastName>
+	<tns:homeAddress>
+		<tns:city>Sutton</tns:city>
+	</tns:homeAddress>
+</tns:person>

@@ -34,6 +34,7 @@ import org.activiti.explorer.ui.form.FormPropertiesForm;
 import org.activiti.explorer.ui.form.FormPropertiesForm.FormPropertiesEvent;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.ui.search.SearchForm.SearchFormEvent;
+import org.activiti.explorer.ui.search.person.Decorator;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
 import com.mash.data.service.Repository;
@@ -64,7 +65,7 @@ public class SearchDetailPanel extends DetailPanel {
   protected I18nManager i18nManager;
   
   protected VerticalLayout detailPanelLayout;
-  protected HorizontalLayout detailContainer;
+  protected VerticalLayout detailContainer;
   protected VerticalLayout processDefinitionStartForm;
   
   protected Map<String, String> savedFormProperties;
@@ -73,6 +74,8 @@ public class SearchDetailPanel extends DetailPanel {
   private LazyLoadingContainer taskListContainer;
   private Repository repository;
   private Table table;
+
+private HorizontalLayout resultsContainer;
 
   
   public SearchDetailPanel( AbstractPage parentPage) {
@@ -94,27 +97,26 @@ public class SearchDetailPanel extends DetailPanel {
     setDetailContainer(detailPanelLayout);
    
    
-    detailContainer = new HorizontalLayout();
+    detailContainer = new VerticalLayout();
     detailContainer.addStyleName(Reindeer.PANEL_LIGHT);
     detailPanelLayout.addComponent(detailContainer);
     detailContainer.setSizeFull();
     
     initForm();
-    initTable();
+    initResults();
   }
   
+  private void initResults() {
+	resultsContainer = new HorizontalLayout();
 
-  
- 
-  
-  private void initTable() {
     table = createList();
-	table.setVisible(false);
-	detailContainer.addComponent(table);
+	resultsContainer.addComponent(table);
+	resultsContainer.setVisible(false);
+	detailContainer.addComponent(resultsContainer);
 	
-}
+  }
 
-protected void initForm() {
+ protected void initForm() {
      SearchForm search = new SearchForm();
      search.addListener(new SearchRequestEventListener());
 	detailContainer.addComponent(search);
@@ -147,19 +149,23 @@ protected void initForm() {
 	    Table taskTable = new Table();
 	    taskTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 	    taskTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
-	    
+	    taskTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+		 
 	   
 	    //this.lazyLoadingQuery = createLazyLoadingQuery();
 	    //this.taskListContainer = new LazyLoadingContainer(lazyLoadingQuery, 30);
 	    //taskTable.setContainerDataSource(taskListContainer);
 	    
 	    // Create column header
-	    taskTable.addGeneratedColumn("icon", new ThemeImageColumnGenerator(Images.TASK_22));
-	    taskTable.setColumnWidth("icon", 22);
+	    taskTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
+	    taskTable.setColumnWidth("", 22);
 	    
-	    taskTable.addContainerProperty("name", String.class, null);
-	    taskTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
-	    
+	    taskTable.addContainerProperty("Name", String.class, null);
+	    taskTable.setColumnWidth("Name", 250);
+	   
+	    taskTable.addContainerProperty("Address", String.class, null);
+	    taskTable.setColumnWidth("Address", 250);
+		  
 	   
 	    return taskTable;
 	  }
@@ -167,9 +173,11 @@ protected void initForm() {
 	private void appendResults(List<Person> results) {
 	
     for (Person person : results) {
-    	table.addItem(new Object[] {person.getFirstName()}, "name");
+    	table.addItem(new Object[] {Decorator.getName(person),Decorator.getSummaryAddress(person)}, person.getId());
 	}
+    resultsContainer.setVisible(true);
     table.setVisible(true);
+    if (results.size()>0) resultsContainer.addComponent(Decorator.getTreeComponent(results.get(0)));
 	
 }
 

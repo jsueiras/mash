@@ -31,11 +31,14 @@ import com.marklogic.client.DatabaseClientFactory.Authentication;
 import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Acts;
 import com.mash.model.catalog.Crime;
+import com.mash.model.catalog.Household;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.ObjectFactory;
+import com.mash.model.catalog.Parent;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
+import com.mash.model.catalog.Relation;
 import com.mash.data.service.marklogic.JAXBStore;
 
 
@@ -87,11 +90,37 @@ public class DataController {
 
 		private Person getPersonMock() {
 			Person result=  new Person();
+			result.setId("xxxxxx");
 			result.setFirstName("first");
 			result.setLastName("dfdfsda");
 			result.setHomeAddress( new Location());
 			result.getHomeAddress().setCity("Sutton");
+			result.setHousehold(createHouseHold());
+			
 			return result;
+		}
+		
+		private Person getParentMock() {
+			Person result=  new Person();
+			result.setFirstName("first");
+			result.setLastName("dfdfsda");
+			result.setHomeAddress( new Location());
+			result.getHomeAddress().setCity("Sutton");
+			
+			
+			return result;
+		}
+
+		private Household createHouseHold() {
+			Household h = new Household();
+			 List<JAXBElement<? extends Relation>> relations = h.getRelations();
+		  		ObjectFactory of = new ObjectFactory();
+               Parent p = of.createParent();
+               p.setPerson(getParentMock());
+			 
+			relations.add(of.createParent(p));
+			return h;
+	      	
 		}
 
     	@RequestMapping(value = "/person", method = RequestMethod.GET,

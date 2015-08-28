@@ -15,7 +15,7 @@
 		<project.source.version>1.7</project.source.version>
 		<project.target.version>1.7</project.target.version>
 		<project.encoding>UTF-8</project.encoding>
-	   <activiti.version>5.17.0</activiti.version>
+	   <activiti.version>5.18.0</activiti.version>
 	</properties>
 
 	<repositories>

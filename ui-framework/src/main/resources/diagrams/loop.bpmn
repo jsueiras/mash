@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+	xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+	xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+	expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+
+	<process id="my-process">
+
+		<startEvent id="start" />
+		<sequenceFlow id="flow1" sourceRef="start" targetRef="scriptTask" />
+
+    <scriptTask id="scriptTask" scriptFormat="JavaScript" activiti:autoStoreVariables="true">
+      <script><![CDATA[
+        var loopCounter = loopCounter -1;
+        ]]></script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="scriptTask" targetRef="exclusiveGw"/>
+
+    <exclusiveGateway id="exclusiveGw" name="Exclusive Gateway"/>
+    <sequenceFlow id="flow3" sourceRef="exclusiveGw" targetRef="scriptTask">
+      <conditionExpression xsi:type="tFormalExpression">${loopCounter > 0}</conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow4" sourceRef="exclusiveGw" targetRef="someTask">
+      <conditionExpression xsi:type="tFormalExpression">${loopCounter == 0}</conditionExpression>
+    </sequenceFlow>
+
+    <userTask id="someTask" name="Activiti is awesome!" />
+		<sequenceFlow id="flow5" sourceRef="someTask" targetRef="end" />
+
+		<endEvent id="end" />
+
+	</process>
+
+</definitions>
