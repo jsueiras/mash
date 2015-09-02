@@ -28,12 +28,12 @@
     <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="endevent1">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action.equals('NFA')}]]></conditionExpression>
     </sequenceFlow>
-    <callActivity id="callMash" name="Call Mash" calledElement="mash">
+    <callActivity id="callMash" name="Call My Cohort" calledElement="mash">
       <extensionElements>
         <activiti:in source="personName" target="personName"></activiti:in>
         <activiti:in source="cohort" target="cohort"></activiti:in>
         <activiti:in source="reference" target="triageId"></activiti:in>
-        <activiti:in source="initiator" target="triagePerformer"></activiti:in>
+        <activiti:in source="initiator" target="initiator"></activiti:in>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>
@@ -59,13 +59,13 @@
         <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="267.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="callMash" id="BPMNShape_callMash">
-        <omgdc:Bounds height="55.0" width="105.0" x="583.0" y="166.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="570.0" y="166.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
         <omgdc:Bounds height="55.0" width="121.0" x="150.0" y="260.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="refer" id="BPMNShape_refer">
-        <omgdc:Bounds height="55.0" width="231.0" x="520.0" y="260.0"></omgdc:Bounds>
+        <omgdc:Bounds height="65.0" width="231.0" x="520.0" y="255.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="95.0" y="287.0"></omgdi:waypoint>
@@ -74,7 +74,7 @@
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="380.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="380.0" y="193.0"></omgdi:waypoint>
-        <omgdi:waypoint x="583.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="193.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
         <omgdi:waypoint x="380.0" y="307.0"></omgdi:waypoint>
@@ -84,7 +84,7 @@
         <omgdi:waypoint x="880.0" y="305.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="688.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="675.0" y="193.0"></omgdi:waypoint>
         <omgdi:waypoint x="880.0" y="193.0"></omgdi:waypoint>
         <omgdi:waypoint x="880.0" y="270.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>

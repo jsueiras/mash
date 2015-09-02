@@ -13,10 +13,7 @@ public class GetPerformerListener implements TaskListener {
 	public void notify(DelegateTask task) {
 		
 		task.getExecution().setVariable(varName.getExpressionText(), task.getAssignee());
-		System.out.println(varName.getExpressionText() );
-		System.out.println(varName.getValue(task.getExecution()));
-		
-		
+			
 	}
 	
 public Expression getVarName() {
