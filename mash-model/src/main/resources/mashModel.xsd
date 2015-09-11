@@ -103,8 +103,8 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    	<complexContent>
    		<extension base="tns:Act">
    			<sequence>
-   			    <element name="type" type="string" minOccurs="0" />
-   				
+   			    <element name="type" type="string" minOccurs="0"/>
+   				<element name="comments" type="string" minOccurs="0" maxOccurs="unbounded" />
    			</sequence>
    		</extension>
    	</complexContent>
