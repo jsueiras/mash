@@ -47,7 +47,6 @@ public class DocumentRenderer {
 	}
 
 	
-
 	public void writeAsPdf(String templateName,Map<String, Object> ctx, OutputStream out) {
 
 		try {
@@ -61,9 +60,36 @@ public class DocumentRenderer {
 			saveAsPdf(out, template);
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
+	
+
+	public void writeAsWord(String templateName,Map<String, Object> ctx, OutputStream out) {
+
+		try {
+
+			WordprocessingMLPackage template = getTemplate(templateName);
+
+			for (ElementHandler handler : handlers) {
+				handler.processElement(template, ctx);
+			}
+
+			saveAsWord(out, template);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	private void saveAsWord(OutputStream out, WordprocessingMLPackage template)
+			throws Exception, Docx4JException {
+		
+		template.save(out);
+	}
+
 
 	private void saveAsPdf(OutputStream out, WordprocessingMLPackage template)
 			throws Exception, Docx4JException {

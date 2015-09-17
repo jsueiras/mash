@@ -50,8 +50,8 @@ public class SetAgenciesServiceTask implements JavaDelegate{
 	    {
 			if (group.getId().startsWith("r_"))
 			{
-				Boolean isRole = (Boolean) execution.getVariable(group.getId());
-				if (isRole)
+				String isRole = (String) execution.getVariable(group.getId());
+				if (isRole.trim().length()>0)
 				{
 					agencies.add(group.getId());
 				}		

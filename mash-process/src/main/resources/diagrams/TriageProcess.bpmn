@@ -16,32 +16,32 @@
         <activiti:formProperty id="person.id" name="Person identifier" type="string"></activiti:formProperty>
         <activiti:formProperty id="person.firstName" name="Forename" type="string"></activiti:formProperty>
         <activiti:formProperty id="person.lastName" name="Surname" type="string"></activiti:formProperty>
-        <activiti:formProperty id="person.homeAddress" name="Address" type="string"></activiti:formProperty>
+        <activiti:formProperty id="person.homeAddress" name="Address" type="memo1x50"></activiti:formProperty>
         <activiti:formProperty id="person.sex" name="Sex" type="enum">
           <activiti:value id="male" name="Male"></activiti:value>
           <activiti:value id="female" name="Female"></activiti:value>
         </activiti:formProperty>
         <activiti:formProperty id="person.dateOfBirth" name="Date of Birth" type="date"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.id" name="Related Person Id" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.firstName" name="Forename" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.lastName" name="Surname" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.homeAddress" name="Address" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.sex" name="Sex" type="enum">
+        <activiti:formProperty id="other1.id" name="Related Person Id" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other1.firstName" name="Forename" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other1.lastName" name="Surname" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other1.homeAddress" name="Address" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="other1.sex" name="Sex" type="enum">
           <activiti:value id="male" name="Male"></activiti:value>
           <activiti:value id="female" name="Female"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.dateOfBirth" name="Date of Birth" type="date"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson1.relationship" name="Relationship" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.id" name="Related Person Id" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.firstName" name="Forename" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.lastName" name="Surname" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.homeAddress" name="Address" type="string"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.sex" name="Sex" type="enum">
+        <activiti:formProperty id="other1.dateOfBirth" name="Date of Birth" type="date"></activiti:formProperty>
+        <activiti:formProperty id="other1.relationship" name="Relationship" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other2.id" name="Related Person Id" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other2.firstName" name="Forename" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other2.lastName" name="Surname" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other2.homeAddress" name="Address" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="other2.sex" name="Sex" type="enum">
           <activiti:value id="male" name="Male"></activiti:value>
           <activiti:value id="female" name="Female"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.dateOfBirth" name="Date of Birth" type="date"></activiti:formProperty>
-        <activiti:formProperty id="otherPerson2.relationship" name="Relationship" type="string"></activiti:formProperty>
+        <activiti:formProperty id="other2.dateOfBirth" name="Date of Birth" type="date"></activiti:formProperty>
+        <activiti:formProperty id="other2.relationship" name="Relationship" type="string"></activiti:formProperty>
         <activiti:formProperty id="triageAction" name="Action" type="enum" required="true">
           <activiti:value id="myAgency" name="My Agency"></activiti:value>
           <activiti:value id="NFA" name="NFA"></activiti:value>
@@ -65,20 +65,28 @@
     </sequenceFlow>
     <callActivity id="callMash" name="Call My Cohort" calledElement="mash">
       <extensionElements>
-        <activiti:in source="person.name" target="personName"></activiti:in>
+        <activiti:in source="personName" target="personName"></activiti:in>
         <activiti:in source="cohort" target="cohort"></activiti:in>
         <activiti:in source="reference" target="triageId"></activiti:in>
         <activiti:in source="initiator" target="initiator"></activiti:in>
-        <activiti:in source="referral" target="referral"></activiti:in>
+        <activiti:in source="referralMap" target="referralMap"></activiti:in>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>
     <scriptTask id="scripttask2" name="Get  process Id" scriptFormat="javascript" activiti:autoStoreVariables="false">
-      <script> execution.setVariable("reference", execution.getProcessInstanceId())</script>
+      <script> execution.setVariable("reference", execution.getProcessInstanceId());
+ execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"))</script>
     </scriptTask>
-    <userTask id="refer" name="Refer to the cohort ${cohort} including ref ${reference}" activiti:assignee="${initiator}">
+    <userTask id="refer" name="Refer to the cohort ${triage.cohort} including ref ${reference}" activiti:assignee="${initiator}">
       <extensionElements>
-        <activiti:taskListener event="create" class="mash.util.process.AddAttachmentListener"></activiti:taskListener>
+        <activiti:taskListener event="create" class="mash.util.process.GenerateDocumentListener">
+          <activiti:field name="varName">
+            <activiti:string><![CDATA[referral]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="templateName">
+            <activiti:string><![CDATA[Research template.docx]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow19" sourceRef="exclusivegateway1" targetRef="refer">
@@ -89,7 +97,7 @@
     <serviceTask id="saveCase" name="Store Case" activiti:class="mash.util.process.FormToMapListener">
       <extensionElements>
         <activiti:field name="varName">
-          <activiti:string><![CDATA[referral]]></activiti:string>
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
         </activiti:field>
         <activiti:executionListener event="start" class="mash.util.process.FormToMapListener">
           <activiti:field name="varName">

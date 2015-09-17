@@ -8,8 +8,7 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
        
-  
-  <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+   <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="location" value="classpath:db.properties" />
     <property name="ignoreUnresolvablePlaceholders" value="true" />
   </bean>
@@ -29,12 +28,28 @@
   <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
   	<property name="dataSource" ref="dataSource" />
   	<property name="transactionManager" ref="transactionManager" />
-  	<property name="databaseSchemaUpdate" value="false" />
-  	<property name="jobExecutorActivate" value="false" />
-    <property name="enableDatabaseEventLogging" value="false" />
-    
-  
-    
+  	<property name="databaseSchemaUpdate" value="true" />
+  	<property name="jobExecutorActivate" value="true" />
+    <property name="enableDatabaseEventLogging" value="true" />
+    <property name="customFormTypes">
+      <list>
+        <bean class="org.activiti.explorer.form.UserFormType"/>
+        <bean class="org.activiti.explorer.form.ProcessDefinitionFormType"/> 
+        <bean class="org.activiti.explorer.form.MonthFormType"/> 
+         <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="10"/>
+             <constructor-arg type="int" value="60"/>
+         </bean>  
+          <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="5"/>
+             <constructor-arg type="int" value="50"/>
+         </bean>  
+          <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="1"/>
+             <constructor-arg type="int" value="50"/>
+         </bean>  
+      </list>
+    </property>
   </bean>
   
   <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean" destroy-method="destroy">
@@ -42,17 +57,11 @@
   </bean>
   
   <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
-    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
-     
-   
+  <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" />
+  <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+  <bean id="formService" factory-bean="processEngine" factory-method="getFormService" />
+  <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
+  <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
   <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" />  
   
-  <bean id="setup" class="mash.util.process.tools.RoleDataConfiguration" >
-      	<property name="identityService" ref="identityService" />
-  	<property name="repositoryService" ref="repositoryService" />
-  	 
-  </bean>
-  
-    
- 
 </beans>

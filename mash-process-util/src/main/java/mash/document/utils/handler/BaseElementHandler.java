@@ -92,8 +92,8 @@ public abstract class BaseElementHandler implements ElementHandler {
 	        String prefix = placeHolder.substring(0,indexOf);
 	        String sufix = placeHolder.substring(indexOf+1);
 			Object object = context.get(prefix);
-			return getStringValue(sufix, object);
-			}		
+			if (object!=null) return getStringValue(sufix, object);
+		}		
 		else if (context.get(placeHolder)!= null)
 		{
 			return context.get(placeHolder).toString();
@@ -110,7 +110,7 @@ public abstract class BaseElementHandler implements ElementHandler {
 				value = ((Map)object).get(sufix);
 			}
 			else
-			{		
+			{	
 			    value = BeanUtils.getProperty(object, sufix);
 			}
 		} catch (IllegalAccessException | InvocationTargetException

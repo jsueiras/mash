@@ -39,7 +39,7 @@ public class DocumentRendererWordTest {
 		people.add(person);
 		ctx.put("people", people);
 		
-		docR.writeAsPdf("Research template.docx",ctx, fop);
+		docR.writeAsWord("Research template.docx",ctx, fop);
 	}
 
 }

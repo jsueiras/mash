@@ -48,11 +48,7 @@ public class MemoFormPropertyRenderer extends AbstractFormPropertyRenderer {
       textField.setValue(formProperty.getValue());
     }
     
-     MemoFormType type = (MemoFormType) formProperty.getType();
-   
-     System.out.println("Name     " + type.getName());
-     System.out.println("Rows     " + type.getRows());
-      
+     MemoFormType type = (MemoFormType) formProperty.getType();   
     textField.setRows(type.getRows());
     textField.setColumns(type.getColumns());
    

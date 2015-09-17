@@ -27,7 +27,6 @@ public class TextHandler  extends BaseElementHandler {
     private int replaceText(Map<String, Object> context,
 		List<Object> texts, int i, Text textElement, String tag) {
 	String value = textElement.getValue();
-	System.out.println(value);
 	if (value.contains(tag.substring(0,1))) {
 	    ResultPlaceholder placeHolder = getAssociatedValues(texts,i,true,VALUE_TAG);
 		if (placeHolder!= null)

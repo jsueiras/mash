@@ -92,6 +92,12 @@ public class TableHandler  extends BaseElementHandler {
 			  // 4. remove the template row
 			  tempTable.getContent().remove(templateRow);
 			}
+			else if (collection instanceof Map)
+			{
+               addRowsToTable(tempTable, templateRow, ((Map)collection).entrySet(),prefix ,i);
+			  // 4. remove the template row
+			  tempTable.getContent().remove(templateRow);
+			}
 		}
 
 	private Map<String,Text> getPlaceHolders(

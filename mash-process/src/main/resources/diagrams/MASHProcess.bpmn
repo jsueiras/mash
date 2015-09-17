@@ -7,20 +7,65 @@
     <userTask id="treshold" name="Treshold for referral ${personName}" activiti:async="true" activiti:exclusive="false" activiti:candidateGroups="${myAgencyDecision}">
       <documentation>Treshold for referral ${personName}</documentation>
       <extensionElements>
+        <activiti:formProperty id="reasonForReferral" name="Reason for referral" type="enum">
+          <activiti:value id="reason1" name="Reason 1"></activiti:value>
+          <activiti:value id="reason2" name="Reason 2"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="referralRationale" name="Referral Rationale" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="tresholdDecision" name="Indicative Treshold Decision" type="enum">
+          <activiti:value id="decision1" name="Decision 1"></activiti:value>
+          <activiti:value id="decision2" name="Decision 2"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="tresholdRationale" name="Decision Rationale" type="memo1x50"></activiti:formProperty>
         <activiti:formProperty id="priority" name="Priority" type="enum">
           <activiti:value id="Red" name="Red"></activiti:value>
           <activiti:value id="Ambar" name="Ambar"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="r_children_stf" name="Children Staffordshire" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_children_stk" name="Children Stoke" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_adults_stf" name="Adults Staffordshire" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_adults_stk" name="Adults Stoke" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_mentalhealth_north" name="Mental H. North" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_mentalhealth_south" name="Mental H. South" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="r_police" name="Police" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="probation" name="Probation" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="nhs" name="NHS" type="boolean"></activiti:formProperty>
-        <activiti:formProperty id="comments" name="Comments" type="memo5x50"></activiti:formProperty>
+        <activiti:formProperty id="r_children_stf" name="Children Staffordshire Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_children_stfComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_children_stk" name="Children Stoke Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_children_stkComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_adults_stf" name="Adults Staffordshire Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_adults_stfComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_adults_stk" name="Adults Stoke Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_adults_stkComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_mentalhealth_north" name="Mental H. North Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_mentalhealth_northComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_mentalhealth_south" name="Mental H. South Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_mentalhealth_southComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_police" name="Police Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_policeComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_probation" name="Probation Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_probationComments" name="Explanation" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="r_nhs" name="NHS Query" type="enum">
+          <activiti:value id="blank" name=" "></activiti:value>
+          <activiti:value id="request" name="Request for Research"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="r_nhsComments" name="Explanation" type="memo1x50"></activiti:formProperty>
         <activiti:taskListener event="complete" class="mash.util.process.GetPerformerListener">
           <activiti:field name="varName">
             <activiti:string><![CDATA[p_treshold]]></activiti:string>
@@ -43,9 +88,9 @@
       </extensionElements>
     </startEvent>
     <sequenceFlow id="flow6" sourceRef="treshold" targetRef="servicetask1"></sequenceFlow>
-    <sequenceFlow id="flow9" sourceRef="usertask1" targetRef="usertask3"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="usertask1" targetRef="servicetask5"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
-    <sequenceFlow id="flow11" sourceRef="exclusivegateway2" targetRef="usertask1">
+    <sequenceFlow id="flow11" sourceRef="exclusivegateway2" targetRef="servicetask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${multiagency == false}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="servicetask1" name="Set agencies" activiti:class="mash.util.process.SetAgenciesServiceTask"></serviceTask>
@@ -56,8 +101,8 @@
     <sequenceFlow id="flow17" sourceRef="start" targetRef="getGroup"></sequenceFlow>
     <userTask id="usertask1" name="Decision for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}">
       <extensionElements>
-        <activiti:formProperty id="decisionMade" name="Summary Decision" type="string"></activiti:formProperty>
-        <activiti:formProperty id="rationale" name="Rationale" type="string"></activiti:formProperty>
+        <activiti:formProperty id="outcome" name="Summary Decision" type="string"></activiti:formProperty>
+        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo1x50"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow13" sourceRef="callactivity1" targetRef="exclusivegateway3"></sequenceFlow>
@@ -68,16 +113,23 @@
         <activiti:in source="personName" target="personName"></activiti:in>
         <activiti:in source="p_treshold" target="requestedBy"></activiti:in>
         <activiti:in source="parentId" target="parentId"></activiti:in>
+        <activiti:in source="referralMap" target="referralMap"></activiti:in>
+        <activiti:in source="reasonForReferral" target="reasonForReferral"></activiti:in>
+        <activiti:in source="referralRationale" target="referralRationale"></activiti:in>
+        <activiti:in source="tresholdDecision" target="tresholdDecision"></activiti:in>
+        <activiti:in source="tresholdRationale" target="tresholdRationale"></activiti:in>
         <activiti:out source="finishInvestigation" target="finishInvestigation"></activiti:out>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${agencies}" activiti:elementVariable="researchAgency">
-        <completionCondition>${!finishInvestigation.equals("false")}</completionCondition>
+        <completionCondition>${!finishInvestigation.equals("false")}
+				</completionCondition>
       </multiInstanceLoopCharacteristics>
     </callActivity>
     <scriptTask id="scripttask1" name="Set parent id" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script> execution.setVariable("finishInvestigation", "false")
- execution.setVariable("parentId", execution.getProcessInstanceId())
- execution.setVariable("meetingDate", null)</script>
+				execution.setVariable("parentId", execution.getProcessInstanceId())
+				execution.setVariable("meetingDate", null)
+			</script>
     </scriptTask>
     <sequenceFlow id="flow18" sourceRef="scripttask1" targetRef="callactivity1"></sequenceFlow>
     <userTask id="usertask2" name="Meeting for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}" activiti:dueDate="${meetingDate}"></userTask>
@@ -85,122 +137,235 @@
     <sequenceFlow id="flow19" sourceRef="exclusivegateway3" targetRef="usertask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${meetingDate != null}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow20" sourceRef="exclusivegateway3" targetRef="usertask1">
+    <sequenceFlow id="flow20" sourceRef="exclusivegateway3" targetRef="servicetask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${meetingDate == null}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow21" sourceRef="usertask2" targetRef="usertask1"></sequenceFlow>
-    <userTask id="usertask3" name="Feedback for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}"></userTask>
+    <sequenceFlow id="flow21" sourceRef="usertask2" targetRef="servicetask2"></sequenceFlow>
+    <userTask id="usertask3" name="Feedback for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}">
+      <extensionElements>
+        <activiti:formProperty id="outcome" name="Summary Decision" type="string" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo1x50" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="f_children_stf" name="Children Staffordshire Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_children_stk" name="Children Stoke Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_adults_stf" name="Adults Staffordshire Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_adults_stk" name="Adults Stoke Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_mentalhealth_north" name="Mental H. North Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_mentalhealth_south" name="Mental H. South Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_police" name="Police Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_probation" name="Probation Query" type="boolean"></activiti:formProperty>
+        <activiti:formProperty id="f_nhs" name="NHS Query" type="boolean"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow22" sourceRef="usertask3" targetRef="endevent1"></sequenceFlow>
     <serviceTask id="getGroup" name="Get Group" activiti:class="mash.util.process.MyAgencyServiceTask"></serviceTask>
-    <sequenceFlow id="flow23" sourceRef="getGroup" targetRef="treshold"></sequenceFlow>
+    <sequenceFlow id="flow23" sourceRef="getGroup" targetRef="servicetask3"></sequenceFlow>
     <serviceTask id="storeCase" name="Store case" activiti:class="mash.util.process.FormToMapListener">
       <extensionElements>
         <activiti:field name="varName">
-          <activiti:string><![CDATA[referral]]></activiti:string>
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
         </activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow24" sourceRef="storeCase" targetRef="exclusivegateway2"></sequenceFlow>
+    <serviceTask id="generateAttachment" name="Generate Attachment" activiti:class="mash.util.process.GenerateDocumentListener">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="templateName">
+          <activiti:string><![CDATA[Research template.docx]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="docName">
+          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow25" sourceRef="generateAttachment" targetRef="treshold"></sequenceFlow>
+    <serviceTask id="servicetask2" name="Generate Attachment" activiti:class="mash.util.process.GenerateDocumentListener">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="templateName">
+          <activiti:string><![CDATA[Research template.docx]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="docName">
+          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow26" sourceRef="servicetask2" targetRef="usertask1"></sequenceFlow>
+    <serviceTask id="servicetask3" name="Init Research Log" activiti:class="mash.util.process.ResearchLogListener">
+      <extensionElements>
+        <activiti:field name="init">
+          <activiti:string><![CDATA[true]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="eventlogVar">
+          <activiti:string><![CDATA[researchLog]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="mapStoreVar">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow27" sourceRef="servicetask3" targetRef="generateAttachment"></sequenceFlow>
+    <serviceTask id="servicetask4" name="Generate Attachment" activiti:class="mash.util.process.GenerateDocumentListener">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="templateName">
+          <activiti:string><![CDATA[Outcome template.docx]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="docName">
+          <activiti:string><![CDATA[Outcome document.docx]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="servicetask5" name="Store case" activiti:class="mash.util.process.FormToMapListener">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow28" sourceRef="servicetask5" targetRef="servicetask4"></sequenceFlow>
+    <sequenceFlow id="flow29" sourceRef="servicetask4" targetRef="usertask3"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_mash">
     <bpmndi:BPMNPlane bpmnElement="mash" id="BPMNPlane_mash">
       <bpmndi:BPMNShape bpmnElement="treshold" id="BPMNShape_treshold">
-        <omgdc:Bounds height="55.0" width="105.0" x="200.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="138.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="945.0" y="630.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1042.0" y="800.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
-        <omgdc:Bounds height="35.0" width="35.0" x="10.0" y="146.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="-90.0" y="146.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
-        <omgdc:Bounds height="40.0" width="40.0" x="610.0" y="143.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="793.0" y="143.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="342.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="530.0" y="136.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="61.0" width="175.0" x="875.0" y="400.0"></omgdc:Bounds>
+        <omgdc:Bounds height="61.0" width="175.0" x="972.0" y="480.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
-        <omgdc:Bounds height="55.0" width="105.0" x="910.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="1005.0" y="136.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="750.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="847.0" y="136.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
-        <omgdc:Bounds height="71.0" width="145.0" x="740.0" y="280.0"></omgdc:Bounds>
+        <omgdc:Bounds height="71.0" width="145.0" x="847.0" y="281.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
-        <omgdc:Bounds height="40.0" width="40.0" x="942.0" y="230.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="1037.0" y="228.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask3" id="BPMNShape_usertask3">
-        <omgdc:Bounds height="71.0" width="175.0" x="875.0" y="510.0"></omgdc:Bounds>
+        <omgdc:Bounds height="71.0" width="175.0" x="972.0" y="710.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="getGroup" id="BPMNShape_getGroup">
-        <omgdc:Bounds height="55.0" width="105.0" x="70.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="-10.0" y="136.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="storeCase" id="BPMNShape_storeCase">
-        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="136.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="660.0" y="136.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="generateAttachment" id="BPMNShape_generateAttachment">
+        <omgdc:Bounds height="55.0" width="105.0" x="260.0" y="136.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask2" id="BPMNShape_servicetask2">
+        <omgdc:Bounds height="61.0" width="137.0" x="991.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask3" id="BPMNShape_servicetask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="130.0" y="136.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask4" id="BPMNShape_servicetask4">
+        <omgdc:Bounds height="61.0" width="137.0" x="991.0" y="630.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask5" id="BPMNShape_servicetask5">
+        <omgdc:Bounds height="55.0" width="105.0" x="1005.0" y="556.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="305.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="342.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="505.0" y="165.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
-        <omgdi:waypoint x="962.0" y="461.0"></omgdi:waypoint>
-        <omgdi:waypoint x="962.0" y="510.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="541.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1057.0" y="556.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
-        <omgdi:waypoint x="630.0" y="183.0"></omgdi:waypoint>
-        <omgdi:waypoint x="629.0" y="430.0"></omgdi:waypoint>
-        <omgdi:waypoint x="875.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="813.0" y="183.0"></omgdi:waypoint>
+        <omgdi:waypoint x="813.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="991.0" y="430.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
-        <omgdi:waypoint x="650.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="750.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="833.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="847.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
-        <omgdi:waypoint x="447.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="470.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="635.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="660.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="45.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="70.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-55.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-10.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
-        <omgdi:waypoint x="962.0" y="191.0"></omgdi:waypoint>
-        <omgdi:waypoint x="962.0" y="230.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1057.0" y="191.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1057.0" y="228.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
-        <omgdi:waypoint x="855.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="910.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="952.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1005.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
-        <omgdi:waypoint x="942.0" y="250.0"></omgdi:waypoint>
-        <omgdi:waypoint x="812.0" y="249.0"></omgdi:waypoint>
-        <omgdi:waypoint x="812.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1037.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="248.0"></omgdi:waypoint>
+        <omgdi:waypoint x="919.0" y="281.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
-        <omgdi:waypoint x="962.0" y="270.0"></omgdi:waypoint>
-        <omgdi:waypoint x="962.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1057.0" y="268.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="400.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
-        <omgdi:waypoint x="812.0" y="351.0"></omgdi:waypoint>
-        <omgdi:waypoint x="812.0" y="429.0"></omgdi:waypoint>
-        <omgdi:waypoint x="875.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="919.0" y="352.0"></omgdi:waypoint>
+        <omgdi:waypoint x="919.0" y="430.0"></omgdi:waypoint>
+        <omgdi:waypoint x="991.0" y="430.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
-        <omgdi:waypoint x="962.0" y="581.0"></omgdi:waypoint>
-        <omgdi:waypoint x="962.0" y="630.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="781.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="800.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
-        <omgdi:waypoint x="175.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="200.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="95.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="130.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
-        <omgdi:waypoint x="575.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="610.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="765.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="793.0" y="163.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="365.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="165.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="1059.0" y="461.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="480.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="235.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0" y="163.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="1057.0" y="611.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="630.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="1059.0" y="691.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1059.0" y="710.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
