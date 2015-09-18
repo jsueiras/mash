@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,9 @@ public class GenerateDocumentListener implements TaskListener,JavaDelegate {
 	private Expression templateName;
 	
 	private Expression parentIdVar;
+	
+	private Expression dateVar;
+
 	
 	
 	
@@ -127,6 +131,7 @@ public class GenerateDocumentListener implements TaskListener,JavaDelegate {
 	   
 		Map<String,Object> processContext  = getContext(execution);
 		
+		addDate(processContext);
 		DocumentRenderer renderer = new DocumentRenderer();
 		
 		String fullName = docName.getExpressionText();
@@ -144,6 +149,16 @@ public class GenerateDocumentListener implements TaskListener,JavaDelegate {
 		return out;
 		 
 	 }
+
+	private void addDate(Map<String, Object> processContext) {
+		String dateName = "date";
+		if (dateVar!=null)
+		{
+			dateName= dateVar.getExpressionText();
+		}		
+		processContext.put(dateName, new Date());
+		
+	}
 
 	private Map<String, Object> getContext(DelegateExecution execution) {
 		if (parentIdVar != null && parentIdVar.getExpressionText().length() >0)

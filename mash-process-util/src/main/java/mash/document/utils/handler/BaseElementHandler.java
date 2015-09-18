@@ -1,16 +1,14 @@
 package mash.document.utils.handler;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-
-
-
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -96,7 +94,7 @@ public abstract class BaseElementHandler implements ElementHandler {
 		}		
 		else if (context.get(placeHolder)!= null)
 		{
-			return context.get(placeHolder).toString();
+			return formatValue(context.get(placeHolder));
 		}	
 		
 		return "";
@@ -107,7 +105,7 @@ public abstract class BaseElementHandler implements ElementHandler {
 		try {
 			if (object instanceof Map)
 			{
-				value = ((Map)object).get(sufix);
+				value =   formatValue(((Map)object).get(sufix));
 			}
 			else
 			{	
@@ -119,8 +117,20 @@ public abstract class BaseElementHandler implements ElementHandler {
 			e.printStackTrace();
 			return "";
 		}
-		if (value!=null) return value.toString();
-		return "";
+		return formatValue(value);
+		
+	}
+
+	private String formatValue(Object value) {
+		if (value ==null) return "";
+		if (value instanceof Date)
+		{
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+			
+			return formatter.format((Date)value);
+			
+		}
+		return value.toString();
 	}
 
 }

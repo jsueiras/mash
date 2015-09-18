@@ -47,7 +47,7 @@
           <activiti:value id="NFA" name="NFA"></activiti:value>
           <activiti:value id="otherAgency" name="Other Agency"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="triage.cohort" name="Cohort" type="enum">
+        <activiti:formProperty id="triageCohort" name="Cohort" type="enum">
           <activiti:value id="blank" name=" "></activiti:value>
           <activiti:value id="t_children" name="Children"></activiti:value>
           <activiti:value id="t_adults" name="Adults"></activiti:value>
@@ -67,28 +67,18 @@
       <extensionElements>
         <activiti:in source="personName" target="personName"></activiti:in>
         <activiti:in source="cohort" target="cohort"></activiti:in>
-        <activiti:in source="reference" target="triageId"></activiti:in>
         <activiti:in source="initiator" target="initiator"></activiti:in>
         <activiti:in source="referralMap" target="referralMap"></activiti:in>
+        <activiti:in source="triageId" target="triageId"></activiti:in>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>
-    <scriptTask id="scripttask2" name="Get  process Id" scriptFormat="javascript" activiti:autoStoreVariables="false">
+    <scriptTask id="scripttask2" name="Init vars" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script> execution.setVariable("reference", execution.getProcessInstanceId());
- execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"))</script>
+ execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"));
+ execution.setVariable("triageId", null);</script>
     </scriptTask>
-    <userTask id="refer" name="Refer to the cohort ${triage.cohort} including ref ${reference}" activiti:assignee="${initiator}">
-      <extensionElements>
-        <activiti:taskListener event="create" class="mash.util.process.GenerateDocumentListener">
-          <activiti:field name="varName">
-            <activiti:string><![CDATA[referral]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="templateName">
-            <activiti:string><![CDATA[Research template.docx]]></activiti:string>
-          </activiti:field>
-        </activiti:taskListener>
-      </extensionElements>
-    </userTask>
+    <userTask id="refer" name="Refer to the cohort ${triageCohort} including ref ${reference}" activiti:assignee="${initiator}"></userTask>
     <sequenceFlow id="flow19" sourceRef="exclusivegateway1" targetRef="refer">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('Other Agency')}]]></conditionExpression>
     </sequenceFlow>

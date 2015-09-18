@@ -27,14 +27,12 @@
         <activiti:formProperty id="tresholdRationale" name="Decision Rationale" type="memo1x50" writable="false"></activiti:formProperty>
         <activiti:formProperty id="question" name="Question type" writable="false"></activiti:formProperty>
         <activiti:formProperty id="answer" name="Research result" type="memo10x60" writable="false"></activiti:formProperty>
-    
         <activiti:formProperty id="action" name="Action" type="enum">
           <activiti:value id="Finish" name="Finish"></activiti:value>
           <activiti:value id="Wait" name="Wait"></activiti:value>
           <activiti:value id="Query" name="Query"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="questionComment" name="Question Explanation" type="memo1x50" ></activiti:formProperty>
-    
+        <activiti:formProperty id="questionComment" name="Question Explanation" type="memo1x50"></activiti:formProperty>
         <activiti:formProperty id="meetingDate" name="Meeting By" type="date"></activiti:formProperty>
       </extensionElements>
     </userTask>
@@ -47,7 +45,7 @@
         <activiti:formProperty id="tresholdRationale" name="Decision Rationale" type="memo1x50" writable="false"></activiti:formProperty>
         <activiti:formProperty id="question" name="Question type" writable="false"></activiti:formProperty>
         <activiti:formProperty id="questionComment" name="Question Explanation" type="memo1x50" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="answer" name="Research result" type="memo5x50"></activiti:formProperty>
+        <activiti:formProperty id="answer" name="Research result" type="memo10x60"></activiti:formProperty>
         <activiti:taskListener event="complete" class="mash.util.process.GetPerformerListener">
           <activiti:field name="varName">
             <activiti:string><![CDATA[p_research]]></activiti:string>
@@ -104,7 +102,7 @@
           <activiti:string><![CDATA[Research template.docx]]></activiti:string>
         </activiti:field>
         <activiti:field name="docName">
-          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+          <activiti:string><![CDATA[Research document.pdf]]></activiti:string>
         </activiti:field>
         <activiti:field name="parentIdVar">
           <activiti:string><![CDATA[parentId]]></activiti:string>
@@ -121,7 +119,7 @@
           <activiti:string><![CDATA[Research template.docx]]></activiti:string>
         </activiti:field>
         <activiti:field name="docName">
-          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+          <activiti:string><![CDATA[Research document.pdf]]></activiti:string>
         </activiti:field>
         <activiti:field name="parentIdVar">
           <activiti:string><![CDATA[parentId]]></activiti:string>

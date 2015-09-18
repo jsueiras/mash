@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class DocumentRendererWordTest {
 	@Test
 	public void test() throws FileNotFoundException {
 		DocumentRenderer docR = new DocumentRenderer();
-			File file = new File("result.pdf");
+			File file = new File("result.docx");
 		OutputStream fop = new FileOutputStream(file);
 		
 		Map<String, Object> ctx = new HashMap<String, Object>();
@@ -32,12 +33,13 @@ public class DocumentRendererWordTest {
 		person.setFirstName("Jose");
 		person.setLastName("Sueiras");
 		person.setId("id");
-		ctx.put("p", person);
+		ctx.put("person", person);
 
 		List<Person> people = new ArrayList<Person>();
 		people.add(person);
 		people.add(person);
-		ctx.put("people", people);
+		ctx.put("other", people);
+		ctx.put("date", new Date());
 		
 		docR.writeAsWord("Research template.docx",ctx, fop);
 	}

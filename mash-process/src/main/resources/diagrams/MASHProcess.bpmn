@@ -74,19 +74,6 @@
       </extensionElements>
     </userTask>
     <endEvent id="endevent1" name="End"></endEvent>
-    <startEvent id="start" name="Start" activiti:initiator="initiator">
-      <extensionElements>
-        <activiti:formProperty id="personName" name="Person Name" type="string"></activiti:formProperty>
-        <activiti:formProperty id="cohort" name="Cohort" type="enum">
-          <activiti:value id="t_children" name="Children"></activiti:value>
-          <activiti:value id="t_adults" name="Adults"></activiti:value>
-          <activiti:value id="t_police" name="Police"></activiti:value>
-        </activiti:formProperty>
-        <activiti:formProperty id="triageId" name="Triage reference" type="string"></activiti:formProperty>
-        <activiti:formProperty id="initiator" name="initiator" readable="false" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="agencyDecision" type="string" writable="false"></activiti:formProperty>
-      </extensionElements>
-    </startEvent>
     <sequenceFlow id="flow6" sourceRef="treshold" targetRef="servicetask1"></sequenceFlow>
     <sequenceFlow id="flow9" sourceRef="usertask1" targetRef="servicetask5"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
@@ -98,11 +85,10 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${multiagency == true}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow16" sourceRef="servicetask1" targetRef="storeCase"></sequenceFlow>
-    <sequenceFlow id="flow17" sourceRef="start" targetRef="getGroup"></sequenceFlow>
     <userTask id="usertask1" name="Decision for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}">
       <extensionElements>
-        <activiti:formProperty id="outcome" name="Summary Decision" type="string"></activiti:formProperty>
-        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="outcome" name="Summary Decision" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo5x50"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow13" sourceRef="callactivity1" targetRef="exclusivegateway3"></sequenceFlow>
@@ -143,8 +129,8 @@
     <sequenceFlow id="flow21" sourceRef="usertask2" targetRef="servicetask2"></sequenceFlow>
     <userTask id="usertask3" name="Feedback for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}">
       <extensionElements>
-        <activiti:formProperty id="outcome" name="Summary Decision" type="string" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo1x50" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="outcome" name="Summary Decision" type="memo1x50" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo5x50" writable="false"></activiti:formProperty>
         <activiti:formProperty id="f_children_stf" name="Children Staffordshire Query" type="boolean"></activiti:formProperty>
         <activiti:formProperty id="f_children_stk" name="Children Stoke Query" type="boolean"></activiti:formProperty>
         <activiti:formProperty id="f_adults_stf" name="Adults Staffordshire Query" type="boolean"></activiti:formProperty>
@@ -176,7 +162,7 @@
           <activiti:string><![CDATA[Research template.docx]]></activiti:string>
         </activiti:field>
         <activiti:field name="docName">
-          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+          <activiti:string><![CDATA[Research document.pdf]]></activiti:string>
         </activiti:field>
       </extensionElements>
     </serviceTask>
@@ -190,7 +176,7 @@
           <activiti:string><![CDATA[Research template.docx]]></activiti:string>
         </activiti:field>
         <activiti:field name="docName">
-          <activiti:string><![CDATA[Research document.docx]]></activiti:string>
+          <activiti:string><![CDATA[Research document.pdf]]></activiti:string>
         </activiti:field>
       </extensionElements>
     </serviceTask>
@@ -218,7 +204,7 @@
           <activiti:string><![CDATA[Outcome template.docx]]></activiti:string>
         </activiti:field>
         <activiti:field name="docName">
-          <activiti:string><![CDATA[Outcome document.docx]]></activiti:string>
+          <activiti:string><![CDATA[Outcome document.pdf]]></activiti:string>
         </activiti:field>
       </extensionElements>
     </serviceTask>
@@ -231,6 +217,30 @@
     </serviceTask>
     <sequenceFlow id="flow28" sourceRef="servicetask5" targetRef="servicetask4"></sequenceFlow>
     <sequenceFlow id="flow29" sourceRef="servicetask4" targetRef="usertask3"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow30" sourceRef="exclusivegateway4" targetRef="getGroup">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageId == null}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="servicetask6" name="Retrieve triage" activiti:class="mash.util.process.RetrieveMapFromProcess">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="varprocessId">
+          <activiti:string><![CDATA[triageId]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow31" sourceRef="exclusivegateway4" targetRef="servicetask6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageId != null}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow32" sourceRef="servicetask6" targetRef="getGroup"></sequenceFlow>
+    <startEvent id="startevent" name="Start" activiti:initiator="initiator">
+      <extensionElements>
+        <activiti:formProperty id="triageId" name="Triage reference" type="string"></activiti:formProperty>
+      </extensionElements>
+    </startEvent>
+    <sequenceFlow id="flow33" sourceRef="startevent" targetRef="exclusivegateway4"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_mash">
     <bpmndi:BPMNPlane bpmnElement="mash" id="BPMNPlane_mash">
@@ -239,9 +249,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="1042.0" y="800.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
-        <omgdc:Bounds height="35.0" width="35.0" x="-90.0" y="146.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
         <omgdc:Bounds height="40.0" width="40.0" x="793.0" y="143.0"></omgdc:Bounds>
@@ -288,6 +295,15 @@
       <bpmndi:BPMNShape bpmnElement="servicetask5" id="BPMNShape_servicetask5">
         <omgdc:Bounds height="55.0" width="105.0" x="1005.0" y="556.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+        <omgdc:Bounds height="40.0" width="40.0" x="-79.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask6" id="BPMNShape_servicetask6">
+        <omgdc:Bounds height="55.0" width="105.0" x="-111.0" y="228.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent" id="BPMNShape_startevent">
+        <omgdc:Bounds height="35.0" width="35.0" x="-76.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
         <omgdi:waypoint x="505.0" y="165.0"></omgdi:waypoint>
         <omgdi:waypoint x="530.0" y="163.0"></omgdi:waypoint>
@@ -308,10 +324,6 @@
       <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
         <omgdi:waypoint x="635.0" y="163.0"></omgdi:waypoint>
         <omgdi:waypoint x="660.0" y="163.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="-55.0" y="163.0"></omgdi:waypoint>
-        <omgdi:waypoint x="-10.0" y="163.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
         <omgdi:waypoint x="1057.0" y="191.0"></omgdi:waypoint>
@@ -366,6 +378,23 @@
       <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
         <omgdi:waypoint x="1059.0" y="691.0"></omgdi:waypoint>
         <omgdi:waypoint x="1059.0" y="710.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="-39.0" y="163.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-10.0" y="163.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="-59.0" y="183.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-59.0" y="228.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="-6.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="42.0" y="254.0"></omgdi:waypoint>
+        <omgdi:waypoint x="42.0" y="191.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
+        <omgdi:waypoint x="-59.0" y="86.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-59.0" y="143.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
