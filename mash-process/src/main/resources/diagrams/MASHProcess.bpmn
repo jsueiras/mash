@@ -4,19 +4,35 @@
     <extensionElements>
       <activiti:eventListener class="org.activiti.engine.test.MyEventListener"></activiti:eventListener>
     </extensionElements>
-    <userTask id="treshold" name="Treshold for referral ${personName}" activiti:async="true" activiti:exclusive="false" activiti:candidateGroups="${myAgencyDecision}">
-      <documentation>Treshold for referral ${personName}</documentation>
+    <userTask id="treshold" name="Threshold for referral ${personName}" activiti:async="true" activiti:exclusive="false" activiti:candidateGroups="${myAgencyDecision}">
+      <documentation>Threshold for referral ${personName}</documentation>
       <extensionElements>
-        <activiti:formProperty id="reasonForReferral" name="Reason for referral" type="enum">
-          <activiti:value id="reason1" name="Reason 1"></activiti:value>
-          <activiti:value id="reason2" name="Reason 2"></activiti:value>
+        <activiti:formProperty id="referralType" name="Referral type" type="enum">
+          <activiti:value id="a_abuse" name="(a) Discriminatory Abuse"></activiti:value>
+          <activiti:value id="a_violence" name="(a) Domestic Violence"></activiti:value>
+           <activiti:value id="a_emotional" name="(a) Emotional/Psychological Abuse"></activiti:value>
+           <activiti:value id="a_financial" name="(a) Financial or Material Abuse"></activiti:value>
+           <activiti:value id="a_slavery" name="(a) Modern Slavery"></activiti:value>
+           <activiti:value id="a_neglect" name="(a) Neglect/Omission"></activiti:value>
+           <activiti:value id="a_physical" name="(a) Physical Abuse"></activiti:value>
+           <activiti:value id="a_sexual" name="(a) Sexual Abuse"></activiti:value>
+           <activiti:value id="c_emotional" name="(c) Emotional Abuse"></activiti:value>
+           <activiti:value id="c_planMigrated" name="(c) Migrated Temp Plan"></activiti:value>
+           <activiti:value id="c_multiple" name="(c) Multiple"></activiti:value>
+           <activiti:value id="c_neglect" name="(c) Neglect"></activiti:value>
+           <activiti:value id="c_sexual" name="(c) Sexual Abuse"></activiti:value>
+            <activiti:value id="c_unkonwn" name="(c) Unknown at Migration"></activiti:value>
+           </activiti:formProperty>
+        <activiti:formProperty id="reasonForReferral" name="Reason for referral" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="thresholdDecision" name="Indicative Threshold Decision" type="enum">
+          <activiti:value id="section47" name="Section 47 Investigation (child)"></activiti:value>
+          <activiti:value id="section42" name="on 42 Investigation (adult)"></activiti:value>
+          <activiti:value id="policeViolence" name="Police: Domestic violence"></activiti:value>
+          <activiti:value id="marac" name="MARAC"></activiti:value>
+          <activiti:value id="section17" name=" Section 17 (child in need)"></activiti:value>
+          <activiti:value id="earlyHelp" name="Early Help Assessment"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="referralRationale" name="Referral Rationale" type="memo1x50"></activiti:formProperty>
-        <activiti:formProperty id="tresholdDecision" name="Indicative Treshold Decision" type="enum">
-          <activiti:value id="decision1" name="Decision 1"></activiti:value>
-          <activiti:value id="decision2" name="Decision 2"></activiti:value>
-        </activiti:formProperty>
-        <activiti:formProperty id="tresholdRationale" name="Decision Rationale" type="memo1x50"></activiti:formProperty>
+        <activiti:formProperty id="thresholdRationale" name="Decision Rationale" type="memo1x50"></activiti:formProperty>
         <activiti:formProperty id="priority" name="Priority" type="enum">
           <activiti:value id="Red" name="Red"></activiti:value>
           <activiti:value id="Ambar" name="Ambar"></activiti:value>
@@ -87,7 +103,13 @@
     <sequenceFlow id="flow16" sourceRef="servicetask1" targetRef="storeCase"></sequenceFlow>
     <userTask id="usertask1" name="Decision for referral ${personName}" activiti:async="true" activiti:assignee="${p_treshold}">
       <extensionElements>
-        <activiti:formProperty id="outcome" name="Summary Decision" type="memo1x50"></activiti:formProperty>
+         <activiti:formProperty id="outcome" name="Decision made" type="enum">
+          <activiti:value id="1" name="Doesn't meet threshold - signposted"></activiti:value>
+          <activiti:value id="2" name="Doesn't meet threshold - NFA"></activiti:value>
+          <activiti:value id="3" name="Adult with care and support needs declined investigation"></activiti:value>
+          <activiti:value id="4" name="Section 42"></activiti:value>
+          <activiti:value id="5" name="Section 47 - investigation"></activiti:value>
+         </activiti:formProperty>
         <activiti:formProperty id="outcomeRationale" name="Rationale" type="memo5x50"></activiti:formProperty>
       </extensionElements>
     </userTask>
