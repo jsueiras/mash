@@ -48,3 +48,5 @@ Temporary Items
 .apdisk
 *.jar
 mash-process/deployment/MASHProcess.bar
+mash-process/result.pdf
+mash-process-util/result.docx
