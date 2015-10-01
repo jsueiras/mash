@@ -1,96 +1,87 @@
 package com.mash.data.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.transform.stream.StreamSource;
 
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
+import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Act;
-import com.mash.model.catalog.Acts;
+import com.mash.model.catalog.Entity;
+import com.mash.model.catalog.Location;
+import com.mash.model.catalog.Locations;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
 
-import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import  org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-
 public class DefaultRepository implements Repository {
 	
-	private static final String PERSON_PATH = "person/";
-
-	private static final String REFERRAL_PATH = "referral/";
-
-	private static final String ACT_PATH = "act/";
-
-	RestTemplate restTemplate;
+	private static final String PERSON_PATH = "person";
 	
-	String baseUrl;
-	
-	public DefaultRepository(String baseUrl) {
-		
-		List<MediaType> mediaType = new ArrayList<>();
-		mediaType.add(MediaType.ALL);
-		
-	
-     	restTemplate = new RestTemplate();
-//		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-//		marshaller.setPackagesToScan("com.mash.model.catalog");
-//		marshaller.setClassesToBeBound(Person.class,Persons.class);
-//	
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-//		MarshallingHttpMessageConverter converter = new MarshallingHttpMessageConverter();
-        //converter.setSupportedMediaTypes(mediaType);
-//		converter.setMarshaller(marshaller);
-//		converter.setUnmarshaller(marshaller);
-		messageConverters.add(new Jaxb2CollectionHttpMessageConverter());
-		messageConverters.add(new Jaxb2RootElementHttpMessageConverter());
-		
-		//messageConverters.add();
+	private static final String LOCATION_PATH = "location";
 
-		restTemplate.setMessageConverters(messageConverters);
+	private static final String REFERRAL_PATH = "referral";
+
+	private static final String ACT_PATH = "act";
+
+	private Jaxb2Marshaller marshaller;
+
+	private String directory;
+	
+	public DefaultRepository() {
 		
-		this.baseUrl = baseUrl;
+	
+     	marshaller = new Jaxb2Marshaller();
+ 		marshaller.setPackagesToScan("com.mash.model.catalog");
+
 	}
+	
+	public DefaultRepository(String directory) {
+       this();
+       this.directory = directory;
+       
+	}
+	
+	private StreamSource getStream(String name)  {
+		String resourceName = name+".xml";
+		if (directory!=null)
+		{
+		   
+			File file = new File(directory+resourceName);
+			 try {
+				return new StreamSource(new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+		return new StreamSource(this.getClass().getResourceAsStream("/" + resourceName));
+	}
+
 
 	@Override
 	public Person findPersonById(String id) {
-		
-		
-	   Person person= restTemplate.getForObject(baseUrl + PERSON_PATH + id , Person.class );
-	   return person;
+		return  (Person) findEntityById(id);
 	}
 
 	@Override
-	public List<Person> findPersonsByName(String name) {
-		// TODO Auto-generated method stub
-		 Persons persons = restTemplate.getForObject(baseUrl + PERSON_PATH, Persons.class,name);
-		 return persons.getPersons();
-	}
-
-	@Override
-	public Referral findReferralById(String id) {
-		 return restTemplate.getForObject(baseUrl + REFERRAL_PATH + id , Referral.class);
+	public Referral findReferralById(String id) {		
+		   JAXBElement<Referral>  referral=  (JAXBElement<Referral>) marshaller.unmarshal(getStream(id))   ;
+		   return referral.getValue();
 	}
 
 	@Override
 	public Referral saveReferral(Referral referral) {
-		return restTemplate.postForObject(baseUrl + REFERRAL_PATH,referral,Referral.class);
+		return referral;
 	}
 
-	@Override
-	public List<Act> findEvents() {
-		 Acts ps = restTemplate.getForObject(baseUrl + ACT_PATH, Acts.class);
-		 return extract( ps.getActs());
-	}
 	
 	
 	private List<Act> extract(List<JAXBElement<? extends Act>> elements){
@@ -101,6 +92,42 @@ public class DefaultRepository implements Repository {
 		}
 		return result;
 		
+	}
+
+	@Override
+	public List<Entity> findEntitiesById(List<String> ids) {
+		List<Entity> results = new ArrayList<Entity>();
+		for (String id : ids) {
+			results.add(findEntityById(id));
+		}
+		return results;
+	}
+
+	@Override
+	public Location findLocationById(String id) {
+		return (Location) findEntityById(id);
+	}
+
+	@Override
+	public List<Person> findPersons(Query query) {
+		// TODO Auto-generated method stub
+		Persons persons =  (Persons) marshaller.unmarshal(getStream(PERSON_PATH + query.getFirstName()));
+		
+		 return persons.getPersons();
+	}
+
+	@Override
+	public List<Location> findLocations(Location sample) {
+		Locations locations =  (Locations) marshaller.unmarshal(getStream(LOCATION_PATH + sample.getPostcode()));
+		
+		 return locations.getLocations();
+	}
+	
+	
+	public Entity findEntityById(String id) {
+		
+		   JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id));
+		   return location.getValue();
 	}
 	
 

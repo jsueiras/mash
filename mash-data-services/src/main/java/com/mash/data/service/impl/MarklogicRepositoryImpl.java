@@ -22,9 +22,12 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Acts;
+import com.mash.model.catalog.Entity;
+import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
@@ -99,16 +102,7 @@ public class MarklogicRepositoryImpl implements Repository {
 	   return person;
 	}
 
-	@Override
-	public List<Person> findPersonsByName(String name) {
-		// TODO Auto-generated method stub
-		//HashMap<String, String> params = new HashMap<String, String>();
-		//params.put("rsquery", name);
-		
-		 Persons persons = restTemplate.getForObject(baseUrl + PERSON_PATH + "?rs:query=" + name, Persons.class);
-		 return persons.getPersons();
-	}
-
+	
 	@Override
 	public Referral findReferralById(String id) {
 		 return restTemplate.getForObject(baseUrl + REFERRAL_PATH + id , Referral.class);
@@ -119,12 +113,7 @@ public class MarklogicRepositoryImpl implements Repository {
 		return restTemplate.postForObject(baseUrl + REFERRAL_PATH,referral,Referral.class);
 	}
 
-	@Override
-	public List<Act> findEvents() {
-		 Acts ps = restTemplate.getForObject(baseUrl + ACT_PATH, Acts.class);
-		 return extract( ps.getActs());
-	}
-	
+
 	
 	private List<Act> extract(List<JAXBElement<? extends Act>> elements){
 		List<Act> result = new ArrayList<Act>();
@@ -134,6 +123,35 @@ public class MarklogicRepositoryImpl implements Repository {
 		}
 		return result;
 		
+	}
+
+	@Override
+	public List<Entity> findEntitiesById(List<String> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Location findLocationById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Person> findPersons(Query query) {
+		// TODO Auto-generated method stub
+		//HashMap<String, String> params = new HashMap<String, String>();
+		//params.put("rsquery", name);
+		
+		 Persons persons = restTemplate.getForObject(baseUrl + PERSON_PATH + "?rs:query=" + query.getFirstName(), Persons.class);
+		 return persons.getPersons();
+
+	}
+
+	@Override
+	public List<Location> findLocations(Location sample) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

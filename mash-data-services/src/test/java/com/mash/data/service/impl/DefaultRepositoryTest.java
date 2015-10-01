@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Person;
@@ -17,7 +18,7 @@ public class DefaultRepositoryTest {
 	@Test
 	public void testGetPerson() {
 		
-	   Repository rep = new DefaultRepository("http://localhost:8080/service/data/");
+	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources");
 	   Person p = rep.findPersonById("1");
 	   assertNotNull(p);
 	   
@@ -26,20 +27,14 @@ public class DefaultRepositoryTest {
 	@Test
 	public void testGetPeople() {
 		
-	   Repository rep = new DefaultRepository("http://localhost:8080/service/data/");
-	   List<Person> p = rep.findPersonsByName(null);
+	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources");
+	   Query query = new Query();
+	   query.setFirstName("List");
+	   List<Person> p = rep.findPersons(query);
 	   assertNotNull(p);
 	   
 	}
 	
-	@Test
-	public void testEvents() {
-		
-	   Repository rep = new DefaultRepository("http://localhost:8080/service/data/");
-	   List<Act> p = rep.findEvents();
-	   assertNotNull(p);
-	   
-	}
 	
 	
 	
