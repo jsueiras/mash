@@ -34,7 +34,22 @@ xmlns:tns="http://www.mash.data.com/mashModel"
       </extension>
       </complexContent>		
    </complexType>
-   <complexType name="Role" abstract="true"/>
+     <complexType name="EntitySummary" abstract="true">
+      <complexContent>
+   		<extension base="tns:Entity">
+    		<sequence>
+   			    <element name="type" type="string" minOccurs="1"/>
+   				 <element name="attributes" type="tns:Entry" minOccurs="0" maxOccurs="unbounded"/>
+   			</sequence>
+       </extension>
+      </complexContent>		
+   </complexType>
+   <complexType name="Role" abstract="true">
+       <sequence>
+           <element name="from" type="date" minOccurs="0"></element>
+   		   <element name="to" type="date" minOccurs="0"></element>
+       </sequence>
+   </complexType>
      
      <complexType name="Relation" abstract="true">
       <complexContent>
@@ -54,7 +69,23 @@ xmlns:tns="http://www.mash.data.com/mashModel"
       </extension>
       </complexContent>		
    </complexType>
-   
+    <complexType name="Child">
+      <complexContent>
+   		<extension base="tns:Relation">
+   		   
+      </extension>
+      </complexContent>		
+   </complexType>
+    <complexType name="OtherRelation">
+    	<complexContent>
+    		<extension base="tns:Relation">
+                <sequence>
+                  <element name="type" type="string" minOccurs="1"/>
+                </sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
     <complexType name="Sibiling">
       <complexContent>
    		<extension base="tns:Relation">
@@ -63,12 +94,19 @@ xmlns:tns="http://www.mash.data.com/mashModel"
       </complexContent>		
    </complexType>
    
-   
-     
-   
-   
-   <complexType name="Participation" abstract="true">
+    <complexType name="Participation" abstract="true">
        
+   </complexType>
+   
+    <complexType name="GenericParticipant" >
+      <complexContent>
+   		<extension base="tns:Participation">
+   		    <choice>
+   		      <element ref="tns:act"/>
+   		      <element ref="tns:entity"/>
+   		   </choice>
+      </extension>
+      </complexContent>	
    </complexType>
    <complexType name="Victim">
       <complexContent>
@@ -99,6 +137,17 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    		</extension>
    	</complexContent>
    </complexType>
+   
+    <complexType name="ActSummary">
+   	<complexContent>
+   		<extension base="tns:Act">
+   			<sequence>
+   			    <element name="type" type="string" minOccurs="1"/>
+   				 <element name="attributes" type="tns:Entry" minOccurs="0" maxOccurs="unbounded"/>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
    <complexType name="Referral">
    	<complexContent>
    		<extension base="tns:Act">
@@ -119,9 +168,33 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    				<element name="firstName" type="string" minOccurs="0"></element>
    				<element name="lastName" type="string" minOccurs="0"></element>
    				<element name="dateOfBirth" type="date" minOccurs="0"></element>
-   				<element name="homeAddress" type="tns:Location" minOccurs="0"></element>
+   				<element name="gender" type="string" minOccurs="0"></element>
+   				<element name="homeAddress" type="tns:Address" minOccurs="0"></element>
    				<element name="participations" type="tns:Participations" minOccurs="0"></element>
    				<element name="household" type="tns:Household" minOccurs="0"></element>
+   				<element name="otherAddresses" type="tns:Address" minOccurs="0" maxOccurs="unbounded"></element>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+   
+    <complexType name="Address">
+   	<complexContent>
+   		<extension base="tns:Role">
+   			<sequence>
+   				<element name="location" type="tns:Location" minOccurs="1"></element>
+   				<element name="type" type="string" minOccurs="0"></element>
+   			</sequence>
+   		</extension>
+   	</complexContent>
+   </complexType>
+   
+    <complexType name="Occupant">
+   	<complexContent>
+   		<extension base="tns:Role">
+   			<sequence>
+   				<element name="person" type="tns:Person" minOccurs="1"></element>
+   				<element name="type" type="string" minOccurs="0"></element>
    			</sequence>
    		</extension>
    	</complexContent>
@@ -137,6 +210,7 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    				<element name="city" type="string"  minOccurs="0"></element>
    				<element name="county" type="string"  minOccurs="0"></element>
    				<element name="postcode" type="string"  minOccurs="0"></element>
+   				<element name="occupants" type="tns:Occupant" minOccurs="0" maxOccurs="unbounded"></element>
    			</sequence>
    		</extension>
    	</complexContent>
@@ -144,12 +218,12 @@ xmlns:tns="http://www.mash.data.com/mashModel"
 
 
   
-  <element name="person" type="tns:Person"/>
-      
-     
+ 
+     <element name="locations" type="tns:Locations"/>
+    
    <element name="persons" type="tns:Persons"/>
   
-   <element name="acts" type="tns:Acts"/>
+   <element name="entities" type="tns:Entities"/>
   
    
      
@@ -168,9 +242,15 @@ xmlns:tns="http://www.mash.data.com/mashModel"
      </sequence>
   </complexType>
   
-   <complexType name="Acts">
+  <complexType name="Locations">
      <sequence>
-        <element ref="tns:act"  minOccurs="0" maxOccurs="unbounded"></element>
+        <element ref="tns:location"  minOccurs="0" maxOccurs="unbounded"></element>
+     </sequence>
+  </complexType>
+  
+   <complexType name="Entities">
+     <sequence>
+        <element ref="tns:entity"  minOccurs="0" maxOccurs="unbounded"></element>
      </sequence>
   </complexType>
   
@@ -183,7 +263,14 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    <element name="act" abstract="true" type="tns:Act"/>
    <element name="crime" type="tns:Crime" substitutionGroup="tns:act"/>
    <element name="referral" type="tns:Referral" substitutionGroup="tns:act"/>
+    <element name="actSummary" type="tns:ActSummary" substitutionGroup="tns:act"/>
+   
+   <element name="entity" abstract="true" type="tns:Entity"/>
+   <element name="person" type="tns:Person" substitutionGroup="tns:entity"/>
+   <element name="location" type="tns:Location" substitutionGroup="tns:entity"/>
+   <element name="entitySummary" type="tns:EntitySummary" substitutionGroup="tns:entity"/>
     
+  
     
     
     <element name="relation" abstract="true" type="tns:Relation"/>
@@ -199,4 +286,15 @@ xmlns:tns="http://www.mash.data.com/mashModel"
              type="tns:Victim"/>
    <element name="subjectOf" substitutionGroup="tns:participation" 
              type="tns:SubjectOf"/>
+    <element name="generic" substitutionGroup="tns:participation" 
+             type="tns:GenericParticipant"/>          
+             
+ 
+  
+     <complexType name="Entry">
+           <sequence>
+                <element name="key" minOccurs="1" type="string"/>
+                 <element name="value" minOccurs="0" type="string"/>
+           </sequence>
+     </complexType>
 </schema>
