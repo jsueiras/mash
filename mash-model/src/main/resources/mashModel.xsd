@@ -51,10 +51,11 @@ xmlns:tns="http://www.mash.data.com/mashModel"
        </sequence>
    </complexType>
      
-     <complexType name="Relation" abstract="true">
+     <complexType name="Relation">
       <complexContent>
    		<extension base="tns:Role">
    		   <sequence>
+   		       <element name="type" type="string" />
    		      <element ref="tns:person"/>
    		   </sequence>
       </extension>
@@ -62,37 +63,6 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    </complexType>
    
    
-     <complexType name="Parent">
-      <complexContent>
-   		<extension base="tns:Relation">
-   		   
-      </extension>
-      </complexContent>		
-   </complexType>
-    <complexType name="Child">
-      <complexContent>
-   		<extension base="tns:Relation">
-   		   
-      </extension>
-      </complexContent>		
-   </complexType>
-    <complexType name="OtherRelation">
-    	<complexContent>
-    		<extension base="tns:Relation">
-                <sequence>
-                  <element name="type" type="string" minOccurs="1"/>
-                </sequence>
-    		</extension>
-    	</complexContent>
-    </complexType>
-
-    <complexType name="Sibiling">
-      <complexContent>
-   		<extension base="tns:Relation">
-   		   
-      </extension>
-      </complexContent>		
-   </complexType>
    
     <complexType name="Participation" abstract="true">
        
@@ -256,7 +226,7 @@ xmlns:tns="http://www.mash.data.com/mashModel"
   
    <complexType name="Household">
      <sequence>
-        <element ref="tns:relation"  minOccurs="0" maxOccurs="unbounded"></element>
+        <element ref="tns:relation" minOccurs="0" maxOccurs="unbounded"></element>
      </sequence>
   </complexType>
   
@@ -269,19 +239,9 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    <element name="person" type="tns:Person" substitutionGroup="tns:entity"/>
    <element name="location" type="tns:Location" substitutionGroup="tns:entity"/>
    <element name="entitySummary" type="tns:EntitySummary" substitutionGroup="tns:entity"/>
+      <element name="relation" type="tns:Relation"/>
     
-  
-    
-    
-    <element name="relation" abstract="true" type="tns:Relation"/>
-   
-    
-    <element name="parent" type="tns:Parent" substitutionGroup="tns:relation"/>
-    <element name="child" type="tns:Child" substitutionGroup="tns:relation"/>
-   
-    <element name="sibiling" type="tns:Sibiling" substitutionGroup="tns:relation"/>
-    <element name="otherRelation" type="tns:OtherRelation" substitutionGroup="tns:relation"/>
- 
+     
    <element name="participation" abstract="true" 
              type="tns:Participation"/>
    

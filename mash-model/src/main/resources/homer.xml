@@ -13,7 +13,7 @@
 	  </location>	
 	</homeAddress>
 	<household>
-	<otherRelation>
+	<relation>
 	<type>Wife</type>
 	<person>
 	 <id>marge</id>
@@ -29,8 +29,9 @@
 	  </location>	
 	</homeAddress>
 </person>
-</otherRelation>
-<child>
+</relation>
+<relation>
+  <type>Child</type>
 <person>
 	 <id>bart</id>
 	<firstName>Bart</firstName>
@@ -45,8 +46,9 @@
 	  </location>	
 	</homeAddress>
 </person>
-</child>
-<child>
+</relation>
+<relation>
+  <type>Child</type>
 	<person>
 	 <id>lisa</id>
 	<firstName>Lisa</firstName>
@@ -61,8 +63,9 @@
 	  </location>	
 	</homeAddress>
 </person>
-</child>
-<child>
+</relation>
+<relation>
+    <type>child</type>
 	<person>
 	 <id>maggie</id>
 	<firstName>Maggie</firstName>
@@ -77,6 +80,6 @@
 	  </location>	
 	</homeAddress>
 </person>
-</child>
+</relation>
 </household>
 </person>
