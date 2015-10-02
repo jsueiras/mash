@@ -18,8 +18,8 @@ public class DefaultRepositoryTest {
 	@Test
 	public void testGetPerson() {
 		
-	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources");
-	   Person p = rep.findPersonById("1");
+	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources\\");
+	   Person p = rep.findPersonById("person1");
 	   assertNotNull(p);
 	   
 	}
@@ -27,7 +27,7 @@ public class DefaultRepositoryTest {
 	@Test
 	public void testGetPeople() {
 		
-	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources");
+	   Repository rep = new DefaultRepository("C:\\workspace\\mash\\mash-data-services\\src\\main\\resources\\");
 	   Query query = new Query();
 	   query.setFirstName("List");
 	   List<Person> p = rep.findPersons(query);
