@@ -277,8 +277,11 @@ xmlns:tns="http://www.mash.data.com/mashModel"
    
     
     <element name="parent" type="tns:Parent" substitutionGroup="tns:relation"/>
-    <element name="sibiling" type="tns:Sibiling" substitutionGroup="tns:relation"/>
+    <element name="child" type="tns:Child" substitutionGroup="tns:relation"/>
    
+    <element name="sibiling" type="tns:Sibiling" substitutionGroup="tns:relation"/>
+    <element name="otherRelation" type="tns:OtherRelation" substitutionGroup="tns:relation"/>
+ 
    <element name="participation" abstract="true" 
              type="tns:Participation"/>
    
