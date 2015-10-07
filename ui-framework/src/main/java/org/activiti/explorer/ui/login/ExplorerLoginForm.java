@@ -12,6 +12,7 @@
  */
 package org.activiti.explorer.ui.login;
 
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
@@ -125,6 +126,7 @@ public void buttonClick(ClickEvent event) {
 	if (user!=null) {
         ExplorerApp.get().setUser(user);
         ExplorerApp.get().getViewManager().showDefaultPage();
+        Authentication.setAuthenticatedUserId(user.getId());
 		
 	} else {
 

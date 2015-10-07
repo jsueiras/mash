@@ -20,7 +20,7 @@ import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.explorer.form.MonthFormType;
 import org.activiti.explorer.form.ProcessDefinitionFormType;
 import org.activiti.explorer.form.UserFormType;
-import org.activiti.explorer.ui.form.custom.PersonFormType;
+import org.activiti.explorer.form.custom.MemoFormType;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.slf4j.Logger;
@@ -105,7 +105,9 @@ public class ActivitiEngineConfiguration {
   	formTypes.add(new UserFormType());
   	formTypes.add(new ProcessDefinitionFormType());
   	formTypes.add(new MonthFormType());
-  	formTypes.add(new PersonFormType());
+  	formTypes.add(new MemoFormType(1,50));
+  	formTypes.add(new MemoFormType(5,50));
+  	formTypes.add(new MemoFormType(10,60));
   	processEngineConfiguration.setCustomFormTypes(formTypes);
   	
   	return processEngineConfiguration;

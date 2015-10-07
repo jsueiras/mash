@@ -38,8 +38,18 @@
         <bean class="org.activiti.explorer.form.UserFormType"/>
         <bean class="org.activiti.explorer.form.ProcessDefinitionFormType"/> 
         <bean class="org.activiti.explorer.form.MonthFormType"/>
-        <bean class="org.activiti.explorer.ui.form.custom.PersonFormType"/>
-      </list>
+         <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="10"/>
+             <constructor-arg type="int" value="60"/>
+         </bean>  
+          <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="5"/>
+             <constructor-arg type="int" value="50"/>
+         </bean>  
+          <bean class="org.activiti.explorer.form.custom.MemoFormType"> 
+             <constructor-arg type="int" value="1"/>
+             <constructor-arg type="int" value="50"/>
+         </bean>       </list>
     </property>
     
   </bean>

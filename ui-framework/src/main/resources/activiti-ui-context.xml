@@ -40,7 +40,7 @@
         <bean class="org.activiti.explorer.ui.form.BooleanFormPropertyRenderer" />
         <bean class="org.activiti.explorer.ui.form.ProcessDefinitionFormPropertyRenderer" />
          <bean class="org.activiti.explorer.ui.form.MonthFormPropertyRenderer" />
-        <bean class="org.activiti.explorer.ui.form.custom.PersonFormPropertyRenderer" />
+        <bean class="org.activiti.explorer.ui.form.custom.MemoFormPropertyRenderer" />
        </list>
     </property>
   </bean>
@@ -69,6 +69,8 @@
     <property name="i18nManager" ref="i18nManager" />
   </bean>
   -->
+  <bean name="graphApp" class="com.vaadin.graph.demo.codegraph.CodeGraphDemo"/>
+  
   <bean name="explorerApp" class="org.activiti.explorer.ExplorerApp" scope="prototype">
     <property name="environment" value="${activiti.ui.environment}" />
     <property name="useJavascriptDiagram" value="${activiti.ui.jsdiagram}" />
@@ -87,7 +89,7 @@
   </bean>
   
   <bean id="mashDefaultRepository" class="com.mash.data.service.impl.DefaultRepository" >
-    <constructor-arg name="baseUrl" value="http://localhost:8080/service/data/"></constructor-arg>
+  
   </bean>
   
   <bean id="simpleWorkflowJsonConverter" class="org.activiti.workflow.simple.converter.json.SimpleWorkflowJsonConverter" />

@@ -287,8 +287,8 @@ public class TaskDetailPanel extends DetailPanel {
   
   
   protected void initSubTasks() {
-    subTaskComponent = new SubTaskComponent(i18nManager,task);
-    centralLayout.addComponent(subTaskComponent);
+    //subTaskComponent = new SubTaskComponent(i18nManager,task);
+    //centralLayout.addComponent(subTaskComponent);
   }
   
   protected void initRelatedContent() {
@@ -387,7 +387,7 @@ protected boolean isCurrentUserOwner() {
   
   public void notifyPeopleInvolvedChanged() {
     involvedPeople.refreshPeopleGrid();
-    taskPage.getTaskEventPanel().refreshTaskEvents();
+    //taskPage.getTaskEventPanel().refreshTaskEvents();
   }
   
   public void notifyAssigneeChanged() {
@@ -395,7 +395,7 @@ protected boolean isCurrentUserOwner() {
       viewManager.showInboxPage(task.getId());
     } else {
       involvedPeople.refreshAssignee();
-      taskPage.getTaskEventPanel().refreshTaskEvents();
+      //taskPage.getTaskEventPanel().refreshTaskEvents();
     }
   }
   
@@ -404,13 +404,13 @@ protected boolean isCurrentUserOwner() {
       viewManager.showTasksPage(task.getId());
     } else {
       involvedPeople.refreshOwner();
-      taskPage.getTaskEventPanel().refreshTaskEvents();
+      //taskPage.getTaskEventPanel().refreshTaskEvents();
     }
   }
   
   public void notifyRelatedContentChanged() {
     relatedContent.refreshTaskAttachments();
-    taskPage.getTaskEventPanel().refreshTaskEvents();
+    //taskPage.getTaskEventPanel().refreshTaskEvents();
   }
   
 }

@@ -109,7 +109,7 @@ public class TaskEventsPanel extends Panel {
   }
   
   private void addComponent(Component eventTitle) {
-	// TODO Auto-generated method stub
+	
 	
 }
 

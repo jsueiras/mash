@@ -15,6 +15,7 @@ package org.activiti.explorer.ui.process;
 import java.text.MessageFormat;
 
 import org.activiti.engine.form.StartFormData;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.Messages;
@@ -68,6 +69,7 @@ public class ProcessDefinitionDetailPanel extends AbstractProcessDefinitionDetai
       processDefinitionStartForm.addListener(new FormPropertiesEventListener() {
         private static final long serialVersionUID = 1L;
         protected void handleFormSubmit(FormPropertiesEvent event) {
+        	 Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());	
           formService.submitStartFormData(processDefinition.getId(), event.getFormProperties());
           
           // Show notification

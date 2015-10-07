@@ -15,40 +15,29 @@ package org.activiti.explorer.ui.search;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.form.StartFormData;
-import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
-import org.activiti.explorer.Messages;
 import org.activiti.explorer.data.LazyLoadingContainer;
 import org.activiti.explorer.data.LazyLoadingQuery;
-import org.activiti.explorer.ui.AbstractPage;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.DetailPanel;
-import org.activiti.explorer.ui.form.FormPropertiesEventListener;
-import org.activiti.explorer.ui.form.FormPropertiesForm;
-import org.activiti.explorer.ui.form.FormPropertiesForm.FormPropertiesEvent;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.ui.search.SearchForm.SearchFormEvent;
 import org.activiti.explorer.ui.search.person.Decorator;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
+import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
+import com.mash.model.catalog.Entity;
+import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.GridLayout;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
@@ -61,7 +50,6 @@ public class SearchDetailPanel extends DetailPanel {
   private static final long serialVersionUID = 1L;
   
   protected ProcessDefinition processDefinition;
-  protected AbstractPage parentPage;
   protected I18nManager i18nManager;
   
   protected VerticalLayout detailPanelLayout;
@@ -73,13 +61,15 @@ public class SearchDetailPanel extends DetailPanel {
   private LazyLoadingQuery lazyLoadingQuery;
   private LazyLoadingContainer taskListContainer;
   private Repository repository;
-  private Table table;
+  private Table personTable;
+  private Table locationTable;
+  private boolean isLocation;
 
 private HorizontalLayout resultsContainer;
+private VerticalLayout treeContainer;
 
   
-  public SearchDetailPanel( AbstractPage parentPage) {
-    this.parentPage = parentPage;
+  public SearchDetailPanel() {
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.repository = ExplorerApp.get().getMashRepository();
   
@@ -98,21 +88,30 @@ private HorizontalLayout resultsContainer;
    
    
     detailContainer = new VerticalLayout();
+    detailContainer.setMargin(true);
     detailContainer.addStyleName(Reindeer.PANEL_LIGHT);
     detailPanelLayout.addComponent(detailContainer);
     detailContainer.setSizeFull();
-    
+     
+   
     initForm();
     initResults();
   }
   
   private void initResults() {
 	resultsContainer = new HorizontalLayout();
-
-    table = createList();
-	resultsContainer.addComponent(table);
+	resultsContainer.setSpacing(true);
+    personTable = createPersonTable();
+    locationTable=createLocationTable();
+    locationTable.addValueChangeListener(getListSelectionListener());
+    personTable.addValueChangeListener(getListSelectionListener());
+    resultsContainer.addComponent(locationTable);
+	resultsContainer.addComponent(personTable);
 	resultsContainer.setVisible(false);
 	detailContainer.addComponent(resultsContainer);
+	 treeContainer = new VerticalLayout();
+	detailContainer.addComponent( treeContainer);
+	 
 	
   }
 
@@ -129,8 +128,33 @@ private HorizontalLayout resultsContainer;
 
 	@Override
 	protected void handleFormSubmit(SearchFormEvent event) {
-		 List<Person> results=repository.findPersonsByName(event.getFormProperties().get("name"));
-	     appendResults(results);		
+		Query query = (Query) event.getFormProperties().get("queryBean");
+		if (!isLocationQuery(query))
+		{		
+			locationTable.setVisible(false);		
+		  List<Person> results=repository.findPersons(query);
+	      appendResults(results,personTable);
+	      
+	      
+		}
+		else
+		{		
+		  personTable.setVisible(false);	
+		  List<Location> results = repository.findLocations(query.getSampleLocation());
+		  appendResults(results,locationTable);	
+		}
+	}
+
+	
+
+	private boolean isLocationQuery(Query query) {
+		isLocation= (query.getLastName() == null || query.getLastName().length() == 0)
+				&& (query.getFirstName() ==null || query.getFirstName().length() == 0)
+				&& query.getDateOfBirthFrom() ==null
+				&& query.getDateOfBirthTo()==null
+				&& query.getGender()==null;
+		return isLocation;
+		
 	}
 
 	@Override
@@ -145,11 +169,12 @@ private HorizontalLayout resultsContainer;
   }
   
   
-  protected Table createList() {
-	    Table taskTable = new Table();
-	    taskTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
-	    taskTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
-	    taskTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+  protected Table createPersonTable() {
+	    Table personTable = new Table();
+	    personTable.setPageLength(10);
+	    personTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
+	    personTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
+	    personTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 		 
 	   
 	    //this.lazyLoadingQuery = createLazyLoadingQuery();
@@ -157,28 +182,52 @@ private HorizontalLayout resultsContainer;
 	    //taskTable.setContainerDataSource(taskListContainer);
 	    
 	    // Create column header
-	    taskTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
-	    taskTable.setColumnWidth("", 22);
+	    personTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
+	    personTable.setColumnWidth("", 22);
 	    
-	    taskTable.addContainerProperty("Name", String.class, null);
-	    taskTable.setColumnWidth("Name", 250);
+	    personTable.addContainerProperty("Name", String.class, null);
+	    personTable.setColumnWidth("Name", 250);
 	   
-	    taskTable.addContainerProperty("Address", String.class, null);
-	    taskTable.setColumnWidth("Address", 250);
+	    personTable.addContainerProperty("Address", String.class, null);
+	    personTable.setColumnWidth("Address", 250);
+	    
+	    personTable.addContainerProperty("DOB", String.class, null);
+	    personTable.setColumnWidth("DOB", 50);
 		  
 	   
-	    return taskTable;
+	    return personTable;
+	  }
+  
+  protected Table createLocationTable() {
+	    Table locationTable = new Table();
+	    locationTable.setPageLength(10);
+	    locationTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
+	    locationTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
+	    locationTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+		     
+	    // Create column header
+	    locationTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
+	    locationTable.setColumnWidth("", 22);
+	    
+	   
+	    locationTable.addContainerProperty("Address", String.class, null);
+	    locationTable.setColumnWidth("Address", 250);
+	    
+	    locationTable.addContainerProperty("Postcode", String.class, null);
+	    locationTable.setColumnWidth("Postcode", 80);
+	
+		   
+	    return locationTable;
 	  }
 
-	private void appendResults(List<Person> results) {
+	private void appendResults(List<? extends Entity> results, Table table) {
 	
-    for (Person person : results) {
-    	table.addItem(new Object[] {Decorator.getName(person),Decorator.getSummaryAddress(person)}, person.getId());
+    for (Entity entity : results) {
+    	table.addItem(Decorator.getTableRow(entity), entity.getId());
 	}
     resultsContainer.setVisible(true);
     table.setVisible(true);
-    if (results.size()>0) resultsContainer.addComponent(Decorator.getTreeComponent(results.get(0)));
-	
+ 	
 }
 
 	private LazyLoadingQuery createLazyLoadingQuery() {
@@ -186,9 +235,38 @@ private HorizontalLayout resultsContainer;
 		return null;
 	}
 
-	private ItemClickListener getListSelectionListener() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  
+
+	 protected ValueChangeListener getListSelectionListener() {
+		    return new Property.ValueChangeListener() {
+		      private static final long serialVersionUID = 1L;
+		      public void valueChange(ValueChangeEvent event) {
+		       // Item item = table.getItem(event.getProperty().getValue()); // the value of the property is the itemId of the table entry
+		        String id = (String) event.getProperty().getValue();
+		        if(id != null) {
+		         
+		          if (!isLocation)
+		          {	  
+		          Person person = ExplorerApp.get().getMashRepository().findPersonById(id);
+		          treeContainer.removeAllComponents();
+		          treeContainer.addComponent(Decorator.getTreeComponent(person));
+		          }
+		          else
+		          {
+		        	    Location location = ExplorerApp.get().getMashRepository().findLocationById(id);
+				          treeContainer.removeAllComponents();
+				          treeContainer.addComponent(Decorator.getTreeComponent(location));
+				         
+		          }	  
+		        } else {
+		            treeContainer.removeAllComponents();
+				     
+		        }
+		      }
+		    };
+		  }
+	
+	
+	
 
 }

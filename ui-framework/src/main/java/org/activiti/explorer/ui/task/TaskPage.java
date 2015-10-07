@@ -15,6 +15,7 @@ package org.activiti.explorer.ui.task;
 
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.LazyLoadingContainer;
@@ -31,6 +32,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.graph.demo.codegraph.GraphPanel;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
@@ -51,7 +53,7 @@ public abstract class TaskPage extends AbstractTablePage {
   protected Table taskTable;
   protected LazyLoadingContainer taskListContainer;
   protected LazyLoadingQuery lazyLoadingQuery;
-  protected TaskEventsPanel taskEventPanel;
+  protected GraphPanel taskEventPanel;
  
   
   
@@ -126,9 +128,10 @@ public abstract class TaskPage extends AbstractTablePage {
   }
   
   protected Component createDetailComponent(String id) {
+	  Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
     Task task = taskService.createTaskQuery().taskId(id).singleResult();
     Component detailComponent = new TaskDetailPanel(task, TaskPage.this);
-    taskEventPanel.setTaskId(task.getId());
+    //taskEventPanel.setTaskId(task.getId());
     return detailComponent;
   }
   
@@ -137,9 +140,9 @@ public abstract class TaskPage extends AbstractTablePage {
     return getTaskEventPanel();
   }
   
-  public TaskEventsPanel getTaskEventPanel() {
+  public GraphPanel getTaskEventPanel() {
     if(taskEventPanel == null) {
-      taskEventPanel = new TaskEventsPanel();
+      taskEventPanel = new GraphPanel();
     }
     return taskEventPanel;
   }
