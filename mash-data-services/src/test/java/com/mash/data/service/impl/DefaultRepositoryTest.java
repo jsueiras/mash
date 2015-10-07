@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Act;
+import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
 
 public class DefaultRepositoryTest {
@@ -36,6 +37,28 @@ public class DefaultRepositoryTest {
 	}
 	
 	
+
+	@Test
+	public void testGetLocation() {
+		
+	   Repository rep = new DefaultRepository();
+	   Location p = rep.findLocationById("homerAddress");
+	   assertNotNull(p);
+	   assertTrue(p.getOccupants().size()>3);
+	}
+	
+	@Test
+	public void testGetLocations() {
+		
+	   Repository rep = new DefaultRepository();
+	   Query query = new Query();
+	   Location sampleLocation = new Location();
+	  
+	   sampleLocation.setCity("Springfield");
+	   List<Location> p = rep.findLocations(sampleLocation);
+	   assertNotNull(p);
+	   
+	}
 	
 	
 	

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
  <groupId>com.mash</groupId>
   <artifactId>process</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  	<version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>BPMN 2.0 with Activiti - Examples</name>
   <properties>
@@ -62,10 +62,16 @@
 			<artifactId>model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
-			<groupId>com.mash</groupId>
-	<artifactId>mash-process-util</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.docx4j</groupId>
+			<artifactId>docx4j</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.0</version>
 		</dependency>
   </dependencies>
 	 <build>

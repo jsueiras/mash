@@ -65,7 +65,7 @@
 </person>
 </relation>
 <relation>
-    <type>child</type>
+    <type>Child</type>
 	<person>
 	 <id>maggie</id>
 	<firstName>Maggie</firstName>

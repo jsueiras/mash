@@ -20,6 +20,7 @@
     </startEvent>
     <sequenceFlow id="flow9" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="usertask1" name="Research review for referral ${personName}" activiti:async="true" activiti:assignee="${requestedBy}" activiti:dueDate="${dueDate}">
+      <documentation>${description}</documentation>
       <extensionElements>
         <activiti:formProperty id="reasonForReferral" name="Reason for referral" type="string" writable="false"></activiti:formProperty>
         <activiti:formProperty id="referralRationale" name="Referral Rationale" type="memo1x50" writable="false"></activiti:formProperty>
@@ -38,6 +39,7 @@
     </userTask>
     <sequenceFlow id="flow18" sourceRef="start" targetRef="exclusivegateway2"></sequenceFlow>
     <userTask id="researchTask" name="Research for referral ${personName}" activiti:async="true" activiti:assignee="${researcher}" activiti:candidateGroups="${researchAgency}" activiti:dueDate="${dueDate}">
+      <documentation>${description}</documentation>
       <extensionElements>
         <activiti:formProperty id="reasonForReferral" name="Reason for referral" type="string" writable="false"></activiti:formProperty>
         <activiti:formProperty id="referralRationale" name="Referral Rationale" type="memo1x50" writable="false"></activiti:formProperty>
@@ -82,6 +84,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${researchAgency !=null}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="finishResearch" name="Finish research for referral ${personName}" activiti:async="true" activiti:assignee="${requestedBy}" activiti:dueDate="${dueDate}">
+      <documentation>${description}</documentation>
       <extensionElements>
         <activiti:formProperty id="meetingDate" name="Meeting By" type="date"></activiti:formProperty>
       </extensionElements>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<acts xmlns="http://www.mash.data.com/mashModel">
-	<crime>
-		<id>referral</id>
-	</crime>
-	<referral>
-		<id>subject</id>
-	</referral>
-</acts>

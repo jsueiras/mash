@@ -7,12 +7,12 @@
     <endEvent id="endevent1" name="End"></endEvent>
     <startEvent id="start" name="Start" activiti:initiator="initiator">
       <extensionElements>
-        <activiti:formProperty id="triage.reason" name="Reason for search" type="enum">
+        <activiti:formProperty id="triageReason" name="Reason for search" type="enum">
           <activiti:value id="reason1" name="Potential risk to child"></activiti:value>
           <activiti:value id="reason2" name="Potential risk to adult"></activiti:value>
           <activiti:value id="reason3" name="Potential risk to children/adult(s) in a household"></activiti:value>
         </activiti:formProperty>
-        <activiti:formProperty id="triage.rationale" name="Rationale" type="memo5x50"></activiti:formProperty>
+        <activiti:formProperty id="triageRationale" name="Rationale" type="memo5x50"></activiti:formProperty>
         <activiti:formProperty id="person.id" name="Person identifier" type="string"></activiti:formProperty>
         <activiti:formProperty id="person.firstName" name="Forename" type="string"></activiti:formProperty>
         <activiti:formProperty id="person.lastName" name="Surname" type="string"></activiti:formProperty>
@@ -78,7 +78,9 @@
  execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"));
  execution.setVariable("triageId", null);</script>
     </scriptTask>
-    <userTask id="refer" name="Refer to the cohort ${triageCohort} including ref ${reference}" activiti:assignee="${initiator}"></userTask>
+    <userTask id="refer" name="Refer to the cohort ${triageCohort} including ref ${reference}" activiti:assignee="${initiator}">
+      <documentation>${triageRationale}</documentation>
+    </userTask>
     <sequenceFlow id="flow19" sourceRef="exclusivegateway1" targetRef="refer">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('Other Agency')}]]></conditionExpression>
     </sequenceFlow>

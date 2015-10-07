@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.marklogic.client.DatabaseClientFactory.Authentication;
 import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Acts;
+import com.mash.model.catalog.Address;
 import com.mash.model.catalog.Crime;
 import com.mash.model.catalog.Household;
 import com.mash.model.catalog.Location;
@@ -93,8 +94,9 @@ public class DataController {
 			result.setId("xxxxxx");
 			result.setFirstName("first");
 			result.setLastName("dfdfsda");
-			result.setHomeAddress( new Location());
-			result.getHomeAddress().setCity("Sutton");
+			result.setHomeAddress( new Address());
+			result.getHomeAddress().setLocation(new Location());
+			result.getHomeAddress().getLocation().setCity("Sutton");
 			result.setHousehold(createHouseHold());
 			
 			return result;
@@ -104,8 +106,9 @@ public class DataController {
 			Person result=  new Person();
 			result.setFirstName("first");
 			result.setLastName("dfdfsda");
-			result.setHomeAddress( new Location());
-			result.getHomeAddress().setCity("Sutton");
+			result.setHomeAddress( new Address());
+			result.getHomeAddress().setLocation(new Location());
+			result.getHomeAddress().getLocation().setCity("Sutton");
 			
 			
 			return result;

@@ -26,6 +26,8 @@ import javax.annotation.PostConstruct;
 
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -38,6 +40,7 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.Job;
 import org.activiti.engine.task.Task;
+import org.activiti.spring.ProcessEngineFactoryBean;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,23 +67,25 @@ public class RoleDataConfiguration {
   @Autowired
   protected IdentityService identityService;
   
-  @Autowired
+  
   protected RepositoryService repositoryService;
   
-  @Autowired
+  
   protected RuntimeService runtimeService;
   
-  @Autowired
+  
   protected TaskService taskService;
   
-  @Autowired
+  
   protected ManagementService managementService;
   
-  @Autowired
+  
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   
   @Autowired
   protected Environment environment;
+
+private ProcessEngine processEngine;
 
 private static final String[] assignmentIds = new String[] {"children_stf", "children_stk", "adults_stf", "adults_stk", "mentalhealth_north","mentalhealth_south","police"};
 
@@ -88,9 +93,16 @@ private static final String[] otherAssignmentIds = new String[]{"probation","nHS
 private static final String[] assignmentGroups = new String[] {"Children Staffordshire", "Children Stoke", "Adults Staffordshire", "Adults Stoke", "Mental Health North","Mental Health South","Police"};
 private static final String[] otherAssignmentGroups= new String[]{"Probation","NHS"};
  
- 
+   
   
-  protected void initGroups() {
+  public RoleDataConfiguration(ProcessEngine processEngine) {
+     this.processEngine = processEngine;
+     this.identityService = processEngine.getProcessEngineConfiguration().getIdentityService();
+     this.managementService = processEngine.getProcessEngineConfiguration().getManagementService();
+     
+}
+
+protected void initGroups() {
 	    int i =0;
     for (String groupName : assignmentGroups) {
       String groupId = assignmentIds[i];
@@ -234,115 +246,8 @@ private static final String[] otherAssignmentGroups= new String[]{"Probation","N
     
   }
 
-  protected void generateReportData() {
-    // Report data is generated in background thread
-      
-    Thread thread = new Thread(new Runnable() {
-      
-      public void run() {
-        
-        // We need to temporarily disable the job executor or it would interfere with the process execution
-        processEngineConfiguration.getJobExecutor().shutdown();
-        
-        Random random = new Random();
-        
-        Date now = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
-        processEngineConfiguration.getClock().setCurrentTime(now);
-        
-        for (int i=0; i<50; i++) {
-          
-          if (random.nextBoolean()) {
-            runtimeService.startProcessInstanceByKey("fixSystemFailure");
-          }
-          
-          if (random.nextBoolean()) {
-            identityService.setAuthenticatedUserId("kermit");
-            Map<String, Object> variables = new HashMap<String, Object>();
-            variables.put("customerName", "testCustomer");
-            variables.put("details", "Looks very interesting!");
-            variables.put("notEnoughInformation", false);
-            runtimeService.startProcessInstanceByKey("reviewSaledLead", variables);
-          }
-          
-          if (random.nextBoolean()) {
-            runtimeService.startProcessInstanceByKey("escalationExample");
-          }
-          
-          if (random.nextInt(100) < 20) {
-            now = new Date(now.getTime() - ((24 * 60 * 60 * 1000) - (60 * 60 * 1000)));
-            processEngineConfiguration.getClock().setCurrentTime(now);
-          }
-        }
-        
-        List<Job> jobs = managementService.createJobQuery().list();
-        for (int i=0; i<jobs.size()/2; i++) {
-          processEngineConfiguration.getClock().setCurrentTime(jobs.get(i).getDuedate());
-          managementService.executeJob(jobs.get(i).getId());
-        }
-        
-        List<Task> tasks = taskService.createTaskQuery().list();
-        while (!tasks.isEmpty()) {
-          for (Task task : tasks) {
-            
-            if (task.getAssignee() == null) {
-              String assignee = random.nextBoolean() ? "kermit" : "fozzie";
-              taskService.claim(task.getId(), assignee);
-            }
 
-            processEngineConfiguration.getClock().setCurrentTime(new Date(
-                task.getCreateTime().getTime() + random.nextInt(60 * 60 * 1000)));
-            
-            taskService.complete(task.getId());
-          }
-          
-          tasks = taskService.createTaskQuery().list();
-        }
-
-        processEngineConfiguration.getClock().reset();
-        
-        processEngineConfiguration.getJobExecutor().start();
-        LOGGER.info("Demo report data generated");
-      }
-      
-    });
-    thread.start();
-  }
-  
-  protected void initModelData() {
-    createModelData("Demo model", "This is a demo model", "org/activiti/explorer/demo/model/test.model.json");
-  }
-  
-  protected void createModelData(String name, String description, String jsonFile) {
-    List<Model> modelList = repositoryService.createModelQuery().modelName("Demo model").list();
-    
-    if (modelList == null || modelList.isEmpty()) {
-    
-      Model model = repositoryService.newModel();
-      model.setName(name);
-      
-      ObjectNode modelObjectNode = new ObjectMapper().createObjectNode();
-      modelObjectNode.put("name", name);
-      modelObjectNode.put("description", description);
-      model.setMetaInfo(modelObjectNode.toString());
-      
-      repositoryService.saveModel(model);
-      
-      try {
-        InputStream svgStream = this.getClass().getClassLoader().getResourceAsStream("org/activiti/explorer/demo/model/test.svg");
-        repositoryService.addModelEditorSourceExtra(model.getId(), IOUtils.toByteArray(svgStream));
-      } catch(Exception e) {
-        LOGGER.warn("Failed to read SVG", e);
-      }
-      
-      try {
-        InputStream editorJsonStream = this.getClass().getClassLoader().getResourceAsStream(jsonFile);
-        repositoryService.addModelEditorSource(model.getId(), IOUtils.toByteArray(editorJsonStream));
-      } catch(Exception e) {
-        LOGGER.warn("Failed to read editor JSON", e);
-      }
-    }
-  }
-  
+ 
   
  
 public IdentityService getIdentityService() {
@@ -396,14 +301,20 @@ public void setProcessEngineConfiguration(
   
 public static void main(String[] args) {
 	  
+	System.out.println("start");
 	  ApplicationContext context = new ClassPathXmlApplicationContext("activiti-custom-context.xml");
 	  
 	
-	  RoleDataConfiguration data = context.getBean(RoleDataConfiguration.class);
+	 ProcessEngine processEngine = (ProcessEngine) context.getBean("processEngine");
+		System.out.println("cofig loaded");
 
+	  
+	  RoleDataConfiguration data = new RoleDataConfiguration(processEngine);
 	  
 	  data.initGroups();
 	  data.initUsers();
+	  
+	  System.out.println("end");
 	
 }
 

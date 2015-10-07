@@ -1,0 +1,5 @@
+@import "codeGraph.scss";
+
+.codeGraph {
+  @include codeGraph;
+}

@@ -23,13 +23,7 @@ import com.mash.model.catalog.Referral;
 
 public class DefaultRepository implements Repository {
 	
-	private static final String PERSON_PATH = "person";
 	
-	private static final String LOCATION_PATH = "location";
-
-	private static final String REFERRAL_PATH = "referral";
-
-	private static final String ACT_PATH = "act";
 
 	private Jaxb2Marshaller marshaller;
 
@@ -49,8 +43,13 @@ public class DefaultRepository implements Repository {
        
 	}
 	
-	private StreamSource getStream(String name)  {
-		String resourceName = name+".xml";
+	private StreamSource getStream(Query query)  {
+		String resourceName = getFileName(query)+".xml";
+		return getStream(resourceName);
+	}
+
+	private StreamSource getStream(String resourceName) {
+		
 		if (directory!=null)
 		{
 		   
@@ -111,14 +110,16 @@ public class DefaultRepository implements Repository {
 	@Override
 	public List<Person> findPersons(Query query) {
 		// TODO Auto-generated method stub
-		Persons persons =  (Persons) marshaller.unmarshal(getStream(PERSON_PATH + query.getFirstName()));
+		Persons persons =  (Persons) marshaller.unmarshal(getStream(query));
 		
 		 return persons.getPersons();
 	}
 
 	@Override
 	public List<Location> findLocations(Location sample) {
-		Locations locations =  (Locations) marshaller.unmarshal(getStream(LOCATION_PATH + sample.getPostcode()));
+		Query query = new Query();
+		query.setSampleLocation(sample);
+		Locations locations =  (Locations) marshaller.unmarshal(getStream(query));
 		
 		 return locations.getLocations();
 	}
@@ -126,9 +127,18 @@ public class DefaultRepository implements Repository {
 	
 	public Entity findEntityById(String id) {
 		
-		   JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id));
+		   JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id.toLowerCase() + ".xml"));
 		   return location.getValue();
 	}
 	
+	private String getFileName(Query query)
+	{
+		String result = "";
+		if (query.getFirstName()!= null) result= result+ query.getFirstName();
+		if (query.getLastName()!= null) result= result+ query.getLastName();
+		if (query.getSampleLocation()!= null && query.getSampleLocation().getCity()!=null && result.length() == 0) result= query.getSampleLocation().getCity();
+		return result.toLowerCase();
+		
+	}
 
 }
