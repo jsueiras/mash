@@ -1,4 +1,5 @@
-window.mash_graph_Graph = function() {
+window.mash_graph_Network = function() {
+
     // create an array with nodes
     var nodes = new vis.DataSet([
         {id: 1, label: 'Node 1'},
@@ -16,8 +17,7 @@ window.mash_graph_Graph = function() {
         {from: 2, to: 5}
     ]);
 
-    // create a network
-    var container = document.getElementById('mynetwork');
+    var container = this.getElement();
 
     // provide the data in the vis format
     var data = {
@@ -28,4 +28,8 @@ window.mash_graph_Graph = function() {
 
     // initialize your network!
     var network = new vis.Network(container, data, options);
+
+    window.onresize = function() {
+        network.redraw();
+    };
 }
