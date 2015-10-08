@@ -24,12 +24,23 @@ window.mash_graph_Network = function() {
         nodes: nodes,
         edges: edges
     };
-    var options = {};
+
+    var options = {
+        autoResize: true,
+        height: '100%',
+        width: '100%',
+        clickToUse: false,
+        configure: {
+            enabled: false,
+            showButton: true
+        }
+    }
 
     // initialize your network!
     var network = new vis.Network(container, data, options);
 
-    window.onresize = function() {
+    // Handle changes from the server-side
+    this.onStateChange = function() {
         network.redraw();
     };
 }
