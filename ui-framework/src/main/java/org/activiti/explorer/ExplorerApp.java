@@ -375,10 +375,14 @@ public void terminalError(ErrorEvent event) {
 		@Override
 		protected void servletInitialized() throws ServletException {
 			super.servletInitialized();
+
 			VaadinServletService.getCurrent().addSessionInitListener(new SessionInitListener() {
+
 				@Override
 				public void sessionInit(SessionInitEvent event) throws ServiceException {
+
 					VaadinSession.getCurrent().addBootstrapListener(new BootstrapListener() {
+
 						@Override
 						public void modifyBootstrapFragment(BootstrapFragmentResponse response) {}
 
@@ -389,14 +393,11 @@ public void terminalError(ErrorEvent event) {
 
 							Object visjsVersion = ResourceBundle.getBundle("app").getObject("visjs.version");
 
-//							addWebJarResource(document, head, String.format("visjs/%s/vis.css", visjsVersion));
-//							addWebJarResource(document, head, String.format("visjs/%s/vis.js", visjsVersion));
-							addWebJarResource(document, head, String.format("visjs/%s/vis.map", visjsVersion));
 							addWebJarResource(document, head, String.format("visjs/%s/vis.min.css", visjsVersion));
 							addWebJarResource(document, head, String.format("visjs/%s/vis.min.js", visjsVersion));
 						}
 
-						void addWebJarResource(Document d, Element head, String id) {
+						private void addWebJarResource(Document d, Element head, String id) {
 							if (id.endsWith(".js")) {
 								Element s = d.createElement("script");
 								s.attr("src", "webjars/" + id);
