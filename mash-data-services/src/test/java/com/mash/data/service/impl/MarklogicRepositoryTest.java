@@ -40,42 +40,37 @@ public class MarklogicRepositoryTest {
 
 	@BeforeClass
 	public static void testFixture() throws IOException, URISyntaxException {
-		Credentials credentials;
-
-		credentials = new UsernamePasswordCredentials("admin", "pa55w0rd");
-
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(AuthScope.ANY, credentials);
+		credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin", "pa55w0rd"));
 
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
 
 		HttpClient httpClient = httpClientBuilder.build();
-		HttpComponentsClientHttpRequestFactory factory = new
-				HttpComponentsClientHttpRequestFactory(httpClient);
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.setRequestFactory(factory);
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
 		messageConverters.add(new FormHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
 		restTemplate.setMessageConverters(messageConverters);
 
-		MultiValueMap<String, String> bodyMap = new LinkedMultiValueMap<String, String>();
+		processScript(restTemplate, "cts:uris() ! xdmp:document-delete(.)");
 
-		bodyMap.add("xquery", "cts:uris() ! xdmp:document-delete(.)");
-		restTemplate.postForLocation("http://localhost:8042/v1/eval?database=mash-content-test", bodyMap);
 		restTemplate.put("http://localhost:8042/v1/documents?uri=/config/ingestion-config.xml", getContent("/config/ingestion-config.xml"));
 		restTemplate.put("http://localhost:8042/v1/documents?uri=/raw/sp/GUARDIAN/GUARDIAN.xml", getContent("/raw/GUARDIAN.xml"));
-		bodyMap.clear();
-		bodyMap.add("xquery", getContent("/process-feed.xqy"));
-		restTemplate.postForLocation("http://localhost:8042/v1/eval?database=mash-content-test", bodyMap);
 
 		loadOntology(httpClient, "/ontology/mash.ttl");
 		loadOntology(httpClient, "/ontology/sp.ttl");
 
-		bodyMap.clear();
-		bodyMap.add("xquery", getContent("/process-ontology.xqy"));
+		processScript(restTemplate, getContent("/process-feed.xqy"));
+		processScript(restTemplate, getContent("/process-ontology.xqy"));
+	}
+
+	private static void processScript(RestTemplate restTemplate, String script) {
+		MultiValueMap<String, String> bodyMap = new LinkedMultiValueMap<>();
+		bodyMap.add("xquery", script);
 		restTemplate.postForLocation("http://localhost:8042/v1/eval?database=mash-content-test", bodyMap);
 	}
 
