@@ -26,8 +26,14 @@ import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.TaskListHeader;
 import org.activiti.explorer.ui.custom.ToolBar;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
+import org.activiti.explorer.ui.search.SearchFormEvent;
+import org.activiti.explorer.ui.search.SearchFormEventListener;
+import org.activiti.explorer.ui.search.SearchTabEvent;
+import org.activiti.explorer.ui.search.SearchTabEventListener;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
+import com.mash.model.catalog.Location;
+import com.mash.model.catalog.Person;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -53,7 +59,7 @@ public abstract class TaskPage extends AbstractTablePage {
   protected Table taskTable;
   protected LazyLoadingContainer taskListContainer;
   protected LazyLoadingQuery lazyLoadingQuery;
-  protected GraphPanel taskEventPanel;
+  protected TaskGraphPanel taskEventPanel;
  
   
   
@@ -82,7 +88,7 @@ public abstract class TaskPage extends AbstractTablePage {
   
   @Override
   protected ToolBar createMenuBar() {
-    return new TaskMenuBar();
+    return new TaskMenuBar(new SearchRequestEventListener());
   }
   
   @Override
@@ -127,6 +133,21 @@ public abstract class TaskPage extends AbstractTablePage {
     };
   }
   
+
+	 public class SearchRequestEventListener extends SearchTabEventListener
+	  {
+	    @Override
+		protected void handleFormSelect(SearchTabEvent event) {
+			taskEventPanel.changeEntity(event.isLocation(), event.getEntityId());
+			
+		}
+
+		@Override
+	     protected void handleFormClear(SearchTabEvent event) {
+			taskEventPanel.changeEntity(event.isLocation(), null);			
+		}
+	  } 
+  
   protected Component createDetailComponent(String id) {
 	  Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
     Task task = taskService.createTaskQuery().taskId(id).singleResult();
@@ -140,9 +161,9 @@ public abstract class TaskPage extends AbstractTablePage {
     return getTaskEventPanel();
   }
   
-  public GraphPanel getTaskEventPanel() {
+  public TaskGraphPanel getTaskEventPanel() {
     if(taskEventPanel == null) {
-      taskEventPanel = new GraphPanel();
+      taskEventPanel = new TaskGraphPanel();
     }
     return taskEventPanel;
   }

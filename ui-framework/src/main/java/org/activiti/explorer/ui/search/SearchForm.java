@@ -206,15 +206,14 @@ private PopupDateField getDateField(String label, String id,String datePattern)
 }
   
 
-  public  Map<String, Object> getFormPropertyValues() throws InvalidValueException {
+  public  Query getSearchQuery() throws InvalidValueException {
 	    // Commit the form to ensure validation is executed
 	  
-	    Map<String, Object> formPropertyValues = new HashMap<String, Object>();
 	    Query queryBean = new Query(); 
 	    queryBean.setSampleLocation(new Location());
 	    populateQueryBean(queryBean,this);
-	    formPropertyValues.put("queryBean", queryBean);
-	    return formPropertyValues;
+	  
+	    return queryBean;
 	  }
 
 
@@ -254,8 +253,8 @@ protected void initListeners() {
       public void buttonClick(ClickEvent event) {
         // Extract the submitted values from the form. Throws exception when validation fails.
         try {
-          Map<String, Object> formProperties = getFormPropertyValues();
-          fireEvent(new SearchFormEvent(SearchForm.this, SearchFormEvent.TYPE_SUBMIT, formProperties));
+          Query queryBean= getSearchQuery();
+          fireEvent(new SearchFormEvent(SearchForm.this, SearchFormEvent.TYPE_SUBMIT,queryBean ));
           submitFormButton.setComponentError(null);
         } catch(InvalidValueException ive) {
           // Error is presented to user by the form component
@@ -284,38 +283,5 @@ protected void initListeners() {
     container.addComponent(emptySpace);
   }
   
-  /**
-   * Event indicating a form has been submitted or cancelled. When submitted,
-   * the values of the form-properties are available.
-   * 
-   *
-   */
-  public class SearchFormEvent extends Event {
 
-    private static final long serialVersionUID = -410814526942034125L;
-    
-    public static final String TYPE_SUBMIT = "SUBMIT";
-    public static final String TYPE_CANCEL = "CANCEL";
-    
-    private String type;
-    private Map<String, Object> formProperties;
-    
-    public SearchFormEvent(Component source, String type) {
-      super(source);
-      this.type = type;
-    }
-    
-    public SearchFormEvent(Component source, String type, Map<String, Object> formProperties) {
-      this(source, type);
-      this.formProperties = formProperties;
-    }
-    
-    public String getType() {
-      return type;
-    }
-    
-    public Map<String, Object> getFormProperties() {
-      return formProperties;
-    }
-  }
 }

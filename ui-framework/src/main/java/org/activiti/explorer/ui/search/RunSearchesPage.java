@@ -55,7 +55,7 @@ public class RunSearchesPage extends AbstractTablePage {
   public RunSearchesPage() {
      searchPages = new HashMap<String,Component>();
     
-	searchPages.put("People", new SearchDetailPanel());
+	searchPages.put("People", new SearchDetailPanel(null));
   }
   
   protected Table createList() {

@@ -28,7 +28,9 @@ import org.activiti.explorer.ui.custom.ToolBar;
 import org.activiti.explorer.ui.custom.ToolbarEntry;
 import org.activiti.explorer.ui.custom.ToolbarEntry.ToolbarCommand;
 import org.activiti.explorer.ui.custom.ToolbarPopupEntry;
+import org.activiti.explorer.ui.search.SearchFormEventListener;
 import org.activiti.explorer.ui.search.SearchPopupWindow;
+import org.activiti.explorer.ui.search.SearchTabEventListener;
 import org.activiti.explorer.ui.task.data.ArchivedListQuery;
 import org.activiti.explorer.ui.task.data.InboxListQuery;
 import org.activiti.explorer.ui.task.data.InvolvedListQuery;
@@ -59,14 +61,16 @@ public class TaskMenuBar extends ToolBar {
   protected ViewManager viewManager;
   protected I18nManager i18nManager;
 
+  private SearchTabEventListener searchListener;
+  
+
    
   
-  public TaskMenuBar() {
+  public TaskMenuBar(SearchTabEventListener listener) {
     this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.i18nManager = ExplorerApp.get().getI18nManager();
-   
-    
+    this.searchListener = listener;
     initItems();
     initActions();
   }
@@ -140,7 +144,7 @@ public class TaskMenuBar extends ToolBar {
     
     newCaseButton.addListener(new ClickListener() {
       public void buttonClick(ClickEvent event) {
-        SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
+        SearchPopupWindow searchPopupWindow = new SearchPopupWindow(searchListener);
         viewManager.showPopupWindow(searchPopupWindow);
       }
     });

@@ -23,7 +23,7 @@ import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.DetailPanel;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
-import org.activiti.explorer.ui.search.SearchForm.SearchFormEvent;
+import org.activiti.explorer.ui.search.SearchFormEvent;
 import org.activiti.explorer.ui.search.person.Decorator;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
@@ -67,18 +67,19 @@ public class SearchDetailPanel extends DetailPanel {
 
 private HorizontalLayout resultsContainer;
 private VerticalLayout treeContainer;
-
+private SearchTabEventListener tabEventListener;
   
-  public SearchDetailPanel() {
+  public SearchDetailPanel(SearchTabEventListener tabListener) {
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.repository = ExplorerApp.get().getMashRepository();
-  
-    initUi();
+    initUi(tabListener);
   }
 
-  protected void initUi() {
+ 
+
+protected void initUi(SearchTabEventListener tabListener) {
 	  
-	addListener(new SearchRequestEventListener());  
+	addListener(tabListener);  
     setSizeFull();
     addStyleName(Reindeer.LAYOUT_WHITE);
     detailPanelLayout = new VerticalLayout();
@@ -118,6 +119,7 @@ private VerticalLayout treeContainer;
  protected void initForm() {
      SearchForm search = new SearchForm();
      search.addListener(new SearchRequestEventListener());
+  
 	detailContainer.addComponent(search);
   }
   
@@ -128,13 +130,14 @@ private VerticalLayout treeContainer;
 
 	@Override
 	protected void handleFormSubmit(SearchFormEvent event) {
-		Query query = (Query) event.getFormProperties().get("queryBean");
+		Query query = event.getQuery();
 		if (!isLocationQuery(query))
 		{		
 			locationTable.setVisible(false);		
 		  List<Person> results=repository.findPersons(query);
 	      appendResults(results,personTable);
-	      
+    	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_CLEAR,isLocation,null ));
+  		
 	      
 		}
 		else
@@ -162,8 +165,10 @@ private VerticalLayout treeContainer;
 		ExplorerApp.get().showNotification("Cancel", "Cancel");
 	
 	}
-	
-	
+
+
+
+
 	
 	  
   }
@@ -241,27 +246,11 @@ private VerticalLayout treeContainer;
 		    return new Property.ValueChangeListener() {
 		      private static final long serialVersionUID = 1L;
 		      public void valueChange(ValueChangeEvent event) {
-		       // Item item = table.getItem(event.getProperty().getValue()); // the value of the property is the itemId of the table entry
-		        String id = (String) event.getProperty().getValue();
-		        if(id != null) {
-		         
-		          if (!isLocation)
-		          {	  
-		          Person person = ExplorerApp.get().getMashRepository().findPersonById(id);
-		          treeContainer.removeAllComponents();
-		          treeContainer.addComponent(Decorator.getTreeComponent(person));
-		          }
-		          else
-		          {
-		        	    Location location = ExplorerApp.get().getMashRepository().findLocationById(id);
-				          treeContainer.removeAllComponents();
-				          treeContainer.addComponent(Decorator.getTreeComponent(location));
-				         
-		          }	  
-		        } else {
-		            treeContainer.removeAllComponents();
-				     
-		        }
+		    	  String id = (String) event.getProperty().getValue();   
+		    	  
+		    	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_SELECT,isLocation,id ));
+		    	     
+		    
 		      }
 		    };
 		  }

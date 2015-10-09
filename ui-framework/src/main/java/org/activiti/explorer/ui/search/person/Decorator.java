@@ -151,4 +151,16 @@ public class Decorator {
 	
 	}
 
+	public static Component getTreeComponent(Entity entity) {
+		if (entity instanceof Person)
+		{
+			return getTreeComponent((Person) entity);
+		}	
+		else
+		{
+			return getTreeComponent((Location) entity);
+		}		
+	    		
+	}
+
 }

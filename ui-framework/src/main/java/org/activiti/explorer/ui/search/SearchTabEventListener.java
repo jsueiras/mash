@@ -29,25 +29,25 @@ import com.vaadin.ui.Component.Listener;
  * 
  * @author Frederik Heremans
  */
-public abstract class SearchFormEventListener implements Listener {
+public abstract class SearchTabEventListener implements Listener {
 
   private static final long serialVersionUID = 7560512657831865244L;
 
   public final void componentEvent(Event event) {
-    if(event instanceof SearchFormEvent) {
-    	SearchFormEvent propertyEvent = (SearchFormEvent) event;
-      if(SearchFormEvent.TYPE_SUBMIT.equals(propertyEvent.getType())) {
-        handleFormSubmit(propertyEvent);
+    if(event instanceof SearchTabEvent) {
+    	SearchTabEvent propertyEvent = (SearchTabEvent) event;
+      if(SearchTabEvent.TYPE_SELECT.equals(propertyEvent.getType())) {  
+        handleFormSelect(propertyEvent);
       }
       else
       {
-        handleFormCancel(propertyEvent); 
+        handleFormClear(propertyEvent); 
       }
     }
   }
   
-  protected abstract void handleFormSubmit(SearchFormEvent event);
+  protected abstract void handleFormSelect(SearchTabEvent event);
   
-  protected abstract void handleFormCancel(SearchFormEvent event);
+  protected abstract void handleFormClear(SearchTabEvent event);
   
 }

@@ -51,7 +51,7 @@ public class SearchPopupWindow extends PopupWindow {
   
   SearchDetailPanel searchPanel;
   
-  public SearchPopupWindow() {
+  public SearchPopupWindow(SearchTabEventListener listener) {
    
     setModal(true);
     center();
@@ -61,12 +61,13 @@ public class SearchPopupWindow extends PopupWindow {
     setWidth(700, UNITS_PIXELS);
     setHeight(1000, UNITS_PIXELS);
    
-    initPanel();
+    initPanel( listener);
     
   }
   
-private void initPanel() {
-	searchPanel = new SearchDetailPanel();
+private void initPanel(SearchTabEventListener listener) {
+	searchPanel = new SearchDetailPanel(listener);
+	//searchPanel.addListener(listener);
 	setContent(searchPanel);
 	
 }
