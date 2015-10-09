@@ -8,12 +8,12 @@ import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 public interface ElementHandler {
-	
+
 	 final String OPEN_TAG = "{";
 	 final String END_TAG = "}";
 	 final String VALUE_TAG = "${";
-	 final String TABLE_TAG = "£{";
-	 
+	 final String TABLE_TAG = "Â£{";
+
 	 void processElement(WordprocessingMLPackage template, Map<String,Object> context) throws Docx4JException, JAXBException;
 
 
