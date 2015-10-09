@@ -26,17 +26,17 @@ public class CodeGraphDemo extends UI {
     private SimpleGraphRepositoryImpl graphRepo;
     private GraphExplorer<?, ?> graph;
     private CssLayout layout;
-    
+
     @Override
     public void init(VaadinRequest request) {
-    	  	
+
     	VerticalLayout content = createContent();
         setContent(content);
-        Page.getCurrent().setTitle("Graph Explorer demo");        
+        Page.getCurrent().setTitle("Network Explorer demo");
     }
 
 	public VerticalLayout createContent() {
-		graphRepo = createGraphRepository();  
+		graphRepo = createGraphRepository();
 		VerticalLayout content = new VerticalLayout();
     	layout = new CssLayout();
     	layout.setSizeFull();
@@ -48,12 +48,12 @@ public class CodeGraphDemo extends UI {
     	refreshGraph();
 		return content;
 	}
-    
+
     private SimpleGraphRepositoryImpl createGraphRepository() {
     	SimpleGraphRepositoryImpl repo = new SimpleGraphRepositoryImpl();
     	repo.addNode("node1", "Node 1").setStyle("root");;
     	repo.setHomeNodeId("node1");
-    	
+
     	repo.addNode("node2", "Node 2").setStyle("blue");
     	repo.addNode("node3", "Node 3");
     	repo.addNode("node4", "Node 4").setIcon(new ThemeResource("icons/48x48/cat_1.png"));
@@ -95,7 +95,7 @@ public class CodeGraphDemo extends UI {
     	repo.joinNodes("node2", "node23", "edge223", "Edge type B");
     	repo.joinNodes("node2", "node24", "edge224", "Edge type B");
     	repo.joinNodes("node2", "node25", "edge225", "Edge type C");
-    	
+
     	return repo;
     }
 
@@ -105,7 +105,7 @@ public class CodeGraphDemo extends UI {
     	select.addItem("Circle");
     	select.addItem("ISOM");
     	select.addValueChangeListener(new ValueChangeListener() {
-			
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -113,7 +113,7 @@ public class CodeGraphDemo extends UI {
 				if ("FR".equals(select.getValue())) {
 					graph.setLayoutEngine(new JungFRLayoutEngine());
 				} else if ("Circle".equals(select.getValue())) {
-					graph.setLayoutEngine(new JungCircleLayoutEngine());					
+					graph.setLayoutEngine(new JungCircleLayoutEngine());
 				} if ("ISOM".equals(select.getValue())) {
 					graph.setLayoutEngine(new JungISOMLayoutEngine());
 				}
@@ -122,7 +122,7 @@ public class CodeGraphDemo extends UI {
 		});
     	return select;
     }
-    
+
     private void refreshGraph() {
     	layout.removeAllComponents();
         graph = new GraphExplorer<NodeImpl, ArcImpl>(graphRepo);

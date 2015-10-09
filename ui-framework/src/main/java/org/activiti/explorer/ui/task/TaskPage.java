@@ -13,6 +13,7 @@
 
 package org.activiti.explorer.ui.task;
 
+import mash.graph.Network;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.identity.Authentication;
@@ -59,7 +60,8 @@ public abstract class TaskPage extends AbstractTablePage {
   protected Table taskTable;
   protected LazyLoadingContainer taskListContainer;
   protected LazyLoadingQuery lazyLoadingQuery;
-  protected TaskGraphPanel taskEventPanel;
+   protected Network taskEventPanel;
+  
  
   
   
@@ -161,9 +163,9 @@ public abstract class TaskPage extends AbstractTablePage {
     return getTaskEventPanel();
   }
   
-  public TaskGraphPanel getTaskEventPanel() {
+ public Network getTaskEventPanel() {
     if(taskEventPanel == null) {
-      taskEventPanel = new TaskGraphPanel();
+      taskEventPanel = new Network();
     }
     return taskEventPanel;
   }
