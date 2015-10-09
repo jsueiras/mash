@@ -1,0 +1,889 @@
+@prefix :     <http://marklogic.com/solution/ontology/mash/sp#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix mash: <http://marklogic.com/solution/ontology/mash#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+##################################################################################
+#
+# Staffordshire Police MASH ontology
+#
+##################################################################################
+<http://marklogic.com/solution/ontology/mash/sp#>
+                          a                   owl:Ontology .
+
+##################################################################################
+# :Category Class
+##################################################################################
+# Subclass of
+# Properties:
+#
+##################################################################################
+:Category                 a                   rdfs:Class .
+
+##################################################################################
+# :Cms2Crime Class
+##################################################################################
+# Subclass of
+#   mash:Event
+# Properties:
+#   :cms2Address
+#   :cms2Person
+#
+##################################################################################
+:Cms2Crime                a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Event .
+
+:cms2Address              a                   owl:ObjectProperty ;
+                          rdfs:domain         :Cms2Crime ;
+                          rdfs:label          "cms2Address" ;
+                          rdfs:range          :Cms2Location .
+
+:cms2Person               a                   owl:ObjectProperty ;
+                          rdfs:domain         :Cms2Crime ;
+                          rdfs:label          "cms2Person" ;
+                          rdfs:range          :Cms2Person .
+
+:crimeIncidentDate        a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Cms2Crime ;
+                          rdfs:label          "crimeIncidentDate" .
+
+:crimeReference           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Cms2Crime ;
+                          rdfs:label          "crimeReference" .
+
+:crimeSerialNo            a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Cms2Crime ;
+                          rdfs:label          "crimeSerialNo" .
+
+##################################################################################
+# :Cms2Location Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :guardianLocationId
+#
+##################################################################################
+:Cms2Location             a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+##################################################################################
+# :Cms2Person Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :cms2PersonType
+#
+##################################################################################
+:Cms2Person               a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:cms2PersonType           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Cms2Person ;
+                          rdfs:label          "cms2PersonType" .
+
+##################################################################################
+# :Family Class
+##################################################################################
+# Subclass of
+#   :Category
+#   mash:Family
+# Properties:
+#
+##################################################################################
+:Family                   a                   rdfs:Class ;
+                          rdfs:subClassOf     :Category ;
+                          rdfs:subClassOf     mash:Family .
+
+##################################################################################
+# :Firearms Class
+##################################################################################
+# Subclass of
+# Properties:
+#    :firearmsAddress
+#    :firearmsPerson
+#
+##################################################################################
+:Firearms                 a                   rdfs:Class .
+
+:firearmsAddress          a                   owl:ObjectProperty ;
+                          rdfs:domain         :Firearms ;
+                          rdfs:label          ":firearmsAddress" ;
+                          rdfs:range          :FirearmsLocation .
+
+:firearmsPerson           a                   owl:ObjectProperty ;
+                          rdfs:domain         :Firearms ;
+                          rdfs:label          ":firearmsPerson" ;
+                          rdfs:range          :FirearmsPerson .
+
+##################################################################################
+# :FirearmsLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :firearmsMapReference
+#
+##################################################################################
+:FirearmsLocation         a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+:firearmsMapReference     a                   owl:DatatypeProperty ;
+                          rdfs:domain         :FirearmsLocation ;
+                          rdfs:label          ":firearmsMapReference" .
+
+##################################################################################
+# :FirearmsPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :firearmsPersonType
+#   :firearmsPncId
+#   :hasTelephone
+#
+##################################################################################
+:FirearmsPerson           a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:firearmsPersonType       a                   owl:DatatypeProperty ;
+                          rdfs:domain         :FirearmsPerson ;
+                          rdfs:label          ":firearmsPersonType" .
+
+:firearmsPncId            a                   owl:DatatypeProperty ;
+                          rdfs:domain         :FirearmsPerson ;
+                          rdfs:label          ":firearmsPncId" .
+
+:hasTelephone             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :FirearmsPerson ;
+                          rdfs:label          ":hasTelephone" .
+
+##################################################################################
+# :GuardianLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :guardianLocationId
+#
+##################################################################################
+:GuardianLocation         a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+:guardianLocationId       a                   owl:DatatypeProperty ;
+                          rdfs:domain         :GuardianLocation ;
+                          rdfs:label          "guardianLocationId" .
+
+##################################################################################
+# :GuardianPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :guardianAssociateOf
+#   :guardianFriendOf
+#   :guardianInHousehold
+#   :guardianParent
+#   :guardianPersonId
+#   :guardianSibling
+#
+##################################################################################
+:GuardianPerson           a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:guardianAssociateOf      a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianAssociateOf" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianFriendOf         a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianFriendOf" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianInHousehold      a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianInHousehold" ;
+                          rdfs:subPropertyOf  mash:inHousehold ;
+                          rdfs:comment        "this is a hack to make test data load easier".
+
+:guardianParent           a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          owl:inverseOf       mash:hasParent ;
+                          rdfs:label					"parent" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianPersonId         a                   owl:DatatypeProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianPersonId" .
+
+:guardianSibling          a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianSibling" ;
+                          rdfs:range          :GuardianPerson ;
+                          rdfs:subPropertyOf  mash:hasSibling ;
+                          rdfs:comment        "this is a hack to make test data load easier".
+
+##################################################################################
+# :GuardianReferral Class
+##################################################################################
+# Subclass of
+#   mash:Event
+# Properties:
+#   :guardianInjuredParty
+#   :guardianLinkedFamily
+#   :guardianMentioned
+#   :guardianPersonOfInterest
+#   :guardianReferralId
+#
+##################################################################################
+:GuardianReferral         a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Event .
+
+:guardianInjuredParty     a                   owl:ObjectProperty ;
+                          rdfs:domain         :Referral ;
+                          rdfs:label          "guardianInjuredParty" ;
+                          rdfs:range          :Person .
+
+:guardianLinkedFamily     a                   owl:ObjectProperty ;
+                          rdfs:domain         :Referral ;
+                          rdfs:label          "guardianLinkedFamily" ;
+                          rdfs:range          :Family .
+
+:guardianMentioned        a                   owl:ObjectProperty ;
+                          rdfs:domain         :Referral ;
+                          rdfs:label          "guardianMentioned" ;
+                          rdfs:range          :Location .
+
+:guardianPersonOfInterest a                   owl:ObjectProperty ;
+                          rdfs:domain         :Referral ;
+                          rdfs:label          "guardianPersonOfInterest" ;
+                          rdfs:range          :Person .
+
+:guardianReferralId       a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Referral ;
+                          rdfs:label          "guardianReferralId" .
+
+##################################################################################
+# :Intelligence Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :spinLogno
+#
+##################################################################################
+:Intelligence             a                   rdfs:Class .
+
+:spinLogno                a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Intelligence ;
+                          rdfs:label          ":spinLogno" .
+
+##################################################################################
+# :Location Class
+##################################################################################
+# Subclass of
+#   mash:Address
+# Properties:
+#   :addressLine2
+#   :addressLine3
+#   :addressLine4
+#   :buildingNoName
+#   :postcode
+#   :street
+#   :town
+#
+##################################################################################
+:Location                 a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Address .
+
+:addressLine1             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "addressLine1" ;
+                          rdfs:comment        "usually street".
+
+:addressLine2             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "addressLine2" .
+
+:addressLine3             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "addressLine3" ;
+                          rdfs:comment        "usually town".
+
+:addressLine4             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "addressLine4" .
+
+:buildingNoName           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "buildingNoName" .
+
+:county                   a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "county" .
+
+:postcode                 a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "postcode" .
+
+:street                   a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "street" .
+
+:town                     a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Location ;
+                          rdfs:label          "town" .
+
+##################################################################################
+# :MisperPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :hasLocation
+#   :misperPersonId
+#
+##################################################################################
+:MisperPerson             a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:hasLocation              a                    owl:ObjectProperty ;
+                          rdfs:domain          :MisperPerson ;
+                          rdfs:label           "hasLocation" ;
+                          rdfs:range           :MisperLocation .
+
+:misperPersonId           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :MisperPerson ;
+                          rdfs:label          "misperPersonId" .
+
+##################################################################################
+# :MisperRecord Class
+##################################################################################
+# Subclass of
+#   mash:Event
+# Properties:
+#   :hasMisperReport
+#   :misperNextOfKin
+#   :misperMissingPerson
+#   :misperReference
+#
+##################################################################################
+:MisperRecord             a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Event .
+
+:hasMisperReport          a                   owl:ObjectProperty ;
+                          rdfs:domain         :MisperRecord ;
+                          rdfs:label          "hasMisperReport" ;
+                          rdfs:range          :MisperReport .
+
+:misperNextOfKin          a                   owl:ObjectProperty ;
+                          rdfs:domain         :MisperRecord ;
+                          rdfs:label          "misperNextOfKin" ;
+                          rdfs:range          :NextOfKin ;
+                          rdfs:comment        "link rule: misperMissingPerson -> misperNextOfKin".
+
+:misperMissingPerson      a                   owl:ObjectProperty ;
+                          rdfs:domain         :MisperRecord ;
+                          rdfs:label          "misperMissingPerson" ;
+                          rdfs:range          :MisperReportedPerson .
+
+:misperReference          a                   owl:DatatypeProperty ;
+                          rdfs:domain         :MisperRecord ;
+                          rdfs:label          "misperReference" .
+
+##################################################################################
+# :MisperReport Class
+##################################################################################
+# Subclass of
+#   mash:Event
+# Properties:
+#   :misperMisperReportId
+#
+##################################################################################
+:MisperReport             a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Event .
+
+:misperMisperReportId     a                   owl:DatatypeProperty ;
+                          rdfs:domain         :MisperReport ;
+                          rdfs:label          "MisperReportId" .
+
+##################################################################################
+# :MisperReportedPerson Class
+##################################################################################
+# Subclass of
+#   :MisperPerson
+# Properties:
+#   :misperPersonId
+#
+##################################################################################
+:MisperReportedPerson     a                   rdfs:Class ;
+                          rdfs:subClassOf     :MisperPerson .
+
+:misperPersonId           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :MisperReportedPerson ;
+                          rdfs:label          ":misperPersonId" .
+
+##################################################################################
+# :NextOfKin Class
+##################################################################################
+# Subclass of
+#   :MisperPerson
+# Properties:
+#   :misperRelation
+#
+##################################################################################
+:NextOfKin                a                   rdfs:Class ;
+                          rdfs:subClassOf     :MisperPerson .
+
+:misperRelation           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :NextOfKin ;
+                          rdfs:label          "misperRelation" ;
+                          rdfs:comment        "property of :Person instead ?".
+
+##################################################################################
+# :NspisCustody Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :custodyRef
+#   :offences
+#
+##################################################################################
+:NspisCustody             a                   rdfs:Class .
+
+:custodyRef               a                   owl:DatatypeProperty ;
+                          rdfs:domain         :NspisCustody ;
+                          rdfs:label          "custodyRef" .
+
+:offences                 a                   owl:DatatypeProperty ;
+                          rdfs:domain         :NspisCustody ;
+                          rdfs:label          ":offences" .
+
+##################################################################################
+# :Person Class
+##################################################################################
+# Subclass of
+#   mash:Person
+# Properties:
+#   :familyname
+#   :firstname
+#
+##################################################################################
+:Person                   a                   rdfs:Class ;
+                          rdfs:subClassOf     mash:Person .
+
+:familyname               a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Person ;
+                          rdfs:label          "familyname" .
+
+:firstname                a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Person ;
+                          rdfs:label          "firstname" .
+
+##################################################################################
+# :SpinCategory Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :spinCategory
+#
+##################################################################################
+:SpinCategory             a                   rdfs:Class .
+
+:spinCategory             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :SpinCategory ;
+                          rdfs:label          ":spinCategory" .
+#   :spinMapRef
+:spinMapRef               a                   owl:DatatypeProperty ;
+                          rdfs:domain         :SpinLocation ;
+                          rdfs:label          ":spinMapRef" .
+#   :spinPersonId
+:spinPersonId             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :SpinPerson ;
+                          rdfs:label          ":spinPersonId" .
+
+##################################################################################
+# :SpinCommunication Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :spinCommunicationDetail
+#   :spinCommunicationType
+#
+##################################################################################
+:SpinCommunication        a                   rdfs:Class .
+
+:spinCommunicationDetail  a                   owl:DatatypeProperty ;
+                          rdfs:domain         :SpinCommunication ;
+                          rdfs:label          ":spinCommunicationDetail" .
+
+:spinCommunicationType    a                   owl:DatatypeProperty ;
+                          rdfs:domain         :SpinCommunication ;
+                          rdfs:label          ":spinCommunicationType" .
+
+##################################################################################
+# :SpinLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :guardianLocationId
+#
+##################################################################################
+:SpinLocation             a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+##################################################################################
+# :SpinPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :guardianSibling
+#
+##################################################################################
+:SpinPerson               a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+##################################################################################
+# :StopSearchLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :stopSearchMapReference
+#
+##################################################################################
+:StopSearchLocation       a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+:stopSearchMapReference   a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StopSearchLocation ;
+                          rdfs:label          ":stopSearchMapReference" .
+
+##################################################################################
+# :StopSearchPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#    :stopSearchAddress
+#   :stopSearchNomiId
+#   :stopSearchPersonType
+#
+##################################################################################
+:StopSearchPerson         a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:stopSearchAddress        a                   owl:ObjectProperty ;
+                          rdfs:domain         :StopSearchPerson ;
+                          rdfs:label          ":stopSearchAddress" ;
+                          rdfs:range          :StopSearchLocation .
+
+:stopSearchNomiId         a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StopSearchPerson ;
+                          rdfs:label          ":stopSearchNomiId" .
+
+:stopSearchPersonType     a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StopSearchPerson ;
+                          rdfs:label          ":stopSearchPersonType" .
+
+##################################################################################
+# :StopSearchRecord Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :pacId
+#   :pacNomiId
+#   :stopSearchPerson
+#
+##################################################################################
+:StopSearchRecord         a                   rdfs:Class .
+
+:pacId                    a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StopSearchRecord ;
+                          rdfs:label          ":pacId" .
+
+:pacNomiId                a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StopSearchRecord ;
+                          rdfs:label          ":pacNomiId" .
+
+:stopSearchPerson         a                   owl:ObjectProperty ;
+                          rdfs:domain         :StopSearchRecord ;
+                          rdfs:label          ":stopSearchPerson" ;
+                          rdfs:range          :StopSearchPerson .
+
+##################################################################################
+# :StormLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :guardianLocationId
+#
+##################################################################################
+:StormLocation            a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+##################################################################################
+# :StormPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :stormPersonType
+#
+##################################################################################
+:StormPerson              a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:stormPersonType          a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StormPerson ;
+                          rdfs:label          ":stormPersonType" .
+
+##################################################################################
+# :StormRecord Class
+##################################################################################
+# Subclass of
+# Properties:
+#    :stormAddress
+#    :stormPerson
+#   :stormReference
+#
+##################################################################################
+:StormRecord              a                   rdfs:Class .
+
+:stormAddress             a                   owl:ObjectProperty ;
+                          rdfs:domain         :StormRecord ;
+                          rdfs:label          ":stormAddress" ;
+                          rdfs:range          :StormLocation .
+
+:stormPerson              a                   owl:ObjectProperty ;
+                          rdfs:domain         :StormRecord ;
+                          rdfs:label          ":stormPerson" ;
+                          rdfs:range          :StormPerson .
+
+:stormReference           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :StormRecord ;
+                          rdfs:label          ":stormReference" .
+
+##################################################################################
+# :TpoLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :tpoMapReference
+#
+##################################################################################
+:TpoLocation              a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+:tpoMapReference          a                   owl:DatatypeProperty ;
+                          rdfs:domain         :TpoLocation ;
+                          rdfs:label          ":tpoMapReference" .
+
+##################################################################################
+# :TpoPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#   :tpoAddress
+#   :tpoPersonType
+#
+##################################################################################
+:TpoPerson                a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:tpoAddress               a                   owl:ObjectProperty ;
+                          rdfs:domain         :TpoPerson ;
+                          rdfs:label          ":tpoAddress" ;
+                          rdfs:range          :TpoLocation .
+
+:tpoPersonType            a                   owl:DatatypeProperty ;
+                          rdfs:domain         :TpoPerson ;
+                          rdfs:label          ":tpoPersonType" .
+
+##################################################################################
+# :TpoRecord Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :tpoPerson
+#   :tpoRef
+#
+##################################################################################
+:TpoRecord                a                   rdfs:Class .
+
+:tpoPerson                a                   owl:ObjectProperty ;
+                          rdfs:domain         :TpoRecord ;
+                          rdfs:label          ":tpoPerson" ;
+                          rdfs:range          :TpoPerson .
+
+:tpoRef                   a                   owl:DatatypeProperty ;
+                          rdfs:domain         :TpoRecord ;
+                          rdfs:label          ":tpoRef" .
+
+##################################################################################
+# :Visp Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :crimeNumber
+#   :vispAttendanceId
+#   :vispPerson
+#   :vispPersonId
+#
+##################################################################################
+:Visp                     a                   rdfs:Class .
+
+:crimeNumber              a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Visp ;
+                          rdfs:label          "crimeNumber" .
+
+:vispAttendanceId         a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Visp ;
+                          rdfs:label          ":vispAttendanceId" .
+
+:vispPerson               a                   owl:ObjectProperty ;
+                          rdfs:domain         :Visp ;
+                          rdfs:label          ":vispPerson" ;
+                          rdfs:range          :VispPerson .
+
+:vispPersonId             a                   owl:DatatypeProperty ;
+                          rdfs:domain         :Visp ;
+                          rdfs:label          ":vispPersonId" .
+
+##################################################################################
+# :VispLocation Class
+##################################################################################
+# Subclass of
+#   :Location
+# Properties:
+#   :guardianLocationId
+#
+##################################################################################
+:VispLocation             a                   rdfs:Class ;
+                          rdfs:subClassOf     :Location .
+
+##################################################################################
+# :VispPerson Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#    :vispAddress
+#   :vispPersonType
+#
+##################################################################################
+:VispPerson               a                   rdfs:Class ;
+                          rdfs:subClassOf     :Person .
+
+:vispAddress              a                   owl:ObjectProperty ;
+                          rdfs:domain         :VispPerson ;
+                          rdfs:label          ":vispAddress" ;
+                          rdfs:range          :VispLocation .
+
+:vispPersonType           a                   owl:DatatypeProperty ;
+                          rdfs:domain         :VispPerson ;
+                          rdfs:label          ":vispPersonType" .
+
+##################################################################################
+# externally classed properties
+##################################################################################
+# Properties:
+#   :guardianCurrentAddress
+#   :guardianFamilyMember
+#
+##################################################################################
+:guardianCurrentAddress   a                   owl:DatatypeProperty ;
+													rdfs:label					"currentAddress";
+                          rdfs:comment        "linking agent requires additional rule: links Location -> Category or Person -> Location".
+
+:guardianFamilyMember     a                   owl:DatatypeProperty ;
+                          rdfs:comment        "linking agent requires additional rule: links Person -> Category or Referral -> Person".
+
+##################################################################################
+# properties to be investigated in larger data set
+##################################################################################
+:guardianBusiness         a                   owl:DatatypeProperty .
+
+:guardianCarer            a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianCarer" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianChild            a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianChild" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianExPartner        a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianExPartner" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianGirlfriend       a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianGirlfriend" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianNeighbour        a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianNeighbour" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianOffenceLocation  a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianReferral ;
+                          rdfs:label          "guardianOffenceLocation" ;
+                          rdfs:range          :GuardianLocation .
+
+:guardianOffender         a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianReferral ;
+                          rdfs:label          "guardianOffender" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianPartner          a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianPartner" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianPersonReporting  a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianReferral ;
+                          rdfs:label          "guardianPersonReporting" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianPersonal         a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianPersonal" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianPreviousAddress  a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianPreviousAddress" ;
+                          rdfs:range          :GuardianLocation .
+
+:guardianSpouseOf         a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianSpouseOf" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianStepSibling      a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianStepSibling" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianVisitedBy        a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianVisitedBy" ;
+                          rdfs:range          :GuardianPerson .
+
+:guardianVisits           a                   owl:ObjectProperty ;
+                          rdfs:domain         :GuardianPerson ;
+                          rdfs:label          "guardianVisits" ;
+                          rdfs:range          :GuardianPerson .

@@ -22,45 +22,45 @@ import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
 
 public class DefaultRepository implements Repository {
-	
-	
+
+
 
 	private Jaxb2Marshaller marshaller;
 
 	private String directory;
-	
+
 	public DefaultRepository() {
-		
-	
-     	marshaller = new Jaxb2Marshaller();
- 		marshaller.setPackagesToScan("com.mash.model.catalog");
+
+
+		marshaller = new Jaxb2Marshaller();
+		marshaller.setPackagesToScan("com.mash.model.catalog");
 
 	}
-	
+
 	public DefaultRepository(String directory) {
-       this();
-       this.directory = directory;
-       
+		this();
+		this.directory = directory;
+
 	}
-	
+
 	private StreamSource getStream(Query query)  {
 		String resourceName = getFileName(query)+".xml";
 		return getStream(resourceName);
 	}
 
 	private StreamSource getStream(String resourceName) {
-		
+
 		if (directory!=null)
 		{
-		   
+
 			File file = new File(directory+resourceName);
-			 try {
+			try {
 				return new StreamSource(new FileInputStream(file));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
+		}
 		return new StreamSource(this.getClass().getResourceAsStream("/" + resourceName));
 	}
 
@@ -71,9 +71,9 @@ public class DefaultRepository implements Repository {
 	}
 
 	@Override
-	public Referral findReferralById(String id) {		
-		   JAXBElement<Referral>  referral=  (JAXBElement<Referral>) marshaller.unmarshal(getStream(id))   ;
-		   return referral.getValue();
+	public Referral findReferralById(String id) {
+		JAXBElement<Referral>  referral=  (JAXBElement<Referral>) marshaller.unmarshal(getStream(id))   ;
+		return referral.getValue();
 	}
 
 	@Override
@@ -81,16 +81,16 @@ public class DefaultRepository implements Repository {
 		return referral;
 	}
 
-	
-	
+
+
 	private List<Act> extract(List<JAXBElement<? extends Act>> elements){
 		List<Act> result = new ArrayList<Act>();
-		
+
 		for (JAXBElement<? extends Act> element : elements) {
 			result.add(element.getValue());
 		}
 		return result;
-		
+
 	}
 
 	@Override
@@ -111,8 +111,8 @@ public class DefaultRepository implements Repository {
 	public List<Person> findPersons(Query query) {
 		// TODO Auto-generated method stub
 		Persons persons =  (Persons) marshaller.unmarshal(getStream(query));
-		
-		 return persons.getPersons();
+
+		return persons.getPersons();
 	}
 
 	@Override
@@ -120,17 +120,16 @@ public class DefaultRepository implements Repository {
 		Query query = new Query();
 		query.setSampleLocation(sample);
 		Locations locations =  (Locations) marshaller.unmarshal(getStream(query));
-		
-		 return locations.getLocations();
+
+		return locations.getLocations();
 	}
-	
-	
+
+
 	public Entity findEntityById(String id) {
-		
-		   JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id.toLowerCase() + ".xml"));
-		   return location.getValue();
+		JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id.toLowerCase() + ".xml"));
+		return location.getValue();
 	}
-	
+
 	private String getFileName(Query query)
 	{
 		String result = "";
@@ -138,7 +137,7 @@ public class DefaultRepository implements Repository {
 		if (query.getLastName()!= null) result= result+ query.getLastName();
 		if (query.getSampleLocation()!= null && query.getSampleLocation().getCity()!=null && result.length() == 0) result= query.getSampleLocation().getCity();
 		return result.toLowerCase();
-		
+
 	}
 
 }
