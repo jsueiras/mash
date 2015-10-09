@@ -150,6 +150,19 @@
         <artifactId>data-services</artifactId>
         <version>${project.version}</version>
       </dependency>
+       <dependency>
+        <groupId>com.mash</groupId>
+        <artifactId>process</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      
+      <dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>graph-explorer</artifactId>
+			<version>0.7.0</version>
+		</dependency>
+      
+   
       
      <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>

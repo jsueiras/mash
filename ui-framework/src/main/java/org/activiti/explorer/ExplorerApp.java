@@ -64,8 +64,8 @@ import com.vaadin.ui.Button.ClickEvent;
 /**
  * @author Joram Barrez
  */
-@Theme("runo")
-@SpringUI
+@Theme("codeGraph")
+@SpringUI(path = "/home")
 @Widgetset("com.mash.ui_framework.MyAppWidgetset")
 public class ExplorerApp extends UI {
   
@@ -125,11 +125,14 @@ public class ExplorerApp extends UI {
     	    loginForm = new ExplorerLoginForm();
     	    // Authentication: check if user is found, otherwise send to login page
     	    LoggedInUser user =  getUser();
+    	      
+
     	    if (user == null) {
     	       viewManager.showLoginPage();
     	    } 
 
     	    if(user != null) {
+    	    	 Authentication.setAuthenticatedUserId(user.getId());
     	       viewManager.showDefaultPage();
     	    }
 

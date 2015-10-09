@@ -12,7 +12,7 @@ public interface Repository {
 	
 	public Person findPersonById(String id);
 	List<Person> findPersons(Query query) throws IOException;
-	
+
 	public List<Entity> findEntitiesById(List<String> ids);
 
 	public Location findLocationById(String id);

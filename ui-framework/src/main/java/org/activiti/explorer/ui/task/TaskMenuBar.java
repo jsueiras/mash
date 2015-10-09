@@ -28,6 +28,7 @@ import org.activiti.explorer.ui.custom.ToolBar;
 import org.activiti.explorer.ui.custom.ToolbarEntry;
 import org.activiti.explorer.ui.custom.ToolbarEntry.ToolbarCommand;
 import org.activiti.explorer.ui.custom.ToolbarPopupEntry;
+import org.activiti.explorer.ui.search.SearchPopupWindow;
 import org.activiti.explorer.ui.task.data.ArchivedListQuery;
 import org.activiti.explorer.ui.task.data.InboxListQuery;
 import org.activiti.explorer.ui.task.data.InvolvedListQuery;
@@ -133,14 +134,14 @@ public class TaskMenuBar extends ToolBar {
   
   protected void initActions() {
     Button newCaseButton = new Button();
-    newCaseButton.setCaption(i18nManager.getMessage(Messages.TASK_NEW));
+    newCaseButton.setCaption("Search");
     newCaseButton.setIcon(Images.TASK_16);
     addButton(newCaseButton);
     
     newCaseButton.addListener(new ClickListener() {
       public void buttonClick(ClickEvent event) {
-        NewCasePopupWindow newTaskPopupWindow = new NewCasePopupWindow();
-        viewManager.showPopupWindow(newTaskPopupWindow);
+        SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
+        viewManager.showPopupWindow(searchPopupWindow);
       }
     });
   }

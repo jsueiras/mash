@@ -1,76 +1,64 @@
 package com.mash.data.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.transform.Result;
-
-import com.mash.data.service.*;
 import com.mash.data.service.Query;
+import com.mash.data.service.Repository;
 import com.mash.model.catalog.*;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.*;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
 import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.xml.transform.StringResult;
-import org.springframework.xml.transform.StringSource;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MarklogicRepositoryImpl implements Repository {
     private static final String ADDRESS_PATH = "address";
 	private static final String PERSON_PATH = "person";
 	private static final String REFERRAL_PATH = "referral/";
-	private static final String ACT_PATH = "act/";
 
 	RestTemplate restTemplate;
 	
 	String baseUrl;
-	private Jaxb2Marshaller marshaller;
     private CloseableHttpClient httpClient;
 
 	public MarklogicRepositoryImpl(String baseUrl) {
-		
 		List<MediaType> mediaType = new ArrayList<>();
 		mediaType.add(MediaType.ALL);
-		 Credentials credentials;
-		  
-		   //1. Set credentials
-		   credentials = new UsernamePasswordCredentials("admin", "pa55w0rd");
-		  
-		   CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		   credsProvider.setCredentials(AuthScope.ANY, credentials);
-		   
-		          //2. Bind credentialsProvider to httpClient
-		   HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-		   httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+
+		Credentials credentials = new UsernamePasswordCredentials("admin", "pa55w0rd");
+
+		CredentialsProvider credsProvider = new BasicCredentialsProvider();
+		credsProvider.setCredentials( AuthScope.ANY, credentials);
+
+			  //2. Bind credentialsProvider to httpClient
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+		httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
 
         httpClient = httpClientBuilder.build();
 
-        HttpComponentsClientHttpRequestFactory factory = new
-		                       HttpComponentsClientHttpRequestFactory(httpClient);
-		  
-		   //3. create restTemplate
-		   restTemplate = new RestTemplate();
-		   restTemplate.setRequestFactory(factory);	
-     	//restTemplate = new RestTemplate(rf);
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
-//		marshaller = new Jaxb2Marshaller();
+		restTemplate = new RestTemplate();
+		restTemplate.setRequestFactory(factory);
+
+//		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 //		marshaller.setPackagesToScan("com.mash.model.catalog","com.mash.data.service");
 //		marshaller.setClassesToBeBound(Person.class,Persons.class,Locations.class,Location.class,Query.class);
-//	
+//		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+//		marshaller.setPackagesToScan("com.mash.model.catalog");
+//		marshaller.setClassesToBeBound(Person.class,Persons.class);
+//
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 //		MarshallingHttpMessageConverter converter = new MarshallingHttpMessageConverter();
         //converter.setSupportedMediaTypes(mediaType);
@@ -98,9 +86,10 @@ public class MarklogicRepositoryImpl implements Repository {
 
 	@Override
 	public Referral findReferralById(String id) {
-		 return restTemplate.getForObject(baseUrl + REFERRAL_PATH + id, Referral.class);
+		return restTemplate.getForObject(baseUrl + REFERRAL_PATH + id, Referral.class);
 	}
 
+	
 	@Override
 	public Referral saveReferral(Referral referral) {
 		return restTemplate.postForObject(baseUrl + REFERRAL_PATH, referral, Referral.class);
@@ -120,7 +109,6 @@ public class MarklogicRepositoryImpl implements Repository {
 
 	@Override
 	public List<Entity> findEntitiesById(List<String> ids) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

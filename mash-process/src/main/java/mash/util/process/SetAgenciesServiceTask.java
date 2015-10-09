@@ -74,7 +74,7 @@ public class SetAgenciesServiceTask implements JavaDelegate{
 	
 	 enum Priority {
 		 
-		 Red(2),Ambar(12);
+		 Red(2),Amber(12);
 		
 		 int hours ;
 		 Priority(int n)

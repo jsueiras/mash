@@ -1,12 +1,12 @@
 package com.mash.data.service;
 
-import java.util.Date;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.util.Date;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Query")
 @XmlRootElement(name = "query")
@@ -14,7 +14,6 @@ public class Query {
 	
 	 protected String firstName;
 	 protected String lastName;
-
 	 protected Date dateOfBirthFrom;
 	 protected Date dateOfBirthTo;
 		

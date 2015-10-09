@@ -55,12 +55,14 @@ public abstract class AbstractPage extends CustomComponent {
     addSearch();
     addSelectComponent();
     //if(showEvents) {
-    //  addEventComponent();
+     addEventComponent();
     //}
   }
   
   protected void addEventComponent() {
-    grid.addComponent(getEventComponent(), 2, 0, 2, 2);
+	Component eventComponent = getEventComponent();
+	if (eventComponent !=null)
+    grid.addComponent(eventComponent, 2, 0, 2, 2);
   }
 
   /**
@@ -96,9 +98,9 @@ public abstract class AbstractPage extends CustomComponent {
   protected void addMainLayout() {
     if(showEvents) {
       grid = new GridLayout(3, 3);
-      grid.setColumnExpandRatio(0, .25f);
-      grid.setColumnExpandRatio(1, .52f);
-      grid.setColumnExpandRatio(2, .23f);
+      grid.setColumnExpandRatio(0, .20f);
+      grid.setColumnExpandRatio(1, .40f);
+      grid.setColumnExpandRatio(2, .40f);
     } else {
       grid = new GridLayout(2, 3);
 
