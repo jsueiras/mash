@@ -41,6 +41,6 @@ window.mash_graph_Network = function() {
 
     // Handle changes from the server-side
     this.onStateChange = function() {
-        network.redraw();
+        //network.redraw();
     };
 }
