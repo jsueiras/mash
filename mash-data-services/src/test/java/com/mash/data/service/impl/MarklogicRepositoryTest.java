@@ -63,7 +63,7 @@ public class MarklogicRepositoryTest {
 
 		MultiValueMap<String, String> bodyMap = new LinkedMultiValueMap<String, String>();
 
-		bodyMap.add("xquery", "fn:doc() ! xdmp:document-delete(./xdmp:node-uri(.))");
+		bodyMap.add("xquery", "cts:uris() ! xdmp:document-delete(.)");
 		restTemplate.postForLocation("http://localhost:8042/v1/eval?database=mash-content-test", bodyMap);
 		restTemplate.put("http://localhost:8042/v1/documents?uri=/config/ingestion-config.xml", getContent("/config/ingestion-config.xml"));
 		restTemplate.put("http://localhost:8042/v1/documents?uri=/raw/sp/GUARDIAN/GUARDIAN.xml", getContent("/raw/GUARDIAN.xml"));
