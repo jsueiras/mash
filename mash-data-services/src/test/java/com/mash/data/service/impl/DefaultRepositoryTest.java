@@ -2,6 +2,7 @@ package com.mash.data.service.impl;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -24,9 +25,8 @@ public class DefaultRepositoryTest {
 	   
 	}
 	
-	@Test
-	public void testGetPeople() {
-		
+	public void testGetPeople() throws IOException {
+
 	   Repository rep = new DefaultRepository();
 	   Query query = new Query();
 	   query.setFirstName("Simpson");
@@ -34,10 +34,4 @@ public class DefaultRepositoryTest {
 	   assertNotNull(p);
 	   
 	}
-	
-	
-	
-	
-	
-
 }

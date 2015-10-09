@@ -6,7 +6,7 @@ ehthumbs.db
 .classpath
 .project
 .settings/
-
+*/.idea
 # Folder config file
 Desktop.ini
 

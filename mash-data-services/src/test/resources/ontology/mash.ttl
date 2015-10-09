@@ -1,0 +1,176 @@
+@prefix :     <http://marklogic.com/solution/ontology/mash#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+##################################################################################
+#
+# Staffordshire MASH master ontology
+#
+##################################################################################
+<http://marklogic.com/solution/ontology/mash#>
+                a               owl:Ontology .
+
+##################################################################################
+# :AgencyId Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :agencyId
+#   :agencySystem
+#
+##################################################################################
+:AgencyId       a               prov:Entity ;
+                rdfs:label      "AgencyId" .
+
+:agencyId       a               owl:DatatypeProperty ;
+                rdfs:domain     :AgencyId ;
+                rdfs:label      "agencyId" .
+
+:agencySystem   a               owl:DatatypeProperty ;
+                rdfs:domain     :AgencyId ;
+                rdfs:label      "agencySystem" .
+
+##################################################################################
+# :Address Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :houseUprn
+#   :houseNumber
+#   :postcode
+#   :townCity
+#
+##################################################################################
+:Address        a               rdfs:Class ;
+                rdfs:label      "Address" .
+
+:houseNumber    a               owl:DatatypeProperty ;
+                rdfs:domain     :Address ;
+                rdfs:label      "houseNumber" .
+
+:houseUprn      a               owl:DatatypeProperty ;
+                rdfs:domain     :Address ;
+                rdfs:label      "houseUprn" .
+
+:postcode       a               owl:DatatypeProperty ;
+                rdfs:domain     :Address ;
+                rdfs:label      "postcode" .
+
+:townCity       a               owl:DatatypeProperty ;
+                rdfs:domain     :Address ;
+                rdfs:label      "townCity" .
+
+##################################################################################
+# :Child Class
+##################################################################################
+# Subclass of
+#   :Person
+# Properties:
+#
+##################################################################################
+:Child          rdfs:subClassOf :Person ;
+                rdfs:label      "Child" .
+
+##################################################################################
+# :Event Class
+##################################################################################
+# Subclass of
+# Properties:
+#
+##################################################################################
+:Event          a               rdfs:Class ;
+                rdfs:label      "Event" .
+
+##################################################################################
+# :Family Class
+##################################################################################
+# Subclass of
+# Properties:
+#
+##################################################################################
+:Family         a               rdfs:Class ;
+                rdfs:label      "Family" .
+
+##################################################################################
+# :Family Class
+##################################################################################
+# Subclass of
+# Properties:
+#   :age
+#
+##################################################################################
+:Household      a               rdfs:Class ;
+                rdfs:label      "Household" .
+
+:hasAddress     a               owl:ObjectProperty ;
+                rdfs:domain     :Household ;
+                rdfs:label      "hasAddress" ;
+                rdfs:range      :Address .
+
+##################################################################################
+# :Person Class
+##################################################################################
+# Subclass of
+#   foaf:Person ?
+# Properties:
+#   :age
+#   :family
+#   :hasAgencyId
+#   :hasParent
+#   :hasSibling
+#   :inHousehold
+#   :livesAt
+#   :name
+#   :sex
+#
+##################################################################################
+:Person         a               prov:Entity ;
+                rdfs:subClassOf foaf:Person ;
+                rdfs:label      "Person" .
+
+:age            a               owl:DatatypeProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "age" .
+
+:family         a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "family" ;
+                rdfs:range      :Family .
+
+:hasAgencyId    a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "hasAgencyId" ;
+                rdfs:range      :AgencyId .
+
+:hasParent      a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "hasParent" ;
+                rdfs:range      :Person .
+
+:hasSibling     a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "hasSibling" ;
+                rdfs:range      :Person .
+
+:inHousehold    a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "inHousehold" ;
+                rdfs:range      :Household .
+
+:livesAt        a               owl:ObjectProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "livesAt" ;
+                rdfs:range      :Address .
+
+:name           a               owl:DatatypeProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "name" ;
+                owl:equivalentProperty
+                                rdfs:label .
+
+:sex            a               owl:DatatypeProperty ;
+                rdfs:domain     :Person ;
+                rdfs:label      "sex" .
