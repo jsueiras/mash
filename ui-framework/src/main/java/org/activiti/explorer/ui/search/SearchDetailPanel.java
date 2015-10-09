@@ -12,6 +12,7 @@
  */
 package org.activiti.explorer.ui.search;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -134,8 +135,16 @@ protected void initUi(SearchTabEventListener tabListener) {
 		if (!isLocationQuery(query))
 		{		
 			locationTable.setVisible(false);		
-		  List<Person> results=repository.findPersons(query);
-	      appendResults(results,personTable);
+		  List<Person> results;
+		
+		try {
+			results = repository.findPersons(query);
+			  appendResults(results,personTable);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	     
     	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_CLEAR,isLocation,null ));
   		
 	      
@@ -143,8 +152,15 @@ protected void initUi(SearchTabEventListener tabListener) {
 		else
 		{		
 		  personTable.setVisible(false);	
-		  List<Location> results = repository.findLocations(query.getSampleLocation());
-		  appendResults(results,locationTable);	
+		  List<Location> results;
+		try {
+			results = repository.findLocations(query.getSampleLocation());
+			 appendResults(results,locationTable);	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
 		}
 	}
 
