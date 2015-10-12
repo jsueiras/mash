@@ -146,7 +146,6 @@ protected void initUi(SearchTabEventListener tabListener) {
 		}
 	     
     	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_CLEAR,isLocation,null ));
-  		
 	      
 		}
 		else
