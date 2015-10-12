@@ -23,7 +23,13 @@ public class Network extends AbstractJavaScriptComponent {
 		} else {
 			if (isLocation) {
 				Location location = ExplorerApp.get().getMashRepository().findLocationById(id);
-				//createContent(location);
+
+			  NetworkState state = getState();
+			  state.nodes = new HashSet<Node>();
+
+			  Node node = new Node(location.getId());
+			  node.label = String.format("%s %s, %s", location.getNumberOrName(), location.getStreet(), location.getCity());
+			  state.nodes.add(node);
 			} else {
 				Person person = ExplorerApp.get().getMashRepository().findPersonById(id);
 
