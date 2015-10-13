@@ -7,7 +7,54 @@
     <endEvent id="endevent1" name="End"></endEvent>
     <startEvent id="start" name="Start" activiti:initiator="initiator">
       <extensionElements>
-        <activiti:formProperty id="triageReason" name="Reason for search" type="enum">
+      </extensionElements>
+    </startEvent>
+    <sequenceFlow id="flow5" sourceRef="start" targetRef="scripttask3"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="callMash">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('My Agency')}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('NFA')}]]></conditionExpression>
+    </sequenceFlow>
+    <callActivity id="callMash" name="Call My Cohort" calledElement="mash">
+      <extensionElements>
+        <activiti:in source="personName" target="personName"></activiti:in>
+        <activiti:in source="cohort" target="cohort"></activiti:in>
+        <activiti:in source="initiator" target="initiator"></activiti:in>
+        <activiti:in source="referralMap" target="referralMap"></activiti:in>
+        <activiti:in source="triageId" target="triageId"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>
+    <scriptTask id="scripttask2" name="Init vars" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script> execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"));
+ </script>
+    </scriptTask>
+    <userTask id="refer" name="Refer to the cohort ${triageCohort} including ref ${reference}" activiti:assignee="${initiator}">
+      <documentation>${triageRationale}</documentation>
+    </userTask>
+    <sequenceFlow id="flow19" sourceRef="exclusivegateway1" targetRef="refer">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('Other Agency')}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="refer" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="scripttask2" targetRef="saveCase"></sequenceFlow>
+    <serviceTask id="saveCase" name="Store Case" activiti:class="mash.util.process.FormToMapListener">
+      <extensionElements>
+        <activiti:field name="varName">
+          <activiti:string><![CDATA[referralMap]]></activiti:string>
+        </activiti:field>
+        <activiti:executionListener event="start" class="mash.util.process.FormToMapListener">
+          <activiti:field name="varName">
+            <activiti:string><![CDATA[referral]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow22" sourceRef="saveCase" targetRef="exclusivegateway1"></sequenceFlow>
+    <userTask id="usertask1" name="Triage" activiti:assignee="${initiator}">
+      <extensionElements>
+        <activiti:formProperty id="triageReason" name="Reason for search" type="triageSearch">
           <activiti:value id="reason1" name="Potential risk to child"></activiti:value>
           <activiti:value id="reason2" name="Potential risk to adult"></activiti:value>
           <activiti:value id="reason3" name="Potential risk to children/adult(s) in a household"></activiti:value>
@@ -54,111 +101,87 @@
           <activiti:value id="t_police" name="Police"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
-    </startEvent>
-    <sequenceFlow id="flow5" sourceRef="start" targetRef="scripttask2"></sequenceFlow>
-    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
-    <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="callMash">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('My Agency')}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="endevent1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('NFA')}]]></conditionExpression>
-    </sequenceFlow>
-    <callActivity id="callMash" name="Call My Cohort" calledElement="mash">
-      <extensionElements>
-        <activiti:in source="personName" target="personName"></activiti:in>
-        <activiti:in source="cohort" target="cohort"></activiti:in>
-        <activiti:in source="initiator" target="initiator"></activiti:in>
-        <activiti:in source="referralMap" target="referralMap"></activiti:in>
-        <activiti:in source="triageId" target="triageId"></activiti:in>
-      </extensionElements>
-    </callActivity>
-    <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>
-    <scriptTask id="scripttask2" name="Init vars" scriptFormat="javascript" activiti:autoStoreVariables="false">
+    </userTask>
+    <sequenceFlow id="flow23" sourceRef="usertask1" targetRef="scripttask2"></sequenceFlow>
+    <scriptTask id="scripttask3" name="Init vars" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script> execution.setVariable("reference", execution.getProcessInstanceId());
- execution.setVariable("personName", execution.getVariable("person.firstName") + " " + execution.getVariable("person.lastName"));
  execution.setVariable("triageId", null);</script>
     </scriptTask>
-    <userTask id="refer" name="Refer to the cohort ${triageCohort} including ref ${reference}" activiti:assignee="${initiator}">
-      <documentation>${triageRationale}</documentation>
-    </userTask>
-    <sequenceFlow id="flow19" sourceRef="exclusivegateway1" targetRef="refer">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${triageAction.equals('Other Agency')}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="flow20" sourceRef="refer" targetRef="endevent1"></sequenceFlow>
-    <sequenceFlow id="flow21" sourceRef="scripttask2" targetRef="saveCase"></sequenceFlow>
-    <serviceTask id="saveCase" name="Store Case" activiti:class="mash.util.process.FormToMapListener">
-      <extensionElements>
-        <activiti:field name="varName">
-          <activiti:string><![CDATA[referralMap]]></activiti:string>
-        </activiti:field>
-        <activiti:executionListener event="start" class="mash.util.process.FormToMapListener">
-          <activiti:field name="varName">
-            <activiti:string><![CDATA[referral]]></activiti:string>
-          </activiti:field>
-        </activiti:executionListener>
-      </extensionElements>
-    </serviceTask>
-    <sequenceFlow id="flow22" sourceRef="saveCase" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow24" sourceRef="scripttask3" targetRef="usertask1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_triage">
     <bpmndi:BPMNPlane bpmnElement="triage" id="BPMNPlane_triage">
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="863.0" y="270.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="960.0" y="270.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
         <omgdc:Bounds height="35.0" width="35.0" x="0.0" y="270.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
-        <omgdc:Bounds height="40.0" width="40.0" x="360.0" y="267.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="572.0" y="267.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="callMash" id="BPMNShape_callMash">
-        <omgdc:Bounds height="55.0" width="105.0" x="570.0" y="166.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="706.0" y="166.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
-        <omgdc:Bounds height="55.0" width="121.0" x="80.0" y="260.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="310.0" y="260.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="refer" id="BPMNShape_refer">
-        <omgdc:Bounds height="65.0" width="231.0" x="520.0" y="255.0"></omgdc:Bounds>
+        <omgdc:Bounds height="65.0" width="231.0" x="660.0" y="255.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="saveCase" id="BPMNShape_saveCase">
-        <omgdc:Bounds height="55.0" width="105.0" x="230.0" y="260.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="440.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask3" id="BPMNShape_scripttask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="50.0" y="260.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="35.0" y="287.0"></omgdi:waypoint>
-        <omgdi:waypoint x="80.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="50.0" y="287.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
-        <omgdi:waypoint x="380.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="380.0" y="193.0"></omgdi:waypoint>
-        <omgdi:waypoint x="570.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="592.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="591.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="706.0" y="193.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
-        <omgdi:waypoint x="380.0" y="307.0"></omgdi:waypoint>
-        <omgdi:waypoint x="380.0" y="381.0"></omgdi:waypoint>
+        <omgdi:waypoint x="592.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="591.0" y="381.0"></omgdi:waypoint>
         <omgdi:waypoint x="628.0" y="381.0"></omgdi:waypoint>
-        <omgdi:waypoint x="880.0" y="381.0"></omgdi:waypoint>
-        <omgdi:waypoint x="880.0" y="305.0"></omgdi:waypoint>
+        <omgdi:waypoint x="977.0" y="381.0"></omgdi:waypoint>
+        <omgdi:waypoint x="977.0" y="305.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="675.0" y="193.0"></omgdi:waypoint>
-        <omgdi:waypoint x="880.0" y="193.0"></omgdi:waypoint>
-        <omgdi:waypoint x="880.0" y="270.0"></omgdi:waypoint>
+        <omgdi:waypoint x="811.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="977.0" y="193.0"></omgdi:waypoint>
+        <omgdi:waypoint x="977.0" y="270.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
-        <omgdi:waypoint x="400.0" y="287.0"></omgdi:waypoint>
-        <omgdi:waypoint x="520.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="660.0" y="287.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
-        <omgdi:waypoint x="751.0" y="287.0"></omgdi:waypoint>
-        <omgdi:waypoint x="863.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="891.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="960.0" y="287.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
-        <omgdi:waypoint x="201.0" y="287.0"></omgdi:waypoint>
-        <omgdi:waypoint x="230.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="415.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="440.0" y="287.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
-        <omgdi:waypoint x="335.0" y="287.0"></omgdi:waypoint>
-        <omgdi:waypoint x="360.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="545.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="572.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="285.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="310.0" y="287.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="155.0" y="287.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="287.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

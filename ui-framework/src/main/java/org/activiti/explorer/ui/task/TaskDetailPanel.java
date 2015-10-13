@@ -12,12 +12,14 @@
  */
 package org.activiti.explorer.ui.task;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.form.FormType;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
@@ -26,6 +28,7 @@ import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.NotificationManager;
 import org.activiti.explorer.ViewManager;
+import org.activiti.explorer.form.custom.TriageSearchFormType;
 import org.activiti.explorer.identity.LoggedInUser;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.DetailPanel;
@@ -300,7 +303,8 @@ public class TaskDetailPanel extends DetailPanel {
     // Check if task requires a form
     TaskFormData formData = formService.getTaskFormData(task.getId());
     if(formData != null && formData.getFormProperties() != null && !formData.getFormProperties().isEmpty()) {
-      taskForm = new FormPropertiesForm();
+      
+	  taskForm = new FormPropertiesForm(getCustomListeners());
       taskForm.setSubmitButtonCaption(i18nManager.getMessage(Messages.TASK_COMPLETE));
       taskForm.setCancelButtonCaption(i18nManager.getMessage(Messages.TASK_RESET_FORM));
       taskForm.setFormHelp(i18nManager.getMessage(Messages.TASK_FORM_HELP));
@@ -362,7 +366,13 @@ public class TaskDetailPanel extends DetailPanel {
     }
   }
 
-  protected boolean isCurrentUserAssignee() {
+  private Map< Class<? extends FormType>, Listener> getCustomListeners() {
+	  Map< Class<? extends FormType>, Listener> customListeners = new HashMap<Class<? extends FormType>,Listener>();
+	  customListeners.put(TriageSearchFormType.class, taskPage.getSearchListener());
+	return customListeners;
+}
+
+protected boolean isCurrentUserAssignee() {
     String currentUser = ExplorerApp.get().getLoggedInUser().getId();
     return currentUser.equals(task.getAssignee());
   }

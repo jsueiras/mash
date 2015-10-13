@@ -13,12 +13,14 @@
 
 package org.activiti.explorer.ui.form;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.FormType;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
@@ -55,12 +57,18 @@ public class FormPropertiesForm extends VerticalLayout {
   protected Button submitFormButton;
   protected Button cancelFormButton;
   protected FormPropertiesComponent formPropertiesComponent;
+
+private Map< Class<? extends FormType>, Listener> listenerMap;
+
+public FormPropertiesForm() {
+	this(new HashMap<Class<? extends FormType>, Listener>());
+}
   
-  public FormPropertiesForm() {
+  public FormPropertiesForm( Map< Class<? extends FormType>, Listener> listenerMap) {
     super();
     formService = ProcessEngines.getDefaultProcessEngine().getFormService();
     this.i18nManager = ExplorerApp.get().getI18nManager();
-    
+    this.listenerMap = listenerMap;
     addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
     addStyleName(ExplorerLayout.STYLE_FORM_PROPERTIES);
     
@@ -123,7 +131,7 @@ public class FormPropertiesForm extends VerticalLayout {
   }
 
   protected void initFormPropertiesComponent() {
-    formPropertiesComponent = new FormPropertiesComponent();
+    formPropertiesComponent = new FormPropertiesComponent(listenerMap);
     addComponent(formPropertiesComponent);    
   }
   

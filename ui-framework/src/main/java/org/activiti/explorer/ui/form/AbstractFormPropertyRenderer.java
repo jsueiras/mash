@@ -18,6 +18,7 @@ import org.activiti.engine.form.FormType;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 
+import com.vaadin.ui.Component.Listener;
 import com.vaadin.ui.Field;
 
 
@@ -54,6 +55,11 @@ public abstract class AbstractFormPropertyRenderer implements FormPropertyRender
   }
   
   public abstract Field getPropertyField(FormProperty formProperty);
+  
+  public Field getPropertyField(FormProperty formProperty, Listener listener)
+  {
+	 return getPropertyField(formProperty);
+  }
   
   protected String getMessage(String key, Object ... params) {
     return ExplorerApp.get().getI18nManager().getMessage(key, params);

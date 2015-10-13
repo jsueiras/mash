@@ -20,6 +20,7 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.StartFormData;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -68,6 +69,7 @@ public class StartProcessInstanceClickListener implements ClickListener {
     } else {
       // Just start the process-instance since it has no form.
       // TODO: Error handling
+       Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
       ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId());
       
       // Show notification of success

@@ -44,10 +44,12 @@ public class FormPropertiesComponent extends VerticalLayout {
   protected Map<FormProperty, Component> propertyComponents;
   
   protected Form form;
+
+private Map< Class<? extends FormType>, Listener> taskListeners;
   
-  public FormPropertiesComponent() {
+  public FormPropertiesComponent(Map< Class<? extends FormType>,Listener> taskListeners) {
     this.formPropertyRendererManager =  ExplorerApp.get().getFormPropertyRendererManager();
-    
+    this.taskListeners = taskListeners;
     setSizeFull();
     initForm();
   } 
@@ -69,10 +71,12 @@ public class FormPropertiesComponent extends VerticalLayout {
         // Be able to get the Form from any Renderer.
         renderer.setForm(form);
        
-        Field editorComponent = renderer.getPropertyField(formProperty);
+       
+		Field editorComponent = renderer.getPropertyField(formProperty,  taskListeners.get(renderer.getFormType()));
+       
         if(editorComponent != null) {
           // Get label for editor component.
-          form.addField(formProperty.getId(), editorComponent);
+          form.addField(formProperty.getId(), editorComponent);     	  
         }
       }
     }

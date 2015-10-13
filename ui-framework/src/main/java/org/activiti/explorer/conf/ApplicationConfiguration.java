@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySources;
   @PropertySource(value = "classpath:engine.properties", ignoreResourceNotFound = true)
 })
 @ComponentScan(basePackages = { "org.activiti.explorer.conf","com.mash.ui-framework" })
-@ImportResource({"classpath:activiti-ui-context.xml", "classpath:activiti-login-context.xml"})
+@ImportResource({"classpath:activiti-ui-context.xml", "classpath:activiti-login-context.xml" ,"classpath:activiti-custom-context.xml"})
 public class ApplicationConfiguration {
   
 }

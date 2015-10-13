@@ -18,6 +18,7 @@ import java.io.Serializable;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.FormType;
 
+import com.vaadin.ui.Component.Listener;
 import com.vaadin.ui.Field;
 
 
@@ -37,7 +38,10 @@ public interface FormPropertyRenderer extends Serializable {
    * The component to show for the given form-property. Return null if
    * the form-property (and it's label) shouldn't be rendered. 
    */
+  Field getPropertyField(FormProperty formProperty, Listener  listener);
+  
   Field getPropertyField(FormProperty formProperty);
+  
   
   /**
    * The label to use for the form-property.

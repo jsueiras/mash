@@ -20,7 +20,10 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Table;
+
 import mash.graph.Network;
+import mash.graph.NetworkPanel;
+
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.identity.Authentication;
@@ -55,7 +58,7 @@ public abstract class TaskPage extends AbstractTablePage {
   protected Table taskTable;
   protected LazyLoadingContainer taskListContainer;
   protected LazyLoadingQuery lazyLoadingQuery;
-   protected CssLayout taskEventPanel;
+   protected NetworkPanel taskEventPanel;
 
 
 
@@ -66,7 +69,7 @@ public abstract class TaskPage extends AbstractTablePage {
   }
 
   public TaskPage( String taskId) {
-
+    this();
     this.taskId = taskId;
   }
 
@@ -85,8 +88,12 @@ public abstract class TaskPage extends AbstractTablePage {
 
   @Override
   protected ToolBar createMenuBar() {
-    return new TaskMenuBar(new SearchRequestEventListener());
+    return new TaskMenuBar(getSearchListener());
   }
+
+  protected SearchTabEventListener getSearchListener() {
+	return new SearchRequestEventListener();
+}
 
   @Override
   protected Table createList() {
@@ -134,15 +141,13 @@ public abstract class TaskPage extends AbstractTablePage {
   public class SearchRequestEventListener extends SearchTabEventListener {
     @Override
     protected void handleFormSelect(SearchTabEvent event) {
-      taskEventPanel.removeAllComponents();
-      taskEventPanel.addComponent(new Network(event.isLocation(), event.getEntityId()));
+      taskEventPanel.setRootEntity(event.isLocation(), event.getEntityId());
     }
 
     @Override
     protected void handleFormClear(SearchTabEvent event) {
       taskEventPanel.removeAllComponents();
-      taskEventPanel.addComponent(new Network(event.isLocation(), null));
-    }
+     }
   }
 
   protected Component createDetailComponent(String id) {
@@ -157,9 +162,9 @@ public abstract class TaskPage extends AbstractTablePage {
     return getTaskEventPanel();
   }
 
- public Component getTaskEventPanel() {
+ public NetworkPanel getTaskEventPanel() {
     if(taskEventPanel == null) {
-      taskEventPanel = new CssLayout();
+      taskEventPanel = new NetworkPanel();
       taskEventPanel.setSizeFull();
     }
     return taskEventPanel;

@@ -48,6 +48,15 @@
              <constructor-arg type="int" value="1"/>
              <constructor-arg type="int" value="50"/>
          </bean>  
+         <bean  class="org.activiti.explorer.form.custom.TriageSearchFormType">
+            <constructor-arg>  
+			<map>
+				<entry key="Potential risk to child" value="Potential risk to child"></entry>
+				<entry key="Potential risk to adult" value="Potential risk to adult"></entry>
+				<entry key="Potential risk to children/adult(s) in a household" value="Potential risk to children/adult(s) in a household"></entry>
+			</map>
+			</constructor-arg>
+         </bean>
       </list>
     </property>
   </bean>
