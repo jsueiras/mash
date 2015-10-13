@@ -71,6 +71,7 @@ public class TaskMenuBar extends ToolBar {
     this.viewManager = ExplorerApp.get().getViewManager();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.searchListener = listener;
+    this.addListener(listener);
     initItems();
     initActions();
   }
@@ -144,7 +145,8 @@ public class TaskMenuBar extends ToolBar {
     
     newCaseButton.addListener(new ClickListener() {
       public void buttonClick(ClickEvent event) {
-        SearchPopupWindow searchPopupWindow = new SearchPopupWindow(searchListener);
+        SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
+        searchPopupWindow.addSearchListener(searchListener);
         viewManager.showPopupWindow(searchPopupWindow);
       }
     });

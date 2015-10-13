@@ -70,18 +70,17 @@ private HorizontalLayout resultsContainer;
 private VerticalLayout treeContainer;
 private SearchTabEventListener tabEventListener;
   
-  public SearchDetailPanel(SearchTabEventListener tabListener) {
+  public SearchDetailPanel() {
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.repository = ExplorerApp.get().getMashRepository();
-    initUi(tabListener);
+    initUi();
   }
 
  
 
-protected void initUi(SearchTabEventListener tabListener) {
+protected void initUi() {
 	  
-	addListener(tabListener);  
-    setSizeFull();
+	setSizeFull();
     addStyleName(Reindeer.LAYOUT_WHITE);
     detailPanelLayout = new VerticalLayout();
     detailPanelLayout.setWidth(100, UNITS_PERCENTAGE);
