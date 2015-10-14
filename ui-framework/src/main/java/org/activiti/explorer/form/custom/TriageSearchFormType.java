@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.activiti.engine.ActivitiIllegalArgumentException;
 import org.activiti.engine.form.AbstractFormType;
+import org.activiti.explorer.ui.form.custom.TriageSearchValue;
 
 
 public class TriageSearchFormType extends AbstractFormType{
@@ -29,28 +30,29 @@ public class TriageSearchFormType extends AbstractFormType{
 	  }
 
 	  @Override
-	  public Object convertFormValueToModelValue(String propertyValue) {
-	    validateValue(propertyValue);
-	    return propertyValue;
+	  public TriageSearchValue convertFormValueToModelValue(String propertyValue) {
+	   // validateValue(propertyValue);
+	    return new TriageSearchValue(propertyValue, null);
 	  }
 
 	  @Override
 	  public String convertModelValueToFormValue(Object modelValue) {
 	    if(modelValue != null) {
-	      if(!(modelValue instanceof String)) {
+	      if(!(modelValue instanceof TriageSearchValue)) {
 	        throw new ActivitiIllegalArgumentException("Model value should be a String");
 	      }
-	      validateValue((String) modelValue);
+	      validateValue((TriageSearchValue) modelValue);
 	    }
-	    return (String) modelValue;
+	    return getValue(modelValue);
 	  }
+
+	private String getValue(Object modelValue) {
+		if (modelValue!=null) return ((TriageSearchValue) modelValue).getValue();
+		else return null;
+	}
 	  
-	  protected void validateValue(String value) {
-	    if(value != null) {
-	      if(values != null && !values.containsKey(value)) {
-	        throw new ActivitiIllegalArgumentException("Invalid value for enum form property: " + value);
-	      }
-	    }
+	  protected void validateValue(TriageSearchValue value) {
+	   
 	  }
 
 	 

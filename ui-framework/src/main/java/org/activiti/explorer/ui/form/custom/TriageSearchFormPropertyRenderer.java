@@ -49,7 +49,7 @@ public TriageSearchFormPropertyRenderer() {
 	  
 	  Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values"); 
 	 
-	  TriageSearchField comboBox = new TriageSearchField(values,formProperty.getValue());
+	 TriageSearchField comboBox = new TriageSearchField(values,formProperty.getValue(),getPropertyLabel(formProperty));
     comboBox.setRequired(formProperty.isRequired());
     comboBox.setRequiredError(getMessage(Messages.FORM_FIELD_REQUIRED, getPropertyLabel(formProperty)));
     comboBox.setEnabled(formProperty.isWritable());

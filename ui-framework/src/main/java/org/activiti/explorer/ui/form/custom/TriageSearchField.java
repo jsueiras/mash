@@ -4,9 +4,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import mash.graph.NetworkChangeEvent;
+import mash.graph.NetworkState;
+
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.search.SearchPopupWindow;
+import org.activiti.explorer.ui.search.SearchTabEvent;
 import org.activiti.explorer.ui.search.SearchTabEventListener;
 import org.springframework.aop.target.HotSwappableTargetSource;
 
@@ -18,8 +22,12 @@ import com.vaadin.ui.CustomField;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component.Event;
+import com.vaadin.ui.Component.Listener;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 
-public class TriageSearchField extends CustomField<String> {
+public class TriageSearchField extends CustomField<TriageSearchValue> {
 
 	/**
 	 * 
@@ -31,19 +39,26 @@ public class TriageSearchField extends CustomField<String> {
 	private ComboBox comboBox;
 	private  Button searchButton;
 	private SearchTabEventListener searchListener;
+	private String label;
+	private NetworkState networkState;
 	
-	public TriageSearchField(Map<String,String> values, String currentValue) {
+	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
 		this.values = values;
 		this.selectedValue = currentValue;
+		this.label = label;
 		comboBox = new ComboBox();
+		
 	}
 
 	@Override
 	protected Component initContent() {
 	
+		
 		HorizontalLayout horizontalLayout = new HorizontalLayout();
+		horizontalLayout.setSpacing(true);
 		 initCombo();
 		 initActions();
+		 horizontalLayout.addComponent(new Label(label));
 		 horizontalLayout.addComponent(comboBox);
 		 horizontalLayout.addComponent(searchButton);
 		
@@ -103,9 +118,9 @@ public class TriageSearchField extends CustomField<String> {
 	}
 
 	@Override
-	public Class<? extends String> getType() {
+	public Class<? extends org.activiti.explorer.ui.form.custom.TriageSearchValue> getType() {
 		
-		return String.class;
+		return TriageSearchValue.class;
 	}
 	
 	public void addSearchListener(SearchTabEventListener listener)
@@ -130,10 +145,23 @@ public class TriageSearchField extends CustomField<String> {
 	}
 	
 	 @Override
-	 public String getValue(){
-		 return (String) comboBox.getValue();
+	 public TriageSearchValue getValue(){
+		 return new TriageSearchValue( (String)comboBox.getValue(), networkState);
 	 }
 
 
+	 
+	 public class NetworkChangeListener implements Listener {
+
+		  private static final long serialVersionUID = 7560512657831865244L;
+
+		  public final void componentEvent(Event event) {
+		    if(event instanceof NetworkChangeEvent) {
+		        networkState = ((NetworkChangeEvent)event).getNewState();
+		    }
+		  }
+	 }  
+	 
+  
 	
 }
