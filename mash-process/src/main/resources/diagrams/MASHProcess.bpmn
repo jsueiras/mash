@@ -128,6 +128,7 @@
         <activiti:in source="tresholdDecision" target="tresholdDecision"></activiti:in>
         <activiti:in source="tresholdRationale" target="tresholdRationale"></activiti:in>
         <activiti:in source="description" target="description"></activiti:in>
+        <activiti:in source="triageReason" target="triageReason"></activiti:in>
         <activiti:out source="finishInvestigation" target="finishInvestigation"></activiti:out>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${agencies}" activiti:elementVariable="researchAgency">

@@ -1,8 +1,6 @@
 package org.activiti.explorer.ui.search.person;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.mash.model.catalog.Address;
 import com.mash.model.catalog.Entity;
@@ -12,18 +10,8 @@ import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
 import com.vaadin.data.Item;
-import com.vaadin.graph.GraphExplorer;
-import com.vaadin.graph.demo.codegraph.ArcImpl;
-import com.vaadin.graph.demo.codegraph.CodeGraphDemo;
-import com.vaadin.graph.demo.codegraph.NodeImpl;
-import com.vaadin.graph.demo.codegraph.SimpleGraphRepositoryImpl;
-import com.vaadin.graph.layout.JungFRLayoutEngine;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Tree;
-import com.vaadin.ui.VerticalLayout;
 
 public class Decorator {
 	

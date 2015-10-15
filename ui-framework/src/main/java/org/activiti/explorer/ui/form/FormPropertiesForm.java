@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mash.graph.NetworkChangeListener;
+
 import org.activiti.engine.FormService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.form.FormProperty;
@@ -78,9 +80,9 @@ public FormPropertiesForm() {
     initListeners();
   }
   
-  public void setFormProperties(List<FormProperty> formProperties) {
+  public List<NetworkChangeListener> setFormProperties(List<FormProperty> formProperties) {
     // Component will refresh it's components based on the passed properties
-    formPropertiesComponent.setFormProperties(formProperties);
+    return formPropertiesComponent.setFormProperties(formProperties);
   }
   
   public void setSubmitButtonCaption(String caption) {

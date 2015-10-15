@@ -16,6 +16,8 @@ package org.activiti.explorer.ui.form.custom;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import mash.graph.NetworkChangeListener;
+
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.impl.form.EnumFormType;
 import org.activiti.explorer.I18nManager;
@@ -48,7 +50,7 @@ public TriageSearchFormPropertyRenderer() {
   public TriageSearchField getPropertyField(FormProperty formProperty) {
 	  
 	  Map<String, String> values = (Map<String, String>) formProperty.getType().getInformation("values"); 
-	 
+	  String value = formProperty.getValue(); 
 	 TriageSearchField comboBox = new TriageSearchField(values,formProperty.getValue(),getPropertyLabel(formProperty));
     comboBox.setRequired(formProperty.isRequired());
     comboBox.setRequiredError(getMessage(Messages.FORM_FIELD_REQUIRED, getPropertyLabel(formProperty)));
@@ -64,4 +66,12 @@ public TriageSearchFormPropertyRenderer() {
 	  triageSearch.addSearchListener((SearchTabEventListener) listener);
 	 return triageSearch;
   }
+  @Override
+  public NetworkChangeListener getNetworkChangeListener(Field field)
+  {
+	  return ((TriageSearchField)field).getNetworkChangeListener();
+  }
+  
+
+	
 }

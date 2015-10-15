@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mash.graph.NetworkChangeEvent;
+import mash.graph.NetworkChangeListener;
 import mash.graph.NetworkState;
 
 import org.activiti.explorer.ExplorerApp;
@@ -27,7 +28,7 @@ import com.vaadin.ui.Component.Listener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class TriageSearchField extends CustomField<TriageSearchValue> {
+public class TriageSearchField extends CustomField<String> {
 
 	/**
 	 * 
@@ -44,7 +45,13 @@ public class TriageSearchField extends CustomField<TriageSearchValue> {
 	
 	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
 		this.values = values;
-		this.selectedValue = currentValue;
+		 if (currentValue!=null)
+		 {
+			 TriageSearchValue searchValue = TriageSearchValue.stringToObject(currentValue);
+			 selectedValue = searchValue.getValue();
+			 networkState =searchValue.getNetworkState();
+		 }	 
+		
 		this.label = label;
 		comboBox = new ComboBox();
 		
@@ -118,9 +125,9 @@ public class TriageSearchField extends CustomField<TriageSearchValue> {
 	}
 
 	@Override
-	public Class<? extends org.activiti.explorer.ui.form.custom.TriageSearchValue> getType() {
+	public Class<? extends String> getType() {
 		
-		return TriageSearchValue.class;
+		return String.class;
 	}
 	
 	public void addSearchListener(SearchTabEventListener listener)
@@ -145,22 +152,23 @@ public class TriageSearchField extends CustomField<TriageSearchValue> {
 	}
 	
 	 @Override
-	 public TriageSearchValue getValue(){
-		 return new TriageSearchValue( (String)comboBox.getValue(), networkState);
+	 public String getValue(){
+		 return new TriageSearchValue( (String)comboBox.getValue(), networkState).objectToString();
 	 }
-
-
 	 
-	 public class NetworkChangeListener implements Listener {
+	  
+	 public NetworkChangeListener getNetworkChangeListener()
+	 {
+		 return new NetworkChangeListener() {
 
-		  private static final long serialVersionUID = 7560512657831865244L;
+		@Override
+		protected void handleNetworkChange(NetworkChangeEvent event) {
+			networkState = event.getNewState();
+		}
 
-		  public final void componentEvent(Event event) {
-		    if(event instanceof NetworkChangeEvent) {
-		        networkState = ((NetworkChangeEvent)event).getNewState();
-		    }
-		  }
-	 }  
+		
+	   };  
+	 }
 	 
   
 	

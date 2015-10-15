@@ -15,6 +15,8 @@ package org.activiti.explorer.ui.form;
 
 import java.io.Serializable;
 
+import mash.graph.NetworkChangeListener;
+
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.FormType;
 
@@ -42,7 +44,7 @@ public interface FormPropertyRenderer extends Serializable {
   
   Field getPropertyField(FormProperty formProperty);
   
-  
+  NetworkChangeListener getNetworkChangeListener(Field field);
   /**
    * The label to use for the form-property.
    */

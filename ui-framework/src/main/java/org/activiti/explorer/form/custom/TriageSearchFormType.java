@@ -1,10 +1,17 @@
 package org.activiti.explorer.form.custom;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Map;
 
 import org.activiti.engine.ActivitiIllegalArgumentException;
 import org.activiti.engine.form.AbstractFormType;
 import org.activiti.explorer.ui.form.custom.TriageSearchValue;
+import org.apache.commons.codec.binary.Base64;
 
 
 public class TriageSearchFormType extends AbstractFormType{
@@ -30,26 +37,25 @@ public class TriageSearchFormType extends AbstractFormType{
 	  }
 
 	  @Override
-	  public TriageSearchValue convertFormValueToModelValue(String propertyValue) {
+	  public Object convertFormValueToModelValue(String propertyValue) {
 	   // validateValue(propertyValue);
-	    return new TriageSearchValue(propertyValue, null);
+	    return propertyValue;
 	  }
 
 	  @Override
 	  public String convertModelValueToFormValue(Object modelValue) {
 	    if(modelValue != null) {
-	      if(!(modelValue instanceof TriageSearchValue)) {
+	      if(!(modelValue instanceof String)) {
 	        throw new ActivitiIllegalArgumentException("Model value should be a String");
 	      }
-	      validateValue((TriageSearchValue) modelValue);
+	    
+	      return   (String) modelValue;
 	    }
-	    return getValue(modelValue);
+	    return null;
+	   
 	  }
 
-	private String getValue(Object modelValue) {
-		if (modelValue!=null) return ((TriageSearchValue) modelValue).getValue();
-		else return null;
-	}
+
 	  
 	  protected void validateValue(TriageSearchValue value) {
 	   
@@ -57,8 +63,8 @@ public class TriageSearchFormType extends AbstractFormType{
 
 	 
 	
-
 	 
+
 
 	
 	 

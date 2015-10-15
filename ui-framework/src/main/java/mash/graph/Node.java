@@ -1,8 +1,10 @@
 package mash.graph;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Node {
+public class Node implements Serializable {
 	public final String id;
 	public String label;
 

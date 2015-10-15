@@ -127,7 +127,7 @@ public abstract class TaskPage extends AbstractTablePage {
 
         if(item != null) {
           String id = (String) item.getItemProperty("id").getValue();
-          setDetailComponent(createDetailComponent(id));
+          setDetailComponent(createDetailComponents(id));
 
         } else {
           // Nothing is selected
@@ -150,10 +150,11 @@ public abstract class TaskPage extends AbstractTablePage {
      }
   }
 
-  protected Component createDetailComponent(String id) {
+  protected Component createDetailComponents(String id) {
 	  Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
     Task task = taskService.createTaskQuery().taskId(id).singleResult();
     Component detailComponent = new TaskDetailPanel(task, TaskPage.this);
+    getTaskEventPanel().initTask(task);
     return detailComponent;
   }
 

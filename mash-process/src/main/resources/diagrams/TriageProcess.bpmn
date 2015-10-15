@@ -5,10 +5,7 @@
       <activiti:eventListener class="org.activiti.engine.test.MyEventListener"></activiti:eventListener>
     </extensionElements>
     <endEvent id="endevent1" name="End"></endEvent>
-    <startEvent id="start" name="Start" activiti:initiator="initiator">
-      <extensionElements>
-      </extensionElements>
-    </startEvent>
+    <startEvent id="start" name="Start" activiti:initiator="initiator"></startEvent>
     <sequenceFlow id="flow5" sourceRef="start" targetRef="scripttask3"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="callMash">
@@ -24,6 +21,7 @@
         <activiti:in source="initiator" target="initiator"></activiti:in>
         <activiti:in source="referralMap" target="referralMap"></activiti:in>
         <activiti:in source="triageId" target="triageId"></activiti:in>
+        <activiti:in source="triageReason" target="triageReason"></activiti:in>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow17" sourceRef="callMash" targetRef="endevent1"></sequenceFlow>

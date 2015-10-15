@@ -70,7 +70,6 @@
     <property name="i18nManager" ref="i18nManager" />
   </bean>
   -->
-  <bean name="graphApp" class="com.vaadin.graph.demo.codegraph.CodeGraphDemo"/>
   
   <bean name="explorerApp" class="org.activiti.explorer.ExplorerApp" scope="prototype">
     <property name="environment" value="${activiti.ui.environment}" />

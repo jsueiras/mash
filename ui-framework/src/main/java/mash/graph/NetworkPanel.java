@@ -7,7 +7,14 @@ import java.util.Set;
 
 import mash.graph.util.NetworkBuilder;
 
+import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
+import org.activiti.explorer.ui.form.custom.TriageSearchValue;
+import org.activiti.explorer.ui.search.SearchDetailPanel;
+import org.activiti.explorer.ui.search.SearchTabEvent;
 
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Entity;
@@ -19,13 +26,39 @@ import com.vaadin.ui.CssLayout;
 
 public class NetworkPanel extends CssLayout {
 	
+	
+	private static final String TRIAGE_REASON = "triageReason";
+	private RuntimeService runtimeService;
+	
+	
+	public NetworkPanel() 
+	{
+		   this.runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+		   
+	}
+
 	public void setRootEntity(boolean isLocation,String id)
 	{
 		  removeAllComponents();
 		  if (id!=null)
-	      addComponent(initNetwork(isLocation, id));
+		  {	  
+	         addComponent(initNetwork(isLocation, id));
+		  }   
 
 	}
+	public void initTask(Task task)
+	{
+		  
+		  removeAllComponents();
+		   Object value = runtimeService.getVariable(task.getProcessInstanceId(), TRIAGE_REASON);
+		   if (value!=null)
+		   {
+			   TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
+			   addComponent(new Network(reason.getNetworkState()));
+		   }	   
+		  
+	}
+	
 	
 	private List<Entity> getPersonPrimaryLinks(String id) {
 		Repository mashRep = ExplorerApp.get().getMashRepository();
@@ -85,8 +118,15 @@ public class NetworkPanel extends CssLayout {
 		} else {
 			builder.addNodesToNetwork(state, getPersonPrimaryLinks(id));
 		}		
+		 fireEvent(new NetworkChangeEvent(NetworkPanel.this, state));
+				
 		return new Network(state);
 		
+	}
+	
+	public void addNetworkChangeEventListener(NetworkChangeListener listener)
+	{
+	    addListener(listener);
 	}
 
 

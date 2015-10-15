@@ -13,9 +13,12 @@
 
 package org.activiti.explorer.ui.form;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import mash.graph.NetworkChangeListener;
 
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.FormType;
@@ -43,6 +46,7 @@ public class FormPropertiesComponent extends VerticalLayout {
   protected List<FormProperty> formProperties;
   protected Map<FormProperty, Component> propertyComponents;
   
+  
   protected Form form;
 
 private Map< Class<? extends FormType>, Listener> taskListeners;
@@ -58,9 +62,11 @@ private Map< Class<? extends FormType>, Listener> taskListeners;
     return formProperties;
   }
   
-  public void setFormProperties(List<FormProperty> formProperties) {
-    this.formProperties = formProperties;
-    
+  public List<NetworkChangeListener> setFormProperties(List<FormProperty> formProperties) {
+	  List<NetworkChangeListener> networkListeners = new ArrayList<NetworkChangeListener>();
+
+	  this.formProperties = formProperties;
+     
     form.removeAllProperties();
     
     // Clear current components in the grid
@@ -73,13 +79,15 @@ private Map< Class<? extends FormType>, Listener> taskListeners;
        
        
 		Field editorComponent = renderer.getPropertyField(formProperty,  taskListeners.get(renderer.getFormType()));
-       
         if(editorComponent != null) {
           // Get label for editor component.
-          form.addField(formProperty.getId(), editorComponent);     	  
+          form.addField(formProperty.getId(), editorComponent);     
+          NetworkChangeListener listener = renderer.getNetworkChangeListener(editorComponent);
+          if (listener!=null) networkListeners.add(listener);
         }
       }
     }
+    return networkListeners;
   }
   
 

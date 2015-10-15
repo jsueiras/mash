@@ -1,8 +1,10 @@
 package mash.graph;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Edge {
+public class Edge implements Serializable {
 	
    public final String from;
    

@@ -13,7 +13,10 @@
 package org.activiti.explorer.ui.task;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import mash.graph.NetworkChangeListener;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.ProcessEngines;
@@ -84,6 +87,7 @@ public class TaskDetailPanel extends DetailPanel {
   protected TaskRelatedContentComponent relatedContent;
   protected Button completeButton;
   protected Button claimButton;
+  
  
   public TaskDetailPanel(Task task, TaskPage taskPage) {
     this.task = task;
@@ -308,8 +312,9 @@ public class TaskDetailPanel extends DetailPanel {
       taskForm.setSubmitButtonCaption(i18nManager.getMessage(Messages.TASK_COMPLETE));
       taskForm.setCancelButtonCaption(i18nManager.getMessage(Messages.TASK_RESET_FORM));
       taskForm.setFormHelp(i18nManager.getMessage(Messages.TASK_FORM_HELP));
-      taskForm.setFormProperties(formData.getFormProperties());
-      
+      List<NetworkChangeListener> listeners= taskForm.setFormProperties(formData.getFormProperties());
+      initNetworkListeners(listeners);
+       
       taskForm.addListener(new FormPropertiesEventListener() {
         
         private static final long serialVersionUID = -3893467157397686736L;
@@ -366,7 +371,13 @@ public class TaskDetailPanel extends DetailPanel {
     }
   }
 
-  private Map< Class<? extends FormType>, Listener> getCustomListeners() {
+  private void initNetworkListeners(List<NetworkChangeListener> listeners) {
+	for (NetworkChangeListener networkChangeListener : listeners) {
+		taskPage.taskEventPanel.addNetworkChangeEventListener(networkChangeListener);
+	}
+}
+
+private Map< Class<? extends FormType>, Listener> getCustomListeners() {
 	  Map< Class<? extends FormType>, Listener> customListeners = new HashMap<Class<? extends FormType>,Listener>();
 	  customListeners.put(TriageSearchFormType.class, taskPage.getSearchListener());
 	return customListeners;
