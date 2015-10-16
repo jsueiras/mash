@@ -94,6 +94,8 @@ public interface ViewManager {
   void showSavedReportPage();
   
   void showSavedReportPage(String reportId);
+
+void showUnassignedPage();
   
   
 

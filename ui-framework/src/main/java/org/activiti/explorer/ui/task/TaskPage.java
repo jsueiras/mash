@@ -132,6 +132,8 @@ public abstract class TaskPage extends AbstractTablePage {
         } else {
           // Nothing is selected
           setDetailComponent(null);
+          taskEventPanel.removeAllComponents();
+          
         }
       }
     };

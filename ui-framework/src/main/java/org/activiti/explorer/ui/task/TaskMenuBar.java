@@ -36,6 +36,7 @@ import org.activiti.explorer.ui.task.data.InboxListQuery;
 import org.activiti.explorer.ui.task.data.InvolvedListQuery;
 import org.activiti.explorer.ui.task.data.QueuedListQuery;
 import org.activiti.explorer.ui.task.data.TasksListQuery;
+import org.activiti.explorer.ui.task.data.UnassignedListQuery;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -53,6 +54,7 @@ public class TaskMenuBar extends ToolBar {
   
   public static final String ENTRY_TASKS = "tasks";
   public static final String ENTRY_INBOX = "inbox";
+  public static final String ENTRY_UNASSIGNED = "unassigned";
   public static final String ENTRY_QUEUED = "queued";
   public static final String ENTRY_INVOLVED = "involved";
   public static final String ENTRY_ARCHIVED = "archived";
@@ -91,50 +93,58 @@ public class TaskMenuBar extends ToolBar {
     });
     inboxEntry.setCount(inboxCount);
     
-    // Tasks
-    long tasksCount = new TasksListQuery(user.getId()).size(); 
-    ToolbarEntry tasksEntry = addToolbarEntry(ENTRY_TASKS, i18nManager.getMessage(Messages.TASK_MENU_TASKS), new ToolbarCommand() {
+    long unassignedCount = new UnassignedListQuery(user.getId()).size(); 
+    ToolbarEntry unassignedEntry = addToolbarEntry(ENTRY_UNASSIGNED, i18nManager.getMessage(Messages.TASK_MENU_QUEUED), new ToolbarCommand() {
       public void toolBarItemSelected() {
-        viewManager.showTasksPage();
+        viewManager.showUnassignedPage();
       }
     });
-    tasksEntry.setCount(tasksCount);
+    unassignedEntry.setCount(unassignedCount);
     
-    // Queued
-    List<Group> groups = user.getGroups();
-    ToolbarPopupEntry queuedItem = addPopupEntry(ENTRY_QUEUED, (i18nManager.getMessage(Messages.TASK_MENU_QUEUED)));
-    long queuedCount = 0;
-    for (final Group group : groups) {
-      long groupCount = new QueuedListQuery(user.getId(),group.getId()).size();
-
-      queuedItem.addMenuItem(group.getName() + " (" + groupCount + ")", new ToolbarCommand() {
-
-        public void toolBarItemSelected() {
-          viewManager.showQueuedPage(group.getId());
-        }
-      });
-
-      queuedCount += groupCount;
-    }
-    queuedItem.setCount(queuedCount);
-    
-    // Involved
-    long involvedCount = new InvolvedListQuery(user.getId()).size(); 
-    ToolbarEntry involvedEntry = addToolbarEntry(ENTRY_INVOLVED, i18nManager.getMessage(Messages.TASK_MENU_INVOLVED), new ToolbarCommand() {
-      public void toolBarItemSelected() {
-        viewManager.showInvolvedPage();
-      }
-    });
-    involvedEntry.setCount(involvedCount);
-    
-    // Archived
-    long archivedCount = new ArchivedListQuery(user.getId()).size(); 
-    ToolbarEntry archivedEntry = addToolbarEntry(ENTRY_ARCHIVED, i18nManager.getMessage(Messages.TASK_MENU_ARCHIVED), new ToolbarCommand() {
-      public void toolBarItemSelected() {
-        viewManager.showArchivedPage();
-      }
-    });
-    archivedEntry.setCount(archivedCount);
+//    // Tasks
+//    long tasksCount = new TasksListQuery(user.getId()).size(); 
+//    ToolbarEntry tasksEntry = addToolbarEntry(ENTRY_TASKS, i18nManager.getMessage(Messages.TASK_MENU_TASKS), new ToolbarCommand() {
+//      public void toolBarItemSelected() {
+//        viewManager.showTasksPage();
+//      }
+//    });
+//    tasksEntry.setCount(tasksCount);
+//    
+//    // Queued
+//    List<Group> groups = user.getGroups();
+//    ToolbarPopupEntry queuedItem = addPopupEntry(ENTRY_QUEUED, (i18nManager.getMessage(Messages.TASK_MENU_QUEUED)));
+//    long queuedCount = 0;
+//    for (final Group group : groups) {
+//      long groupCount = new QueuedListQuery(user.getId(),group.getId()).size();
+//
+//      queuedItem.addMenuItem(group.getName() + " (" + groupCount + ")", new ToolbarCommand() {
+//
+//        public void toolBarItemSelected() {
+//          viewManager.showQueuedPage(group.getId());
+//        }
+//      });
+//
+//      queuedCount += groupCount;
+//    }
+//    queuedItem.setCount(queuedCount);
+//    
+//    // Involved
+//    long involvedCount = new InvolvedListQuery(user.getId()).size(); 
+//    ToolbarEntry involvedEntry = addToolbarEntry(ENTRY_INVOLVED, i18nManager.getMessage(Messages.TASK_MENU_INVOLVED), new ToolbarCommand() {
+//      public void toolBarItemSelected() {
+//        viewManager.showInvolvedPage();
+//      }
+//    });
+//    involvedEntry.setCount(involvedCount);
+//    
+//    // Archived
+//    long archivedCount = new ArchivedListQuery(user.getId()).size(); 
+//    ToolbarEntry archivedEntry = addToolbarEntry(ENTRY_ARCHIVED, i18nManager.getMessage(Messages.TASK_MENU_ARCHIVED), new ToolbarCommand() {
+//      public void toolBarItemSelected() {
+//        viewManager.showArchivedPage();
+//      }
+//    });
+//    archivedEntry.setCount(archivedCount);
   }
   
   protected void initActions() {

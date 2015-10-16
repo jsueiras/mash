@@ -40,6 +40,7 @@ import org.activiti.explorer.ui.task.InvolvedPage;
 import org.activiti.explorer.ui.task.QueuedPage;
 import org.activiti.explorer.ui.task.TaskMenuBar;
 import org.activiti.explorer.ui.task.TasksPage;
+import org.activiti.explorer.ui.task.UnassignedPage;
 import org.activiti.workflow.simple.definition.WorkflowDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -162,9 +163,17 @@ public class DefaultViewManager implements ViewManager, Serializable {
     switchView(new InboxPage(), ViewManager.MAIN_NAVIGATION_TASK, TaskMenuBar.ENTRY_INBOX);
   }
   
+  public void showUnassignedPage() {
+	    switchView(new UnassignedPage(), ViewManager.MAIN_NAVIGATION_TASK, TaskMenuBar.ENTRY_UNASSIGNED);
+	  }
+  
   public void showInboxPage(String taskId) {
     switchView(new InboxPage(taskId), ViewManager.MAIN_NAVIGATION_TASK, TaskMenuBar.ENTRY_INBOX);
   }
+  
+  public void showUnassignedPage(String taskId) {
+	    switchView(new InboxPage(taskId), ViewManager.MAIN_NAVIGATION_TASK, TaskMenuBar.ENTRY_INBOX);
+	  }
   
   public void showQueuedPage(String groupId) {
     switchView(new QueuedPage(groupId), ViewManager.MAIN_NAVIGATION_TASK, TaskMenuBar.ENTRY_QUEUED);
