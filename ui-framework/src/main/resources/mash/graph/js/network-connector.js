@@ -1,10 +1,47 @@
-window.mash_graph_Network = function() {
+window.mash_graph_Network = function () {
 
     // create an array with nodes
-    var nodes = new vis.DataSet([]);
+    //var nodes = new vis.DataSet([]);
+    var nodes = [{
+        id: 1,
+        label: 'User 1',
+        group: 'PERSONS'
+        //}, {
+        //    id: 2,
+        //    label: 'User 2',
+        //    group: 'PERSONS'
+    }, {
+        id: 3,
+        label: 'Usergroup 1',
+        group: 'LOCATIONS'
+        //}, {
+        //    id: 4,
+        //    label: 'Usergroup 2',
+        //    group: 'LOCATIONS'
+        //}, {
+        //    id: 5,
+        //    label: 'Organisation 1',
+        //    shape: 'LOCATIONS',
+    }];
 
     // create an array with edges
-    var edges = new vis.DataSet([]);
+    //var edges = new vis.DataSet([]);
+    var edges = [{
+        from: 1,
+        to: 3
+        //}, {
+        //    from: 1,
+        //    to: 4
+        //}, {
+        //    from: 2,
+        //    to: 4
+        //}, {
+        //    from: 3,
+        //    to: 5
+        //}, {
+        //    from: 4,
+        //    to: 5
+    }];
 
     var container = this.getElement();
 
@@ -14,46 +51,62 @@ window.mash_graph_Network = function() {
         edges: edges
     };
 
+    var element = this.getElement();
     var options = {
-        autoResize: true,
-        height: '100%',
-        width: '100%',
-        clickToUse: false,
-        configure: {
-            enabled: false,
-            showButton: true,
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        nodes: {
+            shape: 'icon',
         },
         groups: {
             PERSONS: {
-                shape: 'icon',
                 icon: {
-                    face: 'FontAwesome',
                     code: '\uf007',
-                    size: 50,
-                    color: 'rgb(106,116,124)',
                 },
             },
             LOCATIONS: {
-                shape: 'icon',
                 icon: {
-                    face: 'FontAwesome',
                     code: '\uf041',
-                    size: 50,
-                    color:'rgb(106,116,124)',
                 },
             },
         },
+        layout: {
+            hierarchical: {
+                enabled: false,
+            },
+        },
+        physics: {
+            forceAtlas2Based: {
+                gravitationalConstant: -26,
+                centralGravity: 0.005,
+                springLength: 230,
+                springConstant: 0.18
+            },
+            maxVelocity: 146,
+            solver: 'forceAtlas2Based',
+            timestep: 0.35,
+            stabilization: {iterations: 150}
+        },
     }
 
-    // initialize your network!
     var network = new vis.Network(container, data, options);
 
     // Handle changes from the server-side
-    this.onStateChange = function() {
+    this.onStateChange = function () {
+
+        nodes = new vis.DataSet(this.getState().nodes);
+        edges = new vis.DataSet(this.getState().edges);
         data = {
-            nodes: new vis.DataSet(this.getState().nodes),
-            edges: new vis.DataSet([{}]),
+            nodes: nodes,
+            edges: edges,
         };
         network.setData(data);
+
+        network.setOptions({
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+        });
+
+        network.redraw();
     }
 }

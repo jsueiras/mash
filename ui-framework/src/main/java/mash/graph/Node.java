@@ -11,15 +11,16 @@ public class Node implements Serializable {
 
 	public final String id;
 	public String label;
+	public Group group;
 
 	public Node(String id) {
 		this.id = id;
 	}
 
-	public Node(String id, String label) {
+	public Node(String id, String label, Group group) {
 		this(id);
 		this.label = label;
-
+		this.group = group;
 	}
 
 	@Override

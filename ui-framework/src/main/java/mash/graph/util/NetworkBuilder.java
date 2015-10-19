@@ -13,21 +13,21 @@ import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
 
 public class NetworkBuilder {
-	
-	
+
+
 	 private  String getLabel(Person person){
-		return  String.format("%s %s", person.getFirstName(), person.getLastName()); 
+		return  String.format("%s %s", person.getFirstName(), person.getLastName());
 	 }
 
 	 private String getLabel(Location location) {
 		if (location== null) return "";
 		return  String.format("%s %s %s", location.getNumberOrName(), location.getStreet(),location.getCity());
 	 }
-	
+
 	 private String getId(Entity entity){
-			return entity.getId(); 
+			return entity.getId();
 	 }
-	 
+
 	 private String getLabel(Entity entity){
 			if (entity instanceof Person)
 			   return getLabel((Person)entity);
@@ -36,55 +36,55 @@ public class NetworkBuilder {
 	 }
 
 	private  void appendNode(NetworkState state,Person person) {
-		
-		state.nodes.add(createNode(person));
-		
-        for (Relation relation : person.getHousehold().getRelations()) {	
-           state.nodes.add(createNode(relation.getPerson()));
+
+		state.nodes.add(createNode(person, Node.Group.PERSONS));
+
+        for (Relation relation : person.getHousehold().getRelations()) {
+           state.nodes.add(createNode(relation.getPerson(), Node.Group.PERSONS));
            state.edges.add(createEdge(person,relation.getPerson(),relation.getType()));
-			
-        }		
+
+        }
 
         if (person.getHomeAddress()!=null && person.getHomeAddress().getLocation()!= null)
-        { 
+        {
         	Location location = person.getHomeAddress().getLocation();
-        	state.nodes.add(createNode(location));
+        	state.nodes.add(createNode(location, Node.Group.LOCATIONS));
         	state.edges.add(createEdge(person, location, "Home Address"));
         }
-       
+
 	 }
 
 
 	private void appendNode(NetworkState state,Location location) {
-		  
-		state.nodes.add(createNode(location));
-		
-	    for (Occupant occupant : location.getOccupants()) {		   
-	           state.nodes.add(createNode(occupant.getPerson()));
+
+		state.nodes.add(createNode(location, Node.Group.LOCATIONS));
+
+	    for (Occupant occupant : location.getOccupants()) {
+	           state.nodes.add(createNode(occupant.getPerson(), Node.Group.PERSONS));
 	           state.edges.add(createEdge(location,occupant.getPerson(),"Occupant"));
 		}
-	
+
 	}
-	
+
 	private void appendNode(NetworkState state,Entity entity) {
-		  
+
 		if (entity instanceof Person)
 			appendNode(state, (Person)entity);
 		else
-			appendNode(state, (Location)entity);	
-	
+			appendNode(state, (Location)entity);
+
 	}
 
 	private Edge createEdge(Entity source, Entity target, String label) {
 		return new Edge(getId(source), getId(target),label);
 	}
 
-	private Node createNode(Entity entity) {
-		Node node = new Node(getId(entity), getLabel(entity));
+	private Node createNode(Entity entity, Node.Group group) {
+		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
 	}
-	
-	
+
+
 	public NetworkState initNetworkState(List<Entity> entities)
 	{
 		NetworkState state = new NetworkState();
@@ -97,6 +97,6 @@ public class NetworkBuilder {
 			appendNode(state, entity);
 		}
 	}
-	
+
 
 }
