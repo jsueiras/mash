@@ -21,8 +21,28 @@ window.mash_graph_Network = function() {
         clickToUse: false,
         configure: {
             enabled: false,
-            showButton: true
-        }
+            showButton: true,
+        },
+        groups: {
+            PERSONS: {
+                shape: 'icon',
+                icon: {
+                    face: 'FontAwesome',
+                    code: '\uf007',
+                    size: 50,
+                    color: 'rgb(106,116,124)',
+                },
+            },
+            LOCATIONS: {
+                shape: 'icon',
+                icon: {
+                    face: 'FontAwesome',
+                    code: '\uf041',
+                    size: 50,
+                    color:'rgb(106,116,124)',
+                },
+            },
+        },
     }
 
     // initialize your network!
@@ -35,6 +55,5 @@ window.mash_graph_Network = function() {
             edges: new vis.DataSet([{}]),
         };
         network.setData(data);
-        network.redraw();
     }
 }

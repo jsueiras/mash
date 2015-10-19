@@ -19,6 +19,7 @@
         <project.encoding>UTF-8</project.encoding>
         <activiti.version>5.18.0</activiti.version>
         <visjs.version>4.8.2</visjs.version>
+        <font-awesome.version>4.4.0</font-awesome.version>
     </properties>
 
     <repositories>
@@ -212,6 +213,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>visjs</artifactId>
             <version>${visjs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font-awesome.version}</version>
         </dependency>
     </dependencies>
 

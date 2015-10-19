@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@ package org.activiti.explorer.ui.task;
 
 import java.util.List;
 
+import com.vaadin.server.FontAwesome;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.identity.Group;
@@ -44,30 +45,30 @@ import com.vaadin.ui.Button.ClickListener;
 
 /**
  * The menu bar which is shown when 'Tasks' is selected in the main menu.
- * 
+ *
  * @author Joram Barrez
  * @author Frederik Heremans
  */
 public class TaskMenuBar extends ToolBar {
-  
+
   private static final long serialVersionUID = 1L;
-  
+
   public static final String ENTRY_TASKS = "tasks";
   public static final String ENTRY_INBOX = "inbox";
   public static final String ENTRY_UNASSIGNED = "unassigned";
   public static final String ENTRY_QUEUED = "queued";
   public static final String ENTRY_INVOLVED = "involved";
   public static final String ENTRY_ARCHIVED = "archived";
-  
+
   protected transient IdentityService identityService;
   protected ViewManager viewManager;
   protected I18nManager i18nManager;
 
   private SearchTabEventListener searchListener;
-  
 
-   
-  
+
+
+
   public TaskMenuBar(SearchTabEventListener listener) {
     this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
     this.viewManager = ExplorerApp.get().getViewManager();
@@ -77,82 +78,40 @@ public class TaskMenuBar extends ToolBar {
     initItems();
     initActions();
   }
-  
+
   protected void initItems() {
     setWidth("100%");
     LoggedInUser user = ExplorerApp.get().getLoggedInUser();
-    
+
     // TODO: the counts should be done later by eg a Refresher component
 
     // Inbox
-    long inboxCount = new InboxListQuery(user.getId()).size(); 
+    long inboxCount = new InboxListQuery(user.getId()).size();
     ToolbarEntry inboxEntry = addToolbarEntry(ENTRY_INBOX, i18nManager.getMessage(Messages.TASK_MENU_INBOX), new ToolbarCommand() {
       public void toolBarItemSelected() {
         viewManager.showInboxPage();
       }
     });
     inboxEntry.setCount(inboxCount);
-    
-    long unassignedCount = new UnassignedListQuery(user.getId()).size(); 
+
+    long unassignedCount = new UnassignedListQuery(user.getId()).size();
     ToolbarEntry unassignedEntry = addToolbarEntry(ENTRY_UNASSIGNED, i18nManager.getMessage(Messages.TASK_MENU_QUEUED), new ToolbarCommand() {
+
       public void toolBarItemSelected() {
         viewManager.showUnassignedPage();
       }
     });
+
     unassignedEntry.setCount(unassignedCount);
-    
-//    // Tasks
-//    long tasksCount = new TasksListQuery(user.getId()).size(); 
-//    ToolbarEntry tasksEntry = addToolbarEntry(ENTRY_TASKS, i18nManager.getMessage(Messages.TASK_MENU_TASKS), new ToolbarCommand() {
-//      public void toolBarItemSelected() {
-//        viewManager.showTasksPage();
-//      }
-//    });
-//    tasksEntry.setCount(tasksCount);
-//    
-//    // Queued
-//    List<Group> groups = user.getGroups();
-//    ToolbarPopupEntry queuedItem = addPopupEntry(ENTRY_QUEUED, (i18nManager.getMessage(Messages.TASK_MENU_QUEUED)));
-//    long queuedCount = 0;
-//    for (final Group group : groups) {
-//      long groupCount = new QueuedListQuery(user.getId(),group.getId()).size();
-//
-//      queuedItem.addMenuItem(group.getName() + " (" + groupCount + ")", new ToolbarCommand() {
-//
-//        public void toolBarItemSelected() {
-//          viewManager.showQueuedPage(group.getId());
-//        }
-//      });
-//
-//      queuedCount += groupCount;
-//    }
-//    queuedItem.setCount(queuedCount);
-//    
-//    // Involved
-//    long involvedCount = new InvolvedListQuery(user.getId()).size(); 
-//    ToolbarEntry involvedEntry = addToolbarEntry(ENTRY_INVOLVED, i18nManager.getMessage(Messages.TASK_MENU_INVOLVED), new ToolbarCommand() {
-//      public void toolBarItemSelected() {
-//        viewManager.showInvolvedPage();
-//      }
-//    });
-//    involvedEntry.setCount(involvedCount);
-//    
-//    // Archived
-//    long archivedCount = new ArchivedListQuery(user.getId()).size(); 
-//    ToolbarEntry archivedEntry = addToolbarEntry(ENTRY_ARCHIVED, i18nManager.getMessage(Messages.TASK_MENU_ARCHIVED), new ToolbarCommand() {
-//      public void toolBarItemSelected() {
-//        viewManager.showArchivedPage();
-//      }
-//    });
-//    archivedEntry.setCount(archivedCount);
   }
-  
+
   protected void initActions() {
     Button newCaseButton = new Button();
     newCaseButton.setCaption("Search");
-    newCaseButton.setIcon(Images.TASK_16);
+    newCaseButton.setIcon(FontAwesome.SEARCH);
+    newCaseButton.setHtmlContentAllowed(true);
     addButton(newCaseButton);
-    
+
     newCaseButton.addListener(new ClickListener() {
       public void buttonClick(ClickEvent event) {
         SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
@@ -161,5 +120,5 @@ public class TaskMenuBar extends ToolBar {
       }
     });
   }
-  
+
 }

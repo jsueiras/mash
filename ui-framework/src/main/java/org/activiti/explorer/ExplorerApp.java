@@ -12,7 +12,6 @@
  */
 package org.activiti.explorer;
 
-import com.google.common.io.Closeables;
 import com.mash.data.service.Repository;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -37,8 +36,6 @@ import org.activiti.workflow.simple.converter.WorkflowDefinitionConversionFactor
 import org.activiti.workflow.simple.converter.json.SimpleWorkflowJsonConverter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -52,10 +49,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -353,68 +348,68 @@ public void terminalError(ErrorEvent event) {
 	  this.simpleWorkflowJsonConverter = simpleWorkflowJsonConverter;
   }
 
-	@WebServlet(urlPatterns = "/webjars/*")
-	public static class WebjarServlet extends HttpServlet {
-		private RequestDispatcher defaultDispatcher;
+  @WebServlet(urlPatterns = "/webjars/*")
+  public static class WebjarServlet extends HttpServlet {
+    private RequestDispatcher defaultDispatcher;
 
-		@Override
-		public void init() throws ServletException {
-			super.init();
-			defaultDispatcher = getServletContext().getNamedDispatcher("default");
-		}
+    @Override
+    public void init() throws ServletException {
+      super.init();
+      defaultDispatcher = getServletContext().getNamedDispatcher("default");
+    }
 
-		@Override
-		protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			defaultDispatcher.forward(request, response);
-		}
-	}
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+      defaultDispatcher.forward(request, response);
+    }
+  }
 
-	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-	@VaadinServletConfiguration(ui = ExplorerApp.class, productionMode = false)
-	public static class MyUIServlet extends SpringVaadinServlet {
-		@Override
-		protected void servletInitialized() throws ServletException {
-			super.servletInitialized();
+  @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+  @VaadinServletConfiguration(ui = ExplorerApp.class, productionMode = false)
+  public static class MyUIServlet extends SpringVaadinServlet {
+    @Override
+    protected void servletInitialized() throws ServletException {
+      super.servletInitialized();
 
-			VaadinServletService.getCurrent().addSessionInitListener(new SessionInitListener() {
+      VaadinServletService.getCurrent().addSessionInitListener(new SessionInitListener() {
 
-				@Override
-				public void sessionInit(SessionInitEvent event) throws ServiceException {
+        @Override
+        public void sessionInit(SessionInitEvent event) throws ServiceException {
 
-					VaadinSession.getCurrent().addBootstrapListener(new BootstrapListener() {
+          VaadinSession.getCurrent().addBootstrapListener(new BootstrapListener() {
 
-						@Override
-						public void modifyBootstrapFragment(BootstrapFragmentResponse response) {}
+            @Override
+            public void modifyBootstrapFragment(BootstrapFragmentResponse response) {}
 
-						@Override
-						public void modifyBootstrapPage(BootstrapPageResponse response) {
-							Document document = response.getDocument();
-							Element head = document.getElementsByTag("head").get(0);
+            @Override
+            public void modifyBootstrapPage(BootstrapPageResponse response) {
+              Document document = response.getDocument();
+              Element head = document.getElementsByTag("head").get(0);
 
-							Object visjsVersion = ResourceBundle.getBundle("app").getObject("visjs.version");
+              addWebJarResource(document, head, String.format("font-awesome/4.4.0/css/font-awesome.min.css"));
+              addWebJarResource(document, head, String.format("visjs/4.8.2/vis.min.css"));
+              addWebJarResource(document, head, String.format("visjs/4.8.2/vis.min.js"));
+            }
 
-							addWebJarResource(document, head, String.format("visjs/%s/vis.min.css", visjsVersion));
-							addWebJarResource(document, head, String.format("visjs/%s/vis.min.js", visjsVersion));
-						}
-
-						private void addWebJarResource(Document d, Element head, String id) {
-							if (id.endsWith(".js")) {
-								Element s = d.createElement("script");
-								s.attr("src", "webjars/" + id);
-								s.attr("type", "text/javascript");
-								head.appendChild(s);
-							} else if (id.endsWith(".css")) {
-								Element s = d.createElement("link");
-								s.attr("href", "webjars/" + id);
-								s.attr("rel", "stylesheet");
-								head.appendChild(s);
-							}
-						}
-					});
-				}
-			});
-		}
-	}
+            private void addWebJarResource(Document d, Element head, String id) {
+              if (id.endsWith(".js")) {
+                Element s = d.createElement("script");
+                s.attr("src", "webjars/" + id);
+                s.attr("type", "text/javascript");
+                head.appendChild(s);
+              } else if (id.endsWith(".css")) {
+                Element s = d.createElement("link");
+                s.attr("href", "webjars/" + id);
+                s.attr("rel", "stylesheet");
+                head.appendChild(s);
+              }
+            }
+          });
+        }
+      });
+    }
+  }
 
   @WebListener
   public static class MyContextLoaderListener extends ContextLoaderListener {

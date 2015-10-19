@@ -8,7 +8,6 @@ import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.shared.ui.JavaScriptComponentState;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 
 import mash.graph.util.NetworkBuilder;
@@ -19,8 +18,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@JavaScript({"webjars/visjs/4.8.2/vis.min.js", "js/network-connector.js"})
-@StyleSheet({"webjars/visjs/4.8.2/vis.min.css", "css/network.css"})
+@JavaScript({"js/network-connector.js"})
+@StyleSheet({"css/network.css"})
 public class Network extends AbstractJavaScriptComponent {
 
 	public Network(NetworkState state) {
