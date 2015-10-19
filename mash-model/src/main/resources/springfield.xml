@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locations xmlns="http://www.mash.data.com/mashModel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
     <location>
-       <id>homerAddress</id>
+       <id>homeraddress</id>
 	   <numberOrName>742</numberOrName>
 	    <street>Evergreen Terrace</street>
 		<city>Springfield</city>
 		<postcode>28003</postcode>
 	  </location>
 	  <location>
-       <id>flandersAddress</id>
+       <id>flandersaddress</id>
 	   <numberOrName>744</numberOrName>
 	    <street>Evergreen Terrace</street>
 		<city>Springfield</city>
