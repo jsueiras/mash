@@ -38,12 +38,14 @@ public class NetworkBuilder {
 	private  void appendNode(NetworkState state,Person person) {
 
 		state.nodes.add(createNode(person, Node.Group.PERSONS));
-
+       if  (person.getHousehold()!=null)
+       {
         for (Relation relation : person.getHousehold().getRelations()) {
            state.nodes.add(createNode(relation.getPerson(), Node.Group.PERSONS));
            state.edges.add(createEdge(person,relation.getPerson(),relation.getType()));
 
         }
+       }
 
         if (person.getHomeAddress()!=null && person.getHomeAddress().getLocation()!= null)
         {
