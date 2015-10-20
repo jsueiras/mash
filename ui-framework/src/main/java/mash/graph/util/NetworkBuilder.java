@@ -37,11 +37,11 @@ public class NetworkBuilder {
 
 	private  void appendNode(NetworkState state,Person person) {
 
-		state.nodes.add(createNode(person, Node.Group.PERSONS));
+		state.nodes.add(createNode(person));
        if  (person.getHousehold()!=null)
        {
         for (Relation relation : person.getHousehold().getRelations()) {
-           state.nodes.add(createNode(relation.getPerson(), Node.Group.PERSONS));
+           state.nodes.add(createNode(relation.getPerson()));
            state.edges.add(createEdge(person,relation.getPerson(),relation.getType()));
 
         }
@@ -50,7 +50,7 @@ public class NetworkBuilder {
         if (person.getHomeAddress()!=null && person.getHomeAddress().getLocation()!= null)
         {
         	Location location = person.getHomeAddress().getLocation();
-        	state.nodes.add(createNode(location, Node.Group.LOCATIONS));
+        	state.nodes.add(createNode(location));
         	state.edges.add(createEdge(person, location, "Home Address"));
         }
 
@@ -59,10 +59,10 @@ public class NetworkBuilder {
 
 	private void appendNode(NetworkState state,Location location) {
 
-		state.nodes.add(createNode(location, Node.Group.LOCATIONS));
+		state.nodes.add(createNode(location));
 
 	    for (Occupant occupant : location.getOccupants()) {
-	           state.nodes.add(createNode(occupant.getPerson(), Node.Group.PERSONS));
+	           state.nodes.add(createNode(occupant.getPerson()));
 	           state.edges.add(createEdge(location,occupant.getPerson(),"Occupant"));
 		}
 
@@ -81,7 +81,18 @@ public class NetworkBuilder {
 		return new Edge(getId(source), getId(target),label);
 	}
 
-	private Node createNode(Entity entity, Node.Group group) {
+	private Node createNode(Entity entity) {
+		Node.Group group = Node.Group.LOCATIONS;
+		if (entity instanceof Person) {
+			Person person = (Person) entity;
+			if ("female".equalsIgnoreCase(person.getGender())) {
+				group = Node.Group.FEMALES;
+			} else if ("male".equalsIgnoreCase(person.getGender())) {
+				group = Node.Group.MALES;
+			} else {
+				group = Node.Group.PERSONS;
+			}
+		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
 	}
