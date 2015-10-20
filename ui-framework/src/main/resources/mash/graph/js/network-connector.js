@@ -7,6 +7,11 @@ window.mash_graph_Network = function () {
         nodes: {
             shape: 'icon',
         },
+        edges: {
+            arrows: {
+                to: true,
+            },
+        },
         groups: {
             PERSONS: {
                 icon: {
