@@ -1,60 +1,9 @@
 window.mash_graph_Network = function () {
 
-    // create an array with nodes
-    //var nodes = new vis.DataSet([]);
-    var nodes = [{
-        id: 1,
-        label: 'User 1',
-        group: 'PERSONS'
-        //}, {
-        //    id: 2,
-        //    label: 'User 2',
-        //    group: 'PERSONS'
-    }, {
-        id: 3,
-        label: 'Usergroup 1',
-        group: 'LOCATIONS'
-        //}, {
-        //    id: 4,
-        //    label: 'Usergroup 2',
-        //    group: 'LOCATIONS'
-        //}, {
-        //    id: 5,
-        //    label: 'Organisation 1',
-        //    shape: 'LOCATIONS',
-    }];
-
-    // create an array with edges
-    //var edges = new vis.DataSet([]);
-    var edges = [{
-        from: 1,
-        to: 3
-        //}, {
-        //    from: 1,
-        //    to: 4
-        //}, {
-        //    from: 2,
-        //    to: 4
-        //}, {
-        //    from: 3,
-        //    to: 5
-        //}, {
-        //    from: 4,
-        //    to: 5
-    }];
-
     var container = this.getElement();
-
-    // provide the data in the vis format
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-
-    var element = this.getElement();
     var options = {
-        width: element.offsetWidth,
-        height: element.offsetHeight,
+        width: container.offsetWidth,
+        height: container.offsetHeight,
         nodes: {
             shape: 'icon',
         },
@@ -89,10 +38,20 @@ window.mash_graph_Network = function () {
         },
     }
 
-    var network = new vis.Network(container, data, options);
+    var nodes = new vis.DataSet([]);
+    var edges = new vis.DataSet([]);
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+
+    var network = null;
 
     // Handle changes from the server-side
     this.onStateChange = function () {
+        if (network != null) {
+            network.destroy();
+        }
 
         nodes = new vis.DataSet(this.getState().nodes);
         edges = new vis.DataSet(this.getState().edges);
@@ -100,12 +59,7 @@ window.mash_graph_Network = function () {
             nodes: nodes,
             edges: edges,
         };
-        network.setData(data);
-
-        network.setOptions({
-            width: element.offsetWidth,
-            height: element.offsetHeight,
-        });
+        network = new vis.Network(container, data, options);
 
         network.redraw();
     }
