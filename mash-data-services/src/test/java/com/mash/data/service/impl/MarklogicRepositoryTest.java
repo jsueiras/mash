@@ -2,8 +2,10 @@ package com.mash.data.service.impl;
 
 import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
+import com.mash.data.service.SecurityInfo;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
@@ -103,13 +105,14 @@ public class MarklogicRepositoryTest {
 		Repository rep = new MarklogicRepositoryImpl("http://localhost:8042/v1/resources/");
 		Query query = new Query();
 		query.setFirstName("Pimpernel");
-		Person p = rep.findPersons(query).get(0);
+		//todo put some values in the sec
+		Person p = rep.findPersons(query,new SecurityInfo("1", "1", "Triage")).get(0);
 		assertNotNull(p);
 		assertEquals("Pimpernel", p.getFirstName());
 		assertEquals("SANDYMAN", p.getLastName());
 		assertNotNull(p.getId());
 
-		Person personById = rep.findPersonById(p.getId());
+		Person personById = rep.findPersonById(p.getId(),new SecurityInfo("1", "1", "Triage"));
 		assertEquals(p.getId(), personById.getId());
 	}
 
@@ -119,10 +122,10 @@ public class MarklogicRepositoryTest {
 		MarklogicRepositoryImpl rep = new MarklogicRepositoryImpl("http://localhost:8042/v1/resources/");
 		Location sample = new Location();
 		sample.setStreet("FAXFLEET");
-		Location location = rep.findLocations(sample).get(0);
+		Location location = rep.findLocations(sample,new SecurityInfo("1", "1", "Triage")).get(0);
 		assertNotNull(location);
 
-		Location locationDeatail = rep.findLocationById(location.getId());
+		Location locationDeatail = rep.findLocationById(location.getId(),new SecurityInfo("1", "1", "Triage"));
 		assertEquals(location.getId(), locationDeatail.getId());
 	}
 }

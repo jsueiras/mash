@@ -63,7 +63,7 @@ public class NetworkPanel extends CssLayout {
 	private List<Entity> getPersonPrimaryLinks(String id) {
 		Repository mashRep = ExplorerApp.get().getMashRepository();
 		List<String> ids = new ArrayList<String>();
-		Person person = mashRep.findPersonById(id);
+		Person person = mashRep.findPersonById(id,null);
 		List<Entity> entities;
 		
 		if (person.getHomeAddress() != null && person.getHomeAddress().getLocation()!= null)
@@ -75,7 +75,7 @@ public class NetworkPanel extends CssLayout {
 				ids.add(relation.getPerson().getId());
 			}
 		}
-		if  (ids.size() >0) entities = mashRep.findEntitiesById(ids);
+		if  (ids.size() >0) entities = mashRep.findEntitiesById(ids,null);
 		else entities = new ArrayList<Entity>();
 		entities.add(0,person);
 
@@ -84,7 +84,7 @@ public class NetworkPanel extends CssLayout {
 
 	private List<Entity> getLocationPrimaryLinks(String id) {
 	    Repository mashRep = ExplorerApp.get().getMashRepository();
-		Location location = mashRep.findLocationById(id);
+		Location location = mashRep.findLocationById(id,null);
 		List<Entity> entities;
 		if  (location.getOccupants()!=null && location.getOccupants().size()>0)
 		{	
@@ -93,7 +93,7 @@ public class NetworkPanel extends CssLayout {
 			for (Occupant person : location.getOccupants()) {
 				ids.add(person.getPerson().getId());
 			}
-		   entities = mashRep.findEntitiesById(ids);
+		   entities = mashRep.findEntitiesById(ids,null);
 		}
 		else
 		{

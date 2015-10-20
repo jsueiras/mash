@@ -21,7 +21,7 @@ public class DefaultRepositoryTest {
 	public void testGetPerson() {
 
 		Repository rep = new DefaultRepository();
-		Person p = rep.findPersonById("homer");
+		Person p = rep.findPersonById("homer",null);
 		assertNotNull(p);
 
 	}
@@ -32,7 +32,7 @@ public class DefaultRepositoryTest {
 		Repository rep = new DefaultRepository();
 		Query query = new Query();
 		query.setFirstName("Simpson");
-		List<Person> p = rep.findPersons(query);
+		List<Person> p = rep.findPersons(query,null);
 		assertNotNull(p);
 
 	}
@@ -43,7 +43,7 @@ public class DefaultRepositoryTest {
 	public void testGetLocation() {
 
 		Repository rep = new DefaultRepository();
-		Location p = rep.findLocationById("homerAddress");
+		Location p = rep.findLocationById("homerAddress",null);
 		assertNotNull(p);
 		assertTrue(p.getOccupants().size()>3);
 	}
@@ -56,7 +56,7 @@ public class DefaultRepositoryTest {
 		Location sampleLocation = new Location();
 
 		sampleLocation.setCity("Springfield");
-		List<Location> p = rep.findLocations(sampleLocation);
+		List<Location> p = rep.findLocations(sampleLocation,null);
 		assertNotNull(p);
 
 	}

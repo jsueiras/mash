@@ -137,7 +137,7 @@ protected void initUi() {
 		  List<Person> results;
 		
 		try {
-			results = repository.findPersons(query);
+			results = repository.findPersons(query,null);
 			  appendResults(results,personTable);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -152,7 +152,7 @@ protected void initUi() {
 		  personTable.setVisible(false);	
 		  List<Location> results;
 		try {
-			results = repository.findLocations(query.getSampleLocation());
+			results = repository.findLocations(query.getSampleLocation(),null);
 			 appendResults(results,locationTable);	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

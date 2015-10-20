@@ -2,7 +2,9 @@ package com.mash.data.service.impl;
 
 import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
+import com.mash.data.service.SecurityInfo;
 import com.mash.model.catalog.*;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -75,40 +77,40 @@ public class MarklogicRepositoryImpl implements Repository {
 	}
 
 	@Override
-	public Person findPersonById(String id) {
+	public Person findPersonById(String id, SecurityInfo info) {
 	   return restTemplate.getForObject(baseUrl + PERSON_PATH + "?rs:id=" + id, Person.class);
 	}
 
 	@Override
-	public List<Person> findPersons(Query query) throws IOException {
+	public List<Person> findPersons(Query query, SecurityInfo info) throws IOException {
 		return restTemplate.postForObject(baseUrl + PERSON_PATH, query, Persons.class).getPersons();
 	}
 
 	@Override
-	public Referral findReferralById(String id) {
+	public Referral findReferralById(String id, SecurityInfo info) {
 		return restTemplate.getForObject(baseUrl + REFERRAL_PATH + id, Referral.class);
 	}
 
 	
 	@Override
-	public Referral saveReferral(Referral referral) {
+	public Referral saveReferral(Referral referral, SecurityInfo info) {
 		return restTemplate.postForObject(baseUrl + REFERRAL_PATH, referral, Referral.class);
 	}
 
     @Override
-    public List<Location> findLocations(Location sample) throws IOException {
+    public List<Location> findLocations(Location sample, SecurityInfo info) throws IOException {
 		Query sampleQuery = new Query();
 		sampleQuery.setSampleLocation(sample);
 		return restTemplate.postForObject(baseUrl + ADDRESS_PATH, sampleQuery, Locations.class).getLocations();
     }
 
     @Override
-    public Location findLocationById(String id) {
+    public Location findLocationById(String id, SecurityInfo info) {
         return restTemplate.getForObject(baseUrl + ADDRESS_PATH + "?rs:id=" + id, Location.class);
     }
 
 	@Override
-	public List<Entity> findEntitiesById(List<String> ids) {
+	public List<Entity> findEntitiesById(List<String> ids, SecurityInfo info) {
 		return null;
 	}
 }

@@ -10,14 +10,14 @@ import com.mash.model.catalog.Referral;
 
 public interface Repository {
 	
-	public Person findPersonById(String id);
-	List<Person> findPersons(Query query) throws IOException;
+	public Person findPersonById(String id, SecurityInfo info);
+	List<Person> findPersons(Query query, SecurityInfo info) throws IOException;
 
-	public List<Entity> findEntitiesById(List<String> ids);
+	public List<Entity> findEntitiesById(List<String> ids, SecurityInfo info);
 
-	public Location findLocationById(String id);
-	public List<Location> findLocations(Location sample) throws IOException;
+	public Location findLocationById(String id, SecurityInfo info);
+	public List<Location> findLocations(Location sample, SecurityInfo info) throws IOException;
 
-	Referral findReferralById(String id);
-	public Referral saveReferral(Referral referral);
+	Referral findReferralById(String id, SecurityInfo info);
+	public Referral saveReferral(Referral referral, SecurityInfo info);
 }

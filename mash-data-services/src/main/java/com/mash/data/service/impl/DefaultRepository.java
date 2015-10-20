@@ -13,6 +13,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.mash.data.service.Query;
 import com.mash.data.service.Repository;
+import com.mash.data.service.SecurityInfo;
 import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
@@ -66,18 +67,18 @@ public class DefaultRepository implements Repository {
 
 
 	@Override
-	public Person findPersonById(String id) {
+	public Person findPersonById(String id, SecurityInfo info) {
 		return  (Person) findEntityById(id);
 	}
 
 	@Override
-	public Referral findReferralById(String id) {
+	public Referral findReferralById(String id, SecurityInfo info) {
 		JAXBElement<Referral>  referral=  (JAXBElement<Referral>) marshaller.unmarshal(getStream(id))   ;
 		return referral.getValue();
 	}
 
 	@Override
-	public Referral saveReferral(Referral referral) {
+	public Referral saveReferral(Referral referral, SecurityInfo info) {
 		return referral;
 	}
 
@@ -94,7 +95,7 @@ public class DefaultRepository implements Repository {
 	}
 
 	@Override
-	public List<Entity> findEntitiesById(List<String> ids) {
+	public List<Entity> findEntitiesById(List<String> ids, SecurityInfo info) {
 		List<Entity> results = new ArrayList<Entity>();
 		for (String id : ids) {
 			results.add(findEntityById(id));
@@ -103,12 +104,12 @@ public class DefaultRepository implements Repository {
 	}
 
 	@Override
-	public Location findLocationById(String id) {
+	public Location findLocationById(String id, SecurityInfo info) {
 		return (Location) findEntityById(id);
 	}
 
 	@Override
-	public List<Person> findPersons(Query query) {
+	public List<Person> findPersons(Query query, SecurityInfo info) {
 		// TODO Auto-generated method stub
 		Persons persons =  (Persons) marshaller.unmarshal(getStream(query));
 
@@ -116,7 +117,7 @@ public class DefaultRepository implements Repository {
 	}
 
 	@Override
-	public List<Location> findLocations(Location sample) {
+	public List<Location> findLocations(Location sample, SecurityInfo info) {
 		Query query = new Query();
 		query.setSampleLocation(sample);
 		Locations locations =  (Locations) marshaller.unmarshal(getStream(query));
