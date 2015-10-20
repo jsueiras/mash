@@ -241,6 +241,7 @@ protected void initUi() {
 
 	private void appendResults(List<? extends Entity> results, Table table) {
 	
+		table.removeAllItems();
     for (Entity entity : results) {
     	table.addItem(Decorator.getTableRow(entity), entity.getId());
 	}
@@ -261,9 +262,10 @@ protected void initUi() {
 		      private static final long serialVersionUID = 1L;
 		      public void valueChange(ValueChangeEvent event) {
 		    	  String id = (String) event.getProperty().getValue();   
-		    	  
+		    	  if (id!=null)
+		    	  {		  
 		    	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_SELECT,isLocation,id ));
-		    	     
+		    	  }   
 		    
 		      }
 		    };
