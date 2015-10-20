@@ -11,7 +11,7 @@
     <name>ui-framework</name>
 
     <properties>
-        <vaadin.version>7.5.0.rc1</vaadin.version>
+        <vaadin.version>7.5.7</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         <jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
         <project.source.version>1.7</project.source.version>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring</artifactId>
-            <version>1.0.0.beta1</version>
+            <version>1.0.0</version>
         </dependency>
 
 
@@ -160,13 +160,6 @@
             <artifactId>process</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>graph-explorer</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

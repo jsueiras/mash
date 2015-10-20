@@ -8,5 +8,5 @@
 
     
 
-    <inherits name="com.vaadin.graph.GraphExplorerWidgetset" />
+    
 </module>
