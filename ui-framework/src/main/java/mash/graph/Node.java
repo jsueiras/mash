@@ -14,6 +14,9 @@ public class Node implements Serializable {
 	public Group group;
 
 	public Node(String id) {
+		if (id == null) {
+			throw new IllegalArgumentException("Node.id cannot be null.");
+		}
 		this.id = id;
 	}
 
@@ -25,12 +28,11 @@ public class Node implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		return (obj != null && obj.getClass() == getClass()) && (id != null) && id.equals(((Node) obj).id);
+		return (obj != null && obj.getClass() == getClass()) && ((id == ((Node) obj).id) || id.equals(((Node) obj).id));
 	}
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
 		return new HashCodeBuilder(17, 31).append(id).toHashCode();
 	}
 }
