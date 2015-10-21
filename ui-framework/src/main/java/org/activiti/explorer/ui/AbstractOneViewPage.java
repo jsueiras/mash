@@ -12,11 +12,9 @@
  */
 package org.activiti.explorer.ui;
 
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import org.activiti.explorer.ui.custom.ToolBar;
-
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
 
 
 /**
@@ -35,36 +33,5 @@ public abstract class AbstractOneViewPage extends AbstractPage {
     addMainLayout();
     setSizeFull();
     addMenuBar();
-  }
-
-  /**
-   * Subclasses are expected to provide their own menuBar.
-   */
-  protected void addMenuBar() {
-
-    // Remove any old menu bar
-    String activeEntry = null;
-    if (toolBar != null) {
-      activeEntry = toolBar.getCurrentEntryKey();
-      grid.removeComponent(toolBar);
-    }
-
-    // Create menu bar
-    ToolBar menuBar = createMenuBar();
-    if (menuBar != null) {
-      toolBar = createMenuBar();
-      grid.addComponent(toolBar);
-
-      if (activeEntry != null) {
-        toolBar.setActiveEntry(activeEntry);
-      }
-    }
-  }
-
-  protected void addMainLayout() {
-    grid = new VerticalLayout();
-    grid.setSizeFull();
-
-    setCompositionRoot(grid);
   }
 }

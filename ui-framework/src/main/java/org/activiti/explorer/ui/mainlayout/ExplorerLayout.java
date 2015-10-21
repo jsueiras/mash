@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,13 @@ package org.activiti.explorer.ui.mainlayout;
  * @author Joram Barrez
  */
 public interface ExplorerLayout {
-  
+
   // Application theme
   static final String THEME = "activiti";
-  
+
   // Custom layouts (found in /VAADIN/themes/${THEME}/layouts
   static final String CUSTOM_LAYOUT_LOGIN = "login";
-  
+
   // Locations defined in the layout .html files
   static final String LOCATION_LOGIN = "login-content";
   static final String LOCATION_CONTENT = "content";
@@ -33,13 +33,13 @@ public interface ExplorerLayout {
   static final String LOCATION_MAIN_MENU = "main-menu";
   static final String LOCATION_HIDDEN = "hidden";
   static final String STYLE_IMAGE_ACTION = "image-action";
-  
+
   static final String LINK_TARGET_BLANK = "_blank";
 
-  // ---------- 
+  // ----------
   // Css styles
   // ----------
-  
+
   // Skeleton
   static final String STYLE_MAIN_WRAPPER = "main";
   static final String STYLE_HEADER = "header";
@@ -73,25 +73,25 @@ public interface ExplorerLayout {
   static final String STYLE_NO_LINE = "no-line";
   static final String STYLE_TEXTAREA_NO_RESIZE = "noResizeTextArea";
   static final String STYLE_ERROR = "error";
-  
+
   static final String STYLE_APPLICATION_LOGO = "logo";
   static final String STYLE_WORKFLOW_CONSOLE_LOGO = "workflow-console-logo";
   static final String STYLE_MAIN_MENU_BUTTON = "main-menu-button";
-  
+
   //Forms
   static final String STYLE_FORM_PROPERTIES = "formprops";
   static final String STYLE_FORM_USER_SELECTED = "formprop-user-selected";
   static final String STYLE_FORM_NO_USER_SELECTED = "formprop-no-user-selected";
-  
+
   // Login page
   static final String STYLE_LOGIN_PAGE = "login-general";
-  
+
   // Profile page
   static final String STYLE_PROFILE_LAYOUT = "profile-layout";
   static final String STYLE_PROFILE_FIELD = "profile-field";
   static final String STYLE_PROFILE_PICTURE = "profile-picture";
   static final String STYLE_PROFILE_LINK = "profile-link";
-  
+
   // Task pages
   static final String STYLE_TASK_LIST = "task-list";
   static final String STYLE_TASK_EVENT_PANEL = "task-event-panel";
@@ -99,7 +99,7 @@ public interface ExplorerLayout {
   static final String STYLE_TASK_EVENT_AUTHOR = "task-event-author";
   static final String STYLE_TASK_EVENT_TIME = "task-event-time";
   static final String STYLE_TASK_EVENT_PICTURE = "task-event-picture";
-  static final String STYLE_TASK_EVENT_GRID = "event-grid";
+  static final String STYLE_TASK_EVENT_GRID = "event-content";
   static final String STYLE_TASK_HEADER_DUEDATE = "task-duedate";
   static final String STYLE_TASK_HEADER_PRIORITY_LOW = "task-priority-low";
   static final String STYLE_TASK_HEADER_PRIORITY_MEDIUM = "task-priority-medium";
@@ -116,24 +116,24 @@ public interface ExplorerLayout {
   static final String STYLE_PROCESS_HEADER_VERSION = "process-version";
   static final String STYLE_PROCESS_HEADER_START_TIME = "process-start-time";
   static final String STYLE_PROCESS_EDITOR_CHOICE = "process-definition-editor-choice";
-  
+
   // Database page
   static final String STYLE_DATABASE_TABLE = "database-table";
-  
-  
+
+
   // Deployment page
   static final String STYLE_DEPLOYMENT_UPLOAD_DESCRIPTION = "upload-description";
   static final String STYLE_DEPLOYMENT_UPLOAD_BUTTON = "upload-button";
   static final String STYLE_DEPLOYMENT_HEADER_DEPLOY_TIME = "deployment-deploy-time";
-  
+
   // Jobs page
   static final String STYLE_JOB_DETAILS_HEADER = "job-details-header";
   static final String STYLE_JOB_EXCEPTION_MESSAGE = "job-exception-message";
   static final String STYLE_JOB_EXCEPTION_TRACE = "job-exception-trace";
   static final String STYLE_JOB_HEADER_DUE_DATE = "job-duedate";
-  
+
   // Process definitions page
-  
+
   static final String STYLE_PROCESS_DEFINITION_SUSPEND_CHOICE = "process-definition-suspend-choice";
 
   // Related content

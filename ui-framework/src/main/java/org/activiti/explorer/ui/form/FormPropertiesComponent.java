@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,53 +35,53 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * A component capable of rendering a form based on form-properties and
  * extracting values filled in into the writable fields.
- * 
+ *
  * @author Frederik Heremans
  */
 public class FormPropertiesComponent extends VerticalLayout {
-  
+
   private static final long serialVersionUID = 1L;
-  
+
   protected FormPropertyRendererManager formPropertyRendererManager;
   protected List<FormProperty> formProperties;
   protected Map<FormProperty, Component> propertyComponents;
-  
-  
+
+
   protected Form form;
 
 private Map< Class<? extends FormType>, Listener> taskListeners;
-  
+
   public FormPropertiesComponent(Map< Class<? extends FormType>,Listener> taskListeners) {
     this.formPropertyRendererManager =  ExplorerApp.get().getFormPropertyRendererManager();
     this.taskListeners = taskListeners;
     setSizeFull();
     initForm();
-  } 
+  }
 
   public List<FormProperty> getFormProperties() {
     return formProperties;
   }
-  
+
   public List<NetworkChangeListener> setFormProperties(List<FormProperty> formProperties) {
 	  List<NetworkChangeListener> networkListeners = new ArrayList<NetworkChangeListener>();
 
 	  this.formProperties = formProperties;
-     
+
     form.removeAllProperties();
-    
-    // Clear current components in the grid
+
+    // Clear current components in the content
     if(formProperties != null) {
       for(FormProperty formProperty : formProperties) {
         FormPropertyRenderer renderer = getRenderer(formProperty);
-       
+
         // Be able to get the Form from any Renderer.
         renderer.setForm(form);
-       
-       
+
+
 		Field editorComponent = renderer.getPropertyField(formProperty,  taskListeners.get(renderer.getFormType()));
         if(editorComponent != null) {
           // Get label for editor component.
-          form.addField(formProperty.getId(), editorComponent);     
+          form.addField(formProperty.getId(), editorComponent);
           NetworkChangeListener listener = renderer.getNetworkChangeListener(editorComponent);
           if (listener!=null) networkListeners.add(listener);
         }
@@ -89,43 +89,43 @@ private Map< Class<? extends FormType>, Listener> taskListeners;
     }
     return networkListeners;
   }
-  
+
 
   /**
    * Returns all values filled in in the writable fields on the form.
-   * 
+   *
    * @throws InvalidValueException when a validation error occurs.
    */
   public Map<String, String> getFormPropertyValues() throws InvalidValueException {
     // Commit the form to ensure validation is executed
     form.commit();
-    
+
     Map<String, String> formPropertyValues = new HashMap<String, String>();
-    
+
     // Get values from fields defined for each form property
     for(FormProperty formProperty : formProperties) {
       if(formProperty.isWritable()) {
         Field field = form.getField(formProperty.getId());
         FormPropertyRenderer renderer = getRenderer(formProperty);
         String fieldValue = renderer.getFieldValue(formProperty, field);
-        
+
         formPropertyValues.put(formProperty.getId(), fieldValue);
       }
     }
     return formPropertyValues;
   }
-  
-  
+
+
   public void setFormEnabled(boolean enabled) {
     if(enabled) {
       form.setEnabled(enabled);
-    }  
+    }
   }
-  
+
   protected void initForm() {
     form = new Form();
     form.setSizeFull();
-    
+
     addComponent(form);
     setComponentAlignment(form, Alignment.TOP_CENTER);
   }

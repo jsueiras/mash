@@ -25,11 +25,12 @@ public abstract class AbstractPage extends CustomComponent {
   private static final long serialVersionUID = 1L;
 
   protected ToolBar toolBar;
-  protected VerticalLayout grid;
   protected AbstractSelect select;
   protected boolean showEvents;
-  private HorizontalLayout outerPanel = new HorizontalLayout();
-  private HorizontalSplitPanel innerPanel = new HorizontalSplitPanel();
+  private VerticalLayout mainLayout = new VerticalLayout();
+  protected HorizontalLayout content;
+  private VerticalLayout sideBar = new VerticalLayout();
+  private HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
 
   // Overriding attach(), so we can construct the components first, before the UI is built,
   // that way, all member fields of subclasses are initialized properly
@@ -56,7 +57,7 @@ public abstract class AbstractPage extends CustomComponent {
 	Component eventComponent = getEventComponent();
 	if (eventComponent !=null) {
       eventComponent.setId("event-component");
-      innerPanel.setSecondComponent(eventComponent);
+      splitPanel.setSecondComponent(eventComponent);
       eventComponent.setSizeFull();
     }
   }
@@ -70,7 +71,7 @@ public abstract class AbstractPage extends CustomComponent {
     String activeEntry = null;
     if (toolBar != null) {
       activeEntry = toolBar.getCurrentEntryKey();
-      grid.removeComponent(toolBar);
+      content.removeComponent(toolBar);
     }
 
     // Create menu bar
@@ -78,8 +79,8 @@ public abstract class AbstractPage extends CustomComponent {
     if (menuBar != null) {
       toolBar = createMenuBar();
       toolBar.setId("tool-bar");
-      grid.addComponent(toolBar, 0);
-      grid.setExpandRatio(toolBar, 0);
+      mainLayout.addComponentAsFirst(toolBar);
+      mainLayout.setExpandRatio(toolBar, 0);
 
       if (activeEntry != null) {
         toolBar.setActiveEntry(activeEntry);
@@ -94,32 +95,40 @@ public abstract class AbstractPage extends CustomComponent {
   protected abstract ToolBar createMenuBar();
 
   protected void addMainLayout() {
-    grid = new VerticalLayout();
+    content = new HorizontalLayout();
+    content.setId("content");
 
-    grid.addStyleName(Reindeer.SPLITPANEL_SMALL);
-    grid.setWidthUndefined();
-    grid.setHeight(100, Unit.PERCENTAGE);
+    content.addStyleName(Reindeer.SPLITPANEL_SMALL);
+    content.setSizeFull();
 
-    setCompositionRoot(outerPanel);
-    outerPanel.setSizeFull();
+    setCompositionRoot(mainLayout);
+    mainLayout.setSizeFull();
 
-    outerPanel.addComponent(grid);
-    outerPanel.setExpandRatio(grid, 0);
+    mainLayout.addComponent(content);
+    mainLayout.setExpandRatio(content, 1);
 
-    outerPanel.addComponent(innerPanel);
-    outerPanel.setExpandRatio(innerPanel, 1);
+    content.addComponent(sideBar);
+    content.setExpandRatio(sideBar, 0);
+    sideBar.setWidth(20, Unit.EM);
+    sideBar.setHeight(100, Unit.PERCENTAGE);
+    sideBar.setId("side-bar");
 
-    outerPanel.setId("outer-panel");
-    innerPanel.setId("inner-panel");
+    content.addComponent(splitPanel);
+    content.setExpandRatio(splitPanel, 1);
+    splitPanel.setSizeFull();
+
+    mainLayout.setId("outer-panel");
+    splitPanel.setId("inner-panel");
   }
 
   protected void addSearch() {
     Component searchComponent = getSearchComponent();
     if(searchComponent != null) {
       searchComponent.setId("search-component");
-      grid.addComponent(searchComponent, 1);
-      grid.setExpandRatio(searchComponent, 0);
+      sideBar.addComponentAsFirst(searchComponent);
+      sideBar.setExpandRatio(searchComponent, 0);
       searchComponent.setWidth(100, Unit.PERCENTAGE);
+      searchComponent.setHeightUndefined();
     }
   }
 
@@ -127,9 +136,9 @@ public abstract class AbstractPage extends CustomComponent {
     AbstractSelect select = createSelectComponent();
     if (select != null) {
       select.setId("select");
-      grid.addComponent(select, 2);
-      grid.setExpandRatio(select, 1);
-      select.setWidth(100, Unit.PERCENTAGE);
+      sideBar.addComponent(select);
+      sideBar.setExpandRatio(select, 1);
+      select.setSizeFull();
     }
   }
 
@@ -152,17 +161,17 @@ public abstract class AbstractPage extends CustomComponent {
   public abstract void selectElement(int index);
 
   protected void setDetailComponent(Component detail) {
-    if(innerPanel.getFirstComponent() != null) {
-      innerPanel.setFirstComponent(null);
+    if(splitPanel.getFirstComponent() != null) {
+      splitPanel.setFirstComponent(null);
     }
     if(detail != null) {
       detail.setId("detail");
-      innerPanel.setFirstComponent(detail);
+      splitPanel.setFirstComponent(detail);
     }
   }
 
   protected Component getDetailComponent() {
-    return innerPanel.getFirstComponent();
+    return splitPanel.getFirstComponent();
   }
 
   /**

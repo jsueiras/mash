@@ -67,7 +67,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
 
 
   public TaskPage() {
-
+    addStyleName("task-page");
     taskService =  ProcessEngines.getDefaultProcessEngine().getTaskService();
   }
 
@@ -105,7 +105,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
     taskTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 
     // Listener to change right panel when clicked on a task
-    taskTable.addListener(getListSelectionListener());
+    taskTable.addValueChangeListener(getListSelectionListener());
 
     this.lazyLoadingQuery = createLazyLoadingQuery();
     this.taskListContainer = new LazyLoadingContainer(lazyLoadingQuery, 30);
@@ -116,7 +116,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
     taskTable.setColumnWidth("icon", 22);
 
     taskTable.addContainerProperty("name", String.class, null);
-    taskTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
+    taskTable.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
 
 
     return taskTable;
@@ -136,7 +136,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
           // Nothing is selected
           setDetailComponent(null);
           taskEventPanel.removeAllComponents();
-          
+
         }
       }
     };

@@ -99,6 +99,14 @@ window.mash_graph_Network = function () {
         },
         physics: {
             solver: 'forceAtlas2Based',
+            forceAtlas2Based: {
+                gravitationalConstant: -50,
+                centralGravity: 0.01,
+                springConstant: 0.01,
+                springLength: 100,
+                damping: 0.4,
+                avoidOverlap: 0,
+            },
         },
     }
 

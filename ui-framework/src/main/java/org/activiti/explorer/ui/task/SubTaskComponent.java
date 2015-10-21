@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,17 +48,17 @@ import com.vaadin.ui.themes.Reindeer;
 /**
  * Custom component for the 'sub tasks' section for a task.
  * Used in the {@link TaskDetailPanel}.
- * 
+ *
  * @author Joram Barrez
  */
 public class SubTaskComponent extends CustomComponent {
-  
+
   private static final long serialVersionUID = 1L;
-  
+
   protected I18nManager i18nManager;
   protected transient TaskService taskService;
   protected transient HistoryService historyService;
-  
+
   protected Task parentTask;
   protected TaskDetailPanel taskDetailPanel;
   protected VerticalLayout layout;
@@ -73,33 +73,33 @@ public class SubTaskComponent extends CustomComponent {
     this.i18nManager = i18nManager;
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
     this.historyService = ProcessEngines.getDefaultProcessEngine().getHistoryService();
-    
+
     initUi();
   }
-  
+
   protected void initUi() {
     addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
     addStyleName(ExplorerLayout.STYLE_INVOLVE_PEOPLE);
-    
+
     initLayout();
     initHeader();
     initSubTasks();
   }
-  
+
   protected void initLayout() {
     this.layout = new VerticalLayout();
     setCompositionRoot(layout);
   }
-  
+
   protected void initHeader() {
     HorizontalLayout headerLayout = new HorizontalLayout();
     headerLayout.setWidth(100, UNITS_PERCENTAGE);
     layout.addComponent(headerLayout);
-    
+
     initTitle(headerLayout);
     initAddSubTaskPanel(headerLayout);
   }
-  
+
   protected void initTitle(HorizontalLayout headerLayout) {
     title = new Label(i18nManager.getMessage(Messages.TASK_SUBTASKS));
     title.addStyleName(ExplorerLayout.STYLE_H3);
@@ -116,7 +116,7 @@ public class SubTaskComponent extends CustomComponent {
     addSubTaskPanel.addStyleName(Reindeer.PANEL_LIGHT);
     addSubTaskPanel.addStyleName("no-border");
     headerLayout.addComponent(addSubTaskPanel);
-    
+
     initAddSubTaskPanelKeyboardActions();
     initAddButton();
   }
@@ -129,9 +129,9 @@ public class SubTaskComponent extends CustomComponent {
         } else if ("enter".equals(action.getCaption())) {
           if (newTaskTextField != null && newTaskTextField.getValue() != null
                   && !"".equals(newTaskTextField.getValue().toString())) {
-            
+
             LoggedInUser loggedInUser = ExplorerApp.get().getLoggedInUser();
-            
+
             // save task
             Task newTask = taskService.newTask();
             newTask.setParentTaskId(parentTask.getId());
@@ -147,10 +147,10 @@ public class SubTaskComponent extends CustomComponent {
             }
             newTask.setName(newTaskTextField.getValue().toString());
             taskService.saveTask(newTask);
-            
+
             // Reset the add button to its original state
             resetAddButton();
-            
+
             // refresh sub tasks section
             refreshSubTasks();
           }
@@ -164,7 +164,7 @@ public class SubTaskComponent extends CustomComponent {
       }
     });
   }
-  
+
   protected void initAddButton() {
     addSubTaskButton = new Button();
     addSubTaskButton.addStyleName(ExplorerLayout.STYLE_ADD);
@@ -173,7 +173,7 @@ public class SubTaskComponent extends CustomComponent {
       public void buttonClick(ClickEvent event) {
         // Remove button
         //addSubTaskPanel.removeAllComponents();
-        
+
         // And add textfield
         Label createSubTaskLabel = new Label("Create new subtask:");
         createSubTaskLabel.addStyleName(Reindeer.LABEL_SMALL);
@@ -184,12 +184,12 @@ public class SubTaskComponent extends CustomComponent {
       }
     });
   }
-  
+
   protected void resetAddButton() {
    // addSubTaskPanel.removeAllComponents();
     initAddButton();
   }
-  
+
   protected void initSubTasks() {
     List<HistoricTaskInstance> subTasks = historyService.createHistoricTaskInstanceQuery()
       .taskParentTaskId(parentTask.getId())
@@ -197,7 +197,7 @@ public class SubTaskComponent extends CustomComponent {
     initSubTasksLayout();
     populateSubTasks(subTasks);
   }
-  
+
   protected void initSubTasksLayout() {
     subTaskLayout = new GridLayout();
     subTaskLayout.setColumns(3);
@@ -207,13 +207,13 @@ public class SubTaskComponent extends CustomComponent {
     subTaskLayout.setSpacing(true);
     layout.addComponent(subTaskLayout);
   }
-  
+
   protected void populateSubTasks(List<HistoricTaskInstance> subTasks) {
     if (!subTasks.isEmpty()) {
       for (final HistoricTaskInstance subTask : subTasks) {
         // icon
         Embedded icon = null;
-        
+
         if(subTask.getEndTime() != null) {
           icon = new Embedded(null, Images.TASK_FINISHED_22);
         } else {
@@ -222,7 +222,7 @@ public class SubTaskComponent extends CustomComponent {
         icon.setWidth(22, UNITS_PIXELS);
         icon.setWidth(22, UNITS_PIXELS);
         subTaskLayout.addComponent(icon);
-        
+
         // Link to subtask
         Button subTaskLink = new Button(subTask.getName());
         subTaskLink.addStyleName(Reindeer.BUTTON_LINK);
@@ -233,7 +233,7 @@ public class SubTaskComponent extends CustomComponent {
         });
         subTaskLayout.addComponent(subTaskLink);
         subTaskLayout.setComponentAlignment(subTaskLink, Alignment.MIDDLE_LEFT);
-        
+
         if(subTask.getEndTime() == null) {
           // Delete icon only appears when task is not finished yet
           Embedded deleteIcon = new Embedded(null, Images.DELETE);
@@ -242,7 +242,7 @@ public class SubTaskComponent extends CustomComponent {
           subTaskLayout.addComponent(deleteIcon);
           subTaskLayout.setComponentAlignment(deleteIcon, Alignment.MIDDLE_RIGHT);
         } else {
-          // Next line of grid
+          // Next line of content
           subTaskLayout.newLine();
         }
       }
@@ -252,9 +252,9 @@ public class SubTaskComponent extends CustomComponent {
       noSubTasksLabel.addStyleName(Reindeer.LABEL_SMALL);
       subTaskLayout.addComponent(noSubTasksLabel);
     }
-    
+
   }
-  
+
   public void refreshSubTasks() {
     subTaskLayout.removeAllComponents();
     List<HistoricTaskInstance> subTasks = historyService.createHistoricTaskInstanceQuery()
