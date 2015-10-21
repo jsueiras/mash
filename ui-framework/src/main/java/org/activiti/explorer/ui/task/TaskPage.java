@@ -26,12 +26,15 @@ import mash.graph.NetworkPanel;
 
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.data.LazyLoadingContainer;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.navigation.UriFragment;
+import org.activiti.explorer.ui.AbstractProcessStartPage;
 import org.activiti.explorer.ui.AbstractTablePage;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.TaskListHeader;
@@ -48,7 +51,7 @@ import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
  *
  * @author Joram Barrez
  */
-public abstract class TaskPage extends AbstractTablePage {
+public abstract class TaskPage extends AbstractProcessStartPage{
 
   private static final long serialVersionUID = 1L;
 
@@ -88,7 +91,7 @@ public abstract class TaskPage extends AbstractTablePage {
 
   @Override
   protected ToolBar createMenuBar() {
-    return new TaskMenuBar(getSearchListener());
+    return new TaskMenuBar(getSearchListener(),this);
   }
 
   protected SearchTabEventListener getSearchListener() {
@@ -191,5 +194,15 @@ public abstract class TaskPage extends AbstractTablePage {
   protected abstract LazyLoadingQuery createLazyLoadingQuery();
 
   protected abstract UriFragment getUriFragment(String taskId);
+  
+  @Override
+  public  void showStartForm(ProcessDefinition processDefinition,
+			StartFormData startFormData) 
+	{
+	  
+	}
+	  
+  
+  
 
 }

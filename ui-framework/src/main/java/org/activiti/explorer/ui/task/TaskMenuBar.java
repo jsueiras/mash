@@ -16,9 +16,13 @@ package org.activiti.explorer.ui.task;
 import java.util.List;
 
 import com.vaadin.server.FontAwesome;
+
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.identity.Group;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
@@ -29,6 +33,8 @@ import org.activiti.explorer.ui.custom.ToolBar;
 import org.activiti.explorer.ui.custom.ToolbarEntry;
 import org.activiti.explorer.ui.custom.ToolbarEntry.ToolbarCommand;
 import org.activiti.explorer.ui.custom.ToolbarPopupEntry;
+import org.activiti.explorer.ui.process.ProcessDefinitionPage;
+import org.activiti.explorer.ui.process.listener.StartProcessInstanceClickListener;
 import org.activiti.explorer.ui.search.SearchFormEventListener;
 import org.activiti.explorer.ui.search.SearchPopupWindow;
 import org.activiti.explorer.ui.search.SearchTabEventListener;
@@ -56,6 +62,9 @@ public class TaskMenuBar extends ToolBar {
   public static final String ENTRY_TASKS = "tasks";
   public static final String ENTRY_INBOX = "inbox";
   public static final String ENTRY_UNASSIGNED = "unassigned";
+  public static final String ENTRY_NEW = "new";
+ 
+  
   public static final String ENTRY_QUEUED = "queued";
   public static final String ENTRY_INVOLVED = "involved";
   public static final String ENTRY_ARCHIVED = "archived";
@@ -66,15 +75,24 @@ public class TaskMenuBar extends ToolBar {
 
   private SearchTabEventListener searchListener;
 
+private TaskPage taskPage;
+
+private RepositoryService repositoryService;
+
+private ProcessDefinition triageDefinition;
 
 
 
-  public TaskMenuBar(SearchTabEventListener listener) {
+
+  public TaskMenuBar(SearchTabEventListener listener, TaskPage taskPage) {
     this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
+    this.repositoryService = ProcessEngines.getDefaultProcessEngine().getRepositoryService();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.searchListener = listener;
+    this.taskPage = taskPage;
     this.addListener(listener);
+    initProcessesDefinition();
     initItems();
     initActions();
   }
@@ -84,7 +102,7 @@ public class TaskMenuBar extends ToolBar {
     LoggedInUser user = ExplorerApp.get().getLoggedInUser();
 
     // TODO: the counts should be done later by eg a Refresher component
-
+    
     // Inbox
     long inboxCount = new InboxListQuery(user.getId()).size();
     ToolbarEntry inboxEntry = addToolbarEntry(ENTRY_INBOX, i18nManager.getMessage(Messages.TASK_MENU_INBOX), new ToolbarCommand() {
@@ -119,6 +137,24 @@ public class TaskMenuBar extends ToolBar {
         viewManager.showPopupWindow(searchPopupWindow);
       }
     });
+    
+    Button newTriage = new Button();
+    newTriage.setCaption("New Triage");
+    newTriage.setHtmlContentAllowed(true);
+    addButton(newTriage);
+
+    ProcessDefinitionPage processDefinitionPage;
+	
+	newTriage.addListener(new StartProcessInstanceClickListener(triageDefinition, taskPage));
   }
+
+private void initProcessesDefinition() {
+	
+	triageDefinition = repositoryService
+    .createProcessDefinitionQuery()
+    .latestVersion()
+    .active().processDefinitionKey("triage").list().get(0);
+	//triageDefinition = repositoryService.getProcessDefinition("triage");
+}
 
 }

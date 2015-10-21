@@ -27,6 +27,8 @@ import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.Messages;
 import org.activiti.explorer.NotificationManager;
+import org.activiti.explorer.ui.AbstractProcessStartPage;
+import org.activiti.explorer.ui.AbstractTablePage;
 import org.activiti.explorer.ui.process.ProcessDefinitionPage;
 
 import com.vaadin.ui.Button.ClickEvent;
@@ -47,10 +49,10 @@ public class StartProcessInstanceClickListener implements ClickListener {
   protected NotificationManager notificationManager;
   
   protected ProcessDefinition processDefinition;
-  protected ProcessDefinitionPage parentPage;
+  protected AbstractProcessStartPage parentPage;
   
   
-  public StartProcessInstanceClickListener(ProcessDefinition processDefinition, ProcessDefinitionPage processDefinitionPage) {
+  public StartProcessInstanceClickListener(ProcessDefinition processDefinition, AbstractProcessStartPage processDefinitionPage) {
     this.runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
     this.formService = ProcessEngines.getDefaultProcessEngine().getFormService();
