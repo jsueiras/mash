@@ -56,6 +56,7 @@ private Map< Class<? extends FormType>, Listener> taskListeners;
     this.taskListeners = taskListeners;
     setSizeFull();
     initForm();
+    addStyleName("form-properties-component");
   }
 
   public List<FormProperty> getFormProperties() {

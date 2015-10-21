@@ -31,7 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 public class TriageSearchField extends CustomField<String> {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<String, String> values;
@@ -42,7 +42,7 @@ public class TriageSearchField extends CustomField<String> {
 	private SearchTabEventListener searchListener;
 	private String label;
 	private NetworkState networkState;
-	
+
 	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
 		this.values = values;
 		 if (currentValue!=null)
@@ -50,37 +50,42 @@ public class TriageSearchField extends CustomField<String> {
 			 TriageSearchValue searchValue = TriageSearchValue.stringToObject(currentValue);
 			 selectedValue = searchValue.getValue();
 			 networkState =searchValue.getNetworkState();
-		 }	 
-		
-		this.label = label;
+		 }
+
+		setCaption(label);
 		comboBox = new ComboBox();
-		
+
 	}
 
 	@Override
 	protected Component initContent() {
-	
-		
+
+
 		HorizontalLayout horizontalLayout = new HorizontalLayout();
 		horizontalLayout.setSpacing(true);
-		 initCombo();
-		 initActions();
-		 horizontalLayout.addComponent(new Label(label));
-		 horizontalLayout.addComponent(comboBox);
-		 horizontalLayout.addComponent(searchButton);
-		
+		horizontalLayout.setWidth(100, Unit.PERCENTAGE);
+		initCombo();
+		initActions();
+
+		horizontalLayout.addComponent(comboBox);
+		horizontalLayout.setExpandRatio(comboBox, 1);
+		comboBox.setWidth(100, Unit.PERCENTAGE);
+
+		horizontalLayout.addComponent(searchButton);
+		horizontalLayout.setExpandRatio(searchButton, 0);
+
 		return horizontalLayout;
 	}
-	
+
 	  protected  void initActions() {
 		    searchButton = new Button();
 		    searchButton.setCaption("Search");
 		    searchButton.setIcon(Images.TASK_16);
 		    searchButton.setEnabled(false);
-		  
-		    
+
+
 		    searchButton.addClickListener(new ClickListener() {
-		     
+
 
 			public void buttonClick(ClickEvent event) {
 		        searchPopupWindow = new SearchPopupWindow();
@@ -88,48 +93,48 @@ public class TriageSearchField extends CustomField<String> {
 		        ExplorerApp.get().getViewManager().showPopupWindow(searchPopupWindow);
 		      }
 		    });
-		  
+
 		  }
 
 	private void initCombo() {
 		  Object firstItemId = null;
 		    Object itemToSelect = null;
-		   
+
 		for (Entry<String, String> enumEntry : values.entrySet()) {
 			// Add value and label (if any)
 	        comboBox.addItem(enumEntry.getKey());
-	        
+
 	        if (firstItemId == null) {
 	          firstItemId = enumEntry.getKey(); // select first element
 	        }
-	        
-	        
+
+
 	        if (selectedValue != null && selectedValue.equals(enumEntry.getKey())) {
 	          itemToSelect = enumEntry.getKey(); // select first element
 	        }
-	        
+
 	        if (enumEntry.getValue() != null) {
 	          comboBox.setItemCaption(enumEntry.getKey(), enumEntry.getValue());
 	        }
 		}
-		
+
 		comboBox.addValueChangeListener(new ValueChangeListener(){
 
 			@Override
 			public void valueChange(
 					com.vaadin.data.Property.ValueChangeEvent event) {
 				if (event.getProperty().getValue()!= null) searchButton.setEnabled(true);
-				
+
 			}});
-		
+
 	}
 
 	@Override
 	public Class<? extends String> getType() {
-		
+
 		return String.class;
 	}
-	
+
 	public void addSearchListener(SearchTabEventListener listener)
 	{
 		this.searchListener = listener;
@@ -138,25 +143,25 @@ public class TriageSearchField extends CustomField<String> {
 	public void setNullSelectionAllowed(boolean b) {
 		comboBox.setNullSelectionAllowed(b);
 	}
-	
+
 	@Override
 	public void setRequired(boolean b)
 	{
 		comboBox.setRequired(b);
 	}
-	
+
 	@Override
 	public void setEnabled(boolean b)
 	{
 		comboBox.setEnabled(b);
 	}
-	
+
 	 @Override
 	 public String getValue(){
 		 return new TriageSearchValue( (String)comboBox.getValue(), networkState).objectToString();
 	 }
-	 
-	  
+
+
 	 public NetworkChangeListener getNetworkChangeListener()
 	 {
 		 return new NetworkChangeListener() {
@@ -166,10 +171,10 @@ public class TriageSearchField extends CustomField<String> {
 			networkState = event.getNewState();
 		}
 
-		
-	   };  
+
+	   };
 	 }
-	 
-  
-	
+
+
+
 }
