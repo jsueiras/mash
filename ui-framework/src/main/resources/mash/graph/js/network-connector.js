@@ -12,8 +12,6 @@ window.mash_graph_Network = function () {
 
     var container = this.getElement();
     var options = {
-        width: container.offsetWidth,
-        height: container.offsetHeight,
         nodes: {
             color: gray,
             font: {
