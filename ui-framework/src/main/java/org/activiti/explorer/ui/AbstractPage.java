@@ -28,8 +28,8 @@ public abstract class AbstractPage extends CustomComponent {
   protected VerticalLayout grid;
   protected AbstractSelect select;
   protected boolean showEvents;
-  private HorizontalSplitPanel outerSplitPanel = new HorizontalSplitPanel();
-  private HorizontalSplitPanel innerSplitPanel = new HorizontalSplitPanel();
+  private HorizontalLayout outerPanel = new HorizontalLayout();
+  private HorizontalSplitPanel innerPanel = new HorizontalSplitPanel();
 
   // Overriding attach(), so we can construct the components first, before the UI is built,
   // that way, all member fields of subclasses are initialized properly
@@ -49,16 +49,15 @@ public abstract class AbstractPage extends CustomComponent {
     addMenuBar();
     addSearch();
     addSelectComponent();
-    //if(showEvents) {
      addEventComponent();
-    //}
   }
 
   protected void addEventComponent() {
 	Component eventComponent = getEventComponent();
 	if (eventComponent !=null) {
       eventComponent.setId("event-component");
-      innerSplitPanel.setSecondComponent(eventComponent);
+      innerPanel.setSecondComponent(eventComponent);
+      eventComponent.setSizeFull();
     }
   }
 
@@ -79,7 +78,7 @@ public abstract class AbstractPage extends CustomComponent {
     if (menuBar != null) {
       toolBar = createMenuBar();
       toolBar.setId("tool-bar");
-      grid.addComponent(toolBar);
+      grid.addComponent(toolBar, 0);
       grid.setExpandRatio(toolBar, 0);
 
       if (activeEntry != null) {
@@ -98,24 +97,29 @@ public abstract class AbstractPage extends CustomComponent {
     grid = new VerticalLayout();
 
     grid.addStyleName(Reindeer.SPLITPANEL_SMALL);
-    grid.setSizeFull();
+    grid.setWidthUndefined();
+    grid.setHeight(100, Unit.PERCENTAGE);
 
-    setCompositionRoot(outerSplitPanel);
-    outerSplitPanel.setFirstComponent(grid);
-    outerSplitPanel.setSecondComponent(innerSplitPanel);
+    setCompositionRoot(outerPanel);
+    outerPanel.setSizeFull();
 
-    outerSplitPanel.setSplitPosition(20, Unit.PERCENTAGE);
+    outerPanel.addComponent(grid);
+    outerPanel.setExpandRatio(grid, 0);
 
-    outerSplitPanel.setId("outer-split-panel");
-    innerSplitPanel.setId("inner-split-panel");
+    outerPanel.addComponent(innerPanel);
+    outerPanel.setExpandRatio(innerPanel, 1);
+
+    outerPanel.setId("outer-panel");
+    innerPanel.setId("inner-panel");
   }
 
   protected void addSearch() {
     Component searchComponent = getSearchComponent();
     if(searchComponent != null) {
       searchComponent.setId("search-component");
-      grid.addComponent(searchComponent);
+      grid.addComponent(searchComponent, 1);
       grid.setExpandRatio(searchComponent, 0);
+      searchComponent.setWidth(100, Unit.PERCENTAGE);
     }
   }
 
@@ -123,8 +127,9 @@ public abstract class AbstractPage extends CustomComponent {
     AbstractSelect select = createSelectComponent();
     if (select != null) {
       select.setId("select");
-      grid.addComponent(select);
+      grid.addComponent(select, 2);
       grid.setExpandRatio(select, 1);
+      select.setWidth(100, Unit.PERCENTAGE);
     }
   }
 
@@ -147,17 +152,17 @@ public abstract class AbstractPage extends CustomComponent {
   public abstract void selectElement(int index);
 
   protected void setDetailComponent(Component detail) {
-    if(innerSplitPanel.getFirstComponent() != null) {
-      innerSplitPanel.setFirstComponent(null);
+    if(innerPanel.getFirstComponent() != null) {
+      innerPanel.setFirstComponent(null);
     }
     if(detail != null) {
       detail.setId("detail");
-      innerSplitPanel.setFirstComponent(detail);
+      innerPanel.setFirstComponent(detail);
     }
   }
 
   protected Component getDetailComponent() {
-    return innerSplitPanel.getFirstComponent();
+    return innerPanel.getFirstComponent();
   }
 
   /**
