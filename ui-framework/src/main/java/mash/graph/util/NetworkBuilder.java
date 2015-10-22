@@ -2,7 +2,9 @@ package mash.graph.util;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import mash.graph.Edge;
 import mash.graph.NetworkState;
@@ -18,6 +20,18 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 public class NetworkBuilder {
 
+	private static final Set<String> bidirectionalSet = new HashSet<String>();
+	
+	static
+	{
+		bidirectionalSet.add("married");
+		bidirectionalSet.add("sibiling");
+		bidirectionalSet.add("friend");
+		bidirectionalSet.add("divorced");
+		bidirectionalSet.add("partner");
+		bidirectionalSet.add("cousin");
+		bidirectionalSet.add("home address");
+	}
 
 	private String getLabel(Person person) {
 		return String.format("%s %s", person.getFirstName(), person.getLastName());
@@ -54,7 +68,7 @@ public class NetworkBuilder {
 		if (person.getHomeAddress() != null && person.getHomeAddress().getLocation() != null) {
 			Location location = person.getHomeAddress().getLocation();
 			state.nodes.add(createNode(location));
-			state.edges.add(createEdge(person, location, "Home Address"));
+			state.edges.add(createEdge(person, location, "home address"));
 		}
 
 	}
@@ -66,7 +80,7 @@ public class NetworkBuilder {
 
 		for (Occupant occupant : location.getOccupants()) {
 			state.nodes.add(createNode(occupant.getPerson()));
-			state.edges.add(createEdge(location, occupant.getPerson(), "Occupant"));
+			state.edges.add(createEdge(location, occupant.getPerson(), "home address"));
 		}
 
 	}
@@ -81,7 +95,9 @@ public class NetworkBuilder {
 	}
 
 	private Edge createEdge(Entity source, Entity target, String label) {
-		return new Edge(getId(source), getId(target), label);
+		Edge edge = new Edge(getId(source), getId(target), label.toLowerCase());
+		edge.arrows.to = !isBidirecctional(label);
+		return edge;
 	}
 
 	private Node createNode(Entity entity) {
@@ -100,6 +116,12 @@ public class NetworkBuilder {
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
+	}
+	
+	
+	private boolean isBidirecctional(String type)
+	{
+		return bidirectionalSet.contains(type.toLowerCase());
 	}
 
 	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
