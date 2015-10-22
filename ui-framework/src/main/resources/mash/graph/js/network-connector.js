@@ -36,7 +36,7 @@ window.mash_graph_Network = function () {
             },
             font: {
                 color: gray,
-                size: 12,
+                size: 0,
                 strokeColor: white,
                 strokeWidth: 2,
             },
@@ -80,7 +80,7 @@ window.mash_graph_Network = function () {
                     },
                 },
                 font: {
-                    color: lightRed,
+                    color: red,
                 },
                 icon: {
                     code: '\uf182',
@@ -95,7 +95,7 @@ window.mash_graph_Network = function () {
                     },
                 },
                 font: {
-                    color: lightBlue,
+                    color: blue,
                 },
                 icon: {
                     code: '\uf183',
@@ -123,6 +123,9 @@ window.mash_graph_Network = function () {
                 },
             },
         },
+        interaction: {
+            hover: true
+        },
         layout: {
             randomSeed: 0,
             hierarchical: false,
@@ -148,6 +151,29 @@ window.mash_graph_Network = function () {
     };
 
     var network = null;
+    var lastEdge = null
+
+    function showEdgeLabel(edgeID) {
+        if (lastEdge != null) {
+            hideEdgeLabel(lastEdge);
+        }
+        lastEdge = edgeID;
+        edges.update({
+            id: edgeID,
+            font: {
+                size: 12,
+            },
+        });
+    }
+
+    function hideEdgeLabel(edgeID) {
+        edges.update({
+            id: edgeID,
+            font: {
+                size: 0,
+            },
+        });
+    }
 
     // Handle changes from the server-side
     this.onStateChange = function () {
@@ -162,6 +188,13 @@ window.mash_graph_Network = function () {
             edges: edges,
         };
         network = new vis.Network(container, data, options);
+
+        network.on("hoverEdge", function (params) {
+            showEdgeLabel(params.edge)
+        });
+        network.on("blurEdge", function (params) {
+            hideEdgeLabel(params.edge)
+        });
 
         network.redraw();
     }
