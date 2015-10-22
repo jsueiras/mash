@@ -4,7 +4,7 @@
    <id>lisa</id>
 	<firstName>Lisa</firstName>
 	<lastName>Simpson</lastName>
-	<dateOfBirth>1981-09-28</dateOfBirth>
+	<dateOfBirth>2007-09-28</dateOfBirth>
     <gender>Female</gender>
 	<homeAddress>
 	   <location>
@@ -13,75 +13,5 @@
 		<city>Springfield</city>
 	  </location>	
 	</homeAddress>
-	<household>
-	<relation>
-	<type>Mother</type>
-	<person>
-	 <id>marge</id>
-	<firstName>Marge</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>1954-03-19</dateOfBirth>
-    <gender>Female</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
-</relation>
-<relation>
-  <type>Father</type>
-<person>
-	 <id>homer</id>
-	<firstName>Homer</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>1955-05-12</dateOfBirth>
-    <gender>Male</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
-</relation>
-<relation>
-  <type>Sibiling</type>
-	<person>
-	   <id>bart</id>
-	<firstName>Bart</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>1979-04-01</dateOfBirth>
-    <gender>Male</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
-</relation>
-<relation>
-    <type>Sibiling</type>
-	<person>
-	 <id>maggie</id>
-	<firstName>Maggie</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>2014-01-12</dateOfBirth>
-    <gender>Female</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
-</relation>
-</household>
 </person>
 </persons>

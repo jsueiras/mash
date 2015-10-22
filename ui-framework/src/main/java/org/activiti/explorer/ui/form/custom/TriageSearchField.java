@@ -16,6 +16,7 @@ import org.activiti.explorer.ui.search.SearchTabEventListener;
 import org.springframework.aop.target.HotSwappableTargetSource;
 
 import com.vaadin.client.ui.Field;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -80,7 +81,7 @@ public class TriageSearchField extends CustomField<String> {
 	  protected  void initActions() {
 		    searchButton = new Button();
 		    searchButton.setCaption("Search");
-		    searchButton.setIcon(Images.TASK_16);
+		    searchButton.setIcon(FontAwesome.SEARCH);
 		    searchButton.setEnabled(false);
 
 
