@@ -72,6 +72,36 @@ window.mash_graph_Network = function () {
                     color: blue,
                 },
             },
+            FEMALES_UNDERAGE: {
+                color: {
+                    border: lightRed,
+                    highlight: {
+                        border: red,
+                    },
+                },
+                font: {
+                    color: lightRed,
+                },
+                icon: {
+                    code: '\uf182',
+                    color: lightRed,
+                },
+            },
+            MALES_UNDERAGE: {
+                color: {
+                    border: lightBlue,
+                    highlight: {
+                        border: blue,
+                    },
+                },
+                font: {
+                    color: lightBlue,
+                },
+                icon: {
+                    code: '\uf183',
+                    color: lightBlue,
+                },
+            },
             PERSONS: {
                 icon: {
                     code: '\uf007',
