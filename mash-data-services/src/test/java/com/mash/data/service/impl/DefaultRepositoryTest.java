@@ -43,9 +43,9 @@ public class DefaultRepositoryTest {
 	public void testGetLocation() {
 
 		Repository rep = new DefaultRepository();
-		Location p = rep.findLocationById("homerAddress",null);
+		Location p = rep.findLocationById("location",null);
 		assertNotNull(p);
-		assertTrue(p.getOccupants().size()>3);
+		assertTrue(p.getOccupants().size()==1);
 	}
 
 	@Test

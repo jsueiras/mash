@@ -174,3 +174,17 @@
 :sex            a               owl:DatatypeProperty ;
                 rdfs:domain     :Person ;
                 rdfs:label      "sex" .
+
+##################################################################################
+# externally classed properties
+##################################################################################
+# Properties:
+#   :guardianCurrentAddress
+#   :guardianFamilyMember
+#
+##################################################################################
+:mashDocument             a                   owl:ObjectProperty ;
+                          rdfs:comment        "used to link triple subject -> XML document".
+
+:mashDocumentId           a                   owl:DatatypeProperty ;
+                          rdfs:comment        "used to link triple subject -> XML document".
