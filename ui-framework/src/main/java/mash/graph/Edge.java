@@ -41,7 +41,7 @@ public class Edge implements Serializable {
 		return val;
 	}
 
-	public static class Arrows {
+	public static class Arrows implements Serializable{
 		public boolean to = true;
 		public boolean from = false;
 	}
