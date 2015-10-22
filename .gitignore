@@ -50,3 +50,4 @@ Temporary Items
 mash-process/deployment/MASHProcess.bar
 mash-process/result.pdf
 mash-process-util/result.docx
+ui-framework/src/main/webapp/VAADIN/themes/codeGraph/styles.css

@@ -18,9 +18,11 @@ import com.mash.model.catalog.Act;
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Locations;
+import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Persons;
 import com.mash.model.catalog.Referral;
+import com.mash.model.catalog.Relation;
 
 public class DefaultRepository implements Repository {
 
@@ -68,7 +70,9 @@ public class DefaultRepository implements Repository {
 
 	@Override
 	public Person findPersonById(String id, SecurityInfo info) {
-		return  (Person) findEntityById(id);
+		Person person =  (Person) findEntityById(id);
+	
+		return person;
 	}
 
 	@Override
@@ -127,8 +131,41 @@ public class DefaultRepository implements Repository {
 
 
 	public Entity findEntityById(String id) {
-		JAXBElement<Entity>  location=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id.toLowerCase() + ".xml"));
-		return location.getValue();
+		Entity entity = loadEntity(id);
+		if (entity instanceof Person)
+		{
+		   loadRelatedData((Person)entity);	
+		}		
+		else
+		{
+			
+			
+		}		
+		return entity;
+	}
+
+	private Entity loadEntity(String id) {
+		JAXBElement<Entity>  entity=  (JAXBElement<Entity>) marshaller.unmarshal(getStream(id.toLowerCase() + ".xml"));
+		return entity.getValue();
+	}
+	
+	private void loadRelatedData (Location location) {
+			for (Occupant occupant : location.getOccupants()) {
+			  Person p =  (Person) loadEntity(occupant.getPerson().getId());
+			occupant.setPerson(p);
+		}
+	}
+	
+	private void loadRelatedData (Person person) {
+		if ((person.getHomeAddress()!=null) && (person.getHomeAddress().getLocation()!=null))
+		{
+			person.getHomeAddress().setLocation((Location) loadEntity(person.getHomeAddress().getLocation().getId()));
+		}
+		
+		for (Relation relation : person.getHousehold().getRelations()) {
+			Person p =  (Person) loadEntity(relation.getPerson().getId());
+			relation.setPerson(p);
+		}
 	}
 
 	private String getFileName(Query query)

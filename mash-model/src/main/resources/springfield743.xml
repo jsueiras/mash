@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<location xmlns="http://www.mash.data.com/mashModel"
+	schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
+	<id>springfield743</id>
+	<numberOrName>743</numberOrName>
+	<street>Evergreen Terrace</street>
+	<city>Springfield</city>
+    <postcode>28005</postcode>
+	<occupants>
+		<person>
+			<id>homer2</id>
+		</person>
+	</occupants>
+</location>	

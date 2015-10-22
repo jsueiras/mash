@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persons xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
+	<person>
+	 <id>marge2</id>
+	<firstName>Marge</firstName>
+	<lastName>Sampson</lastName>
+	<dateOfBirth>1954-03-19</dateOfBirth>
+    <gender>Female</gender>
+	<homeAddress>
+	   <location>
+	   <numberOrName>745</numberOrName>
+	    <street>Evergreen Terrace</street>
+		<city>Springfield</city>
+	  </location>	
+	</homeAddress>
+</person>
+</persons>

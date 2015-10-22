@@ -89,9 +89,7 @@ public class NetworkBuilder {
 		if (entity instanceof Person) {
 			Person person = (Person) entity;
 			XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
-			boolean underAge =
-					Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
-							LocalDate.now()).getYears() < 18;
+			boolean underAge = isUnderAge(dateOfBirth);
 			if ("female".equalsIgnoreCase(person.getGender())) {
 				group = underAge ? Node.Group.FEMALES_UNDERAGE : Node.Group.FEMALES;
 			} else if ("male".equalsIgnoreCase(person.getGender())) {
@@ -102,6 +100,16 @@ public class NetworkBuilder {
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
+	}
+
+	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
+		
+		boolean underAge = false;
+		if  (dateOfBirth!=null)
+		
+			underAge=Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
+						LocalDate.now()).getYears() < 18;
+		return underAge;
 	}
 
 
