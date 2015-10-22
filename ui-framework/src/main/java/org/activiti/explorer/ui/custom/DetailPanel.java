@@ -38,11 +38,11 @@ public class DetailPanel extends VerticalLayout {
 
   protected Panel mainPanel;
 
-private VerticalLayout verticalLayout;
+  private VerticalLayout verticalLayout;
 
   public DetailPanel() {
-    setSizeFull();
     addStyleName(ExplorerLayout.STYLE_DETAIL_PANEL);
+    setSizeFull();
     setMargin(false);
 
     CssLayout cssLayout = new CssLayout(); // Needed for rounded corners
@@ -51,11 +51,14 @@ private VerticalLayout verticalLayout;
     super.addComponent(cssLayout);
 
     mainPanel = new Panel();
+    mainPanel.setId("main-panel");
     mainPanel.setSizeFull();
     cssLayout.addComponent(mainPanel);
 
     verticalLayout = new VerticalLayout();
-    verticalLayout.setWidth(100, Unit.PERCENTAGE);
+    verticalLayout.setId("content");
+    verticalLayout.setSizeFull();
+    verticalLayout.setHeightUndefined();
     verticalLayout.setMargin(true);
     mainPanel.setContent(verticalLayout);
   }
@@ -88,8 +91,8 @@ private VerticalLayout verticalLayout;
    * Add component to detail-container.
    */
   public void addDetailComponent(Component c) {
-      verticalLayout.addComponent(c);
- }
+    verticalLayout.addComponent(c);
+  }
 
   @Override
   public void addComponent(Component c, int index) {

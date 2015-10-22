@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,40 +41,37 @@ import com.vaadin.ui.themes.Reindeer;
 
 /**
  * Popup window to create a new task
- * 
+ *
  * @author Joram Barrez
  */
 public class SearchPopupWindow extends PopupWindow {
 
   private static final long serialVersionUID = 1L;
-  
-  
+
+
   SearchDetailPanel searchPanel;
-  
+
   public SearchPopupWindow() {
-   
+    setId("search-popup-window");
     setModal(true);
-    center();
-    setResizable(false);
+    setResizable(true);
     setCaption("Search");
-    addStyleName(Reindeer.WINDOW_LIGHT);
-    setWidth(700, UNITS_PIXELS);
-    setHeight(1000, UNITS_PIXELS);
-   
+    setWidth(40, Unit.EM);
+    setHeight(80, Unit.PERCENTAGE);
+
     initPanel();
-    
   }
-  
-private void initPanel() {
-	searchPanel = new SearchDetailPanel();
-	setContent(searchPanel);
-	
-}
+
+  private void initPanel() {
+    searchPanel = new SearchDetailPanel();
+    searchPanel.setId("search-panel");
+    setContent(searchPanel);
+  }
 
 public void addSearchListener(SearchTabEventListener listener)
 {
 	searchPanel.addListener(listener);
 }
 
-  
+
 }

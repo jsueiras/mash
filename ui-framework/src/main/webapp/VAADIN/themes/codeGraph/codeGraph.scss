@@ -2,4 +2,8 @@
 
 @mixin codeGraph {
   @include valo;
+
+  .group {
+    @include valo-horizontallayout-wrapping-style();
+  }
 }
