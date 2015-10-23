@@ -21,9 +21,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class NetworkBuilder {
 
 	private static final Set<String> bidirectionalSet = new HashSet<String>();
-	
-	static
-	{
+
+	static {
 		bidirectionalSet.add("married");
 		bidirectionalSet.add("sibiling");
 		bidirectionalSet.add("friend");
@@ -59,7 +58,9 @@ public class NetworkBuilder {
 		state.nodes.add(createNode(person));
 		if (person.getHousehold() != null) {
 			for (Relation relation : person.getHousehold().getRelations()) {
-				state.nodes.add(createNode(relation.getPerson()));
+				Person relatedPerson = relation.getPerson();
+				state.nodes.add(createNode(relatedPerson));
+				appendAge(state, relatedPerson);
 				state.edges.add(createEdge(person, relation.getPerson(), relation.getType()));
 
 			}
@@ -71,6 +72,22 @@ public class NetworkBuilder {
 			state.edges.add(createEdge(person, location, "home address"));
 		}
 
+		appendAge(state, person);
+	}
+
+	private void appendAge(NetworkState state, Person person) {
+		XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
+		int age = age(dateOfBirth);
+		String personId = person.getId();
+		String ageId = "age-" + personId;
+
+		Node ageNode = new Node(ageId, "" + age, Node.Group.AGE);
+		state.nodes.add(ageNode);
+
+		Edge ageEdge = new Edge(personId, ageId, "age");
+		ageEdge.length = 0;
+		ageEdge.arrows.to = false;
+		state.edges.add(ageEdge);
 	}
 
 
@@ -117,21 +134,24 @@ public class NetworkBuilder {
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
 	}
-	
-	
-	private boolean isBidirecctional(String type)
-	{
+
+
+	private boolean isBidirecctional(String type) {
 		return bidirectionalSet.contains(type.toLowerCase());
 	}
 
 	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
-		
+
 		boolean underAge = false;
-		if  (dateOfBirth!=null)
-		
-			underAge=Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
-						LocalDate.now()).getYears() < 18;
+		if (dateOfBirth != null)
+
+			underAge = age(dateOfBirth) < 18;
 		return underAge;
+	}
+
+	private int age(XMLGregorianCalendar dateOfBirth) {
+		return Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
+				LocalDate.now()).getYears();
 	}
 
 
