@@ -151,13 +151,24 @@ window.mash_graph_Network = function () {
     };
 
     var network = null;
-    var lastEdge = null
+    var hoverEdgeID = null
+    var selectionEdgeIDs = null;
+
+    function showHoverLabel(edgeID) {
+        if (hoverEdgeID != null) {
+            hideHoverLabel(hoverEdgeID);
+        }
+        hoverEdgeID = edgeID;
+        showEdgeLabel(edgeID);
+    }
+
+    function hideHoverLabel(edgeID) {
+        if (selectionEdgeIDs.indexOf(edgeID) < 0) {
+            hideEdgeLabel(edgeID);
+        }
+    }
 
     function showEdgeLabel(edgeID) {
-        if (lastEdge != null) {
-            hideEdgeLabel(lastEdge);
-        }
-        lastEdge = edgeID;
         edges.update({
             id: edgeID,
             font: {
@@ -175,6 +186,21 @@ window.mash_graph_Network = function () {
         });
     }
 
+    function toggleSelectionLabels(nodeIDs, edgeIDs) {
+        hoverEdgeID = null;
+        if (selectionEdgeIDs != null) {
+            selectionEdgeIDs.map(function (edgeID) {
+                hideEdgeLabel(edgeID);
+            });
+        }
+        console.log(edgeIDs);
+        edgeIDs.map(function (edgeID) {
+            console.log(edgeID);
+            showEdgeLabel(edgeID);
+        });
+        selectionEdgeIDs = edgeIDs;
+    }
+
     // Handle changes from the server-side
     this.onStateChange = function () {
         if (network != null) {
@@ -190,10 +216,13 @@ window.mash_graph_Network = function () {
         network = new vis.Network(container, data, options);
 
         network.on("hoverEdge", function (params) {
-            showEdgeLabel(params.edge)
+            showHoverLabel(params.edge);
         });
         network.on("blurEdge", function (params) {
-            hideEdgeLabel(params.edge)
+            hideHoverLabel(params.edge);
+        });
+        network.on("select", function (params) {
+            toggleSelectionLabels(params.nodes, params.edges);
         });
 
         network.redraw();
