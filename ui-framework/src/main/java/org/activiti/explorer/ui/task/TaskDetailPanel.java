@@ -12,6 +12,7 @@
  */
 package org.activiti.explorer.ui.task;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,9 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.FormType;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
@@ -435,5 +438,35 @@ protected boolean isCurrentUserOwner() {
     relatedContent.refreshTaskAttachments();
     //taskPage.getTaskEventPanel().refreshTaskEvents();
   }
+  
+  public void showProcessStartForm(StartFormData startFormData,final ProcessDefinition processDefinition) {
+	    if(taskForm == null) {
+	    	taskForm = new FormPropertiesForm();
+	    	taskForm.setSubmitButtonCaption(i18nManager.getMessage(Messages.PROCESS_START));
+	    	taskForm.setCancelButtonCaption(i18nManager.getMessage(Messages.BUTTON_CANCEL));
+	      
+	      // When form is submitted/cancelled, show the info again
+	    	taskForm.addListener(new FormPropertiesEventListener() {
+	        private static final long serialVersionUID = 1L;
+	        protected void handleFormSubmit(FormPropertiesEvent event) {
+	        	 Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());	
+	          formService.submitStartFormData(processDefinition.getId(), event.getFormProperties());
+	          
+	          // Show notification
+	          ExplorerApp.get().showNotification(MessageFormat.format(
+	            i18nManager.getMessage(Messages.PROCESS_STARTED_NOTIFICATION), getProcessDisplayName(processDefinition)));
+	           init();
+	        }
+	        protected void handleFormCancel(FormPropertiesEvent event) {
+	           init();
+	        }
+	      });
+	    }
+	    taskForm.setFormProperties(startFormData.getFormProperties());
+	    
+	    taskForm.setEnabled(true);
+	    centralLayout.removeAllComponents();
+	    centralLayout.addComponent(taskForm);
+	  }
 
 }

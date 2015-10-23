@@ -81,17 +81,19 @@ private RepositoryService repositoryService;
 
 private ProcessDefinition triageDefinition;
 
+private ProcessDefinition mashDefinition;
 
 
 
-  public TaskMenuBar(SearchTabEventListener listener, TaskPage taskPage) {
+
+  public TaskMenuBar( TaskPage taskPage) {
     this.identityService = ProcessEngines.getDefaultProcessEngine().getIdentityService();
     this.repositoryService = ProcessEngines.getDefaultProcessEngine().getRepositoryService();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.i18nManager = ExplorerApp.get().getI18nManager();
-    this.searchListener = listener;
+    this.searchListener = taskPage.getSearchListener();
     this.taskPage = taskPage;
-    this.addListener(listener);
+    this.addListener(searchListener);
     initProcessesDefinition();
     initItems();
     initActions();
@@ -138,15 +140,22 @@ private ProcessDefinition triageDefinition;
       }
     });
     
-    Button newTriage = new Button();
-    newTriage.setCaption("New Triage");
+    addProcessButton( "New Triage", triageDefinition);
+    addProcessButton( "Open Triage", mashDefinition);
+	
+	
+  }
+
+private void addProcessButton(String label, ProcessDefinition processDef) {
+	Button newTriage = new Button();
+    newTriage.setCaption(label);
     newTriage.setHtmlContentAllowed(true);
     addButton(newTriage);
 
     ProcessDefinitionPage processDefinitionPage;
 	
-	newTriage.addListener(new StartProcessInstanceClickListener(triageDefinition, taskPage));
-  }
+	newTriage.addClickListener(new StartProcessInstanceClickListener(processDef, taskPage));
+}
 
 private void initProcessesDefinition() {
 	
@@ -154,7 +163,12 @@ private void initProcessesDefinition() {
     .createProcessDefinitionQuery()
     .latestVersion()
     .active().processDefinitionKey("triage").list().get(0);
-	//triageDefinition = repositoryService.getProcessDefinition("triage");
+	
+	mashDefinition = repositoryService
+		    .createProcessDefinitionQuery()
+		    .latestVersion()
+		    .active().processDefinitionKey("mash").list().get(0);
+	
 }
 
 }
