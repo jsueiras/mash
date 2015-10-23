@@ -138,7 +138,7 @@ public class DefaultRepository implements Repository {
 		}		
 		else
 		{
-			
+			 loadRelatedData((Location)entity);	
 			
 		}		
 		return entity;
@@ -150,9 +150,12 @@ public class DefaultRepository implements Repository {
 	}
 	
 	private void loadRelatedData (Location location) {
+		if (location.getOccupants()!= null)
+		{		
 			for (Occupant occupant : location.getOccupants()) {
 			  Person p =  (Person) loadEntity(occupant.getPerson().getId());
 			occupant.setPerson(p);
+		   }
 		}
 	}
 	
@@ -161,10 +164,12 @@ public class DefaultRepository implements Repository {
 		{
 			person.getHomeAddress().setLocation((Location) loadEntity(person.getHomeAddress().getLocation().getId()));
 		}
-		
-		for (Relation relation : person.getHousehold().getRelations()) {
-			Person p =  (Person) loadEntity(relation.getPerson().getId());
-			relation.setPerson(p);
+		if (person.getHousehold()!=null && person.getHousehold().getRelations()!= null)
+		{		
+			for (Relation relation : person.getHousehold().getRelations()) {
+				Person p =  (Person) loadEntity(relation.getPerson().getId());
+				relation.setPerson(p);
+			}
 		}
 	}
 

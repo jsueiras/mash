@@ -20,17 +20,17 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 public class NetworkBuilder {
 
-	private static final Set<String> bidirectionalSet = new HashSet<String>();
+	private static final String LIVES_AT = "lives at";
+	private static final Set<String> nondirecctionalSet = new HashSet<String>();
 	
 	static
 	{
-		bidirectionalSet.add("married");
-		bidirectionalSet.add("sibiling");
-		bidirectionalSet.add("friend");
-		bidirectionalSet.add("divorced");
-		bidirectionalSet.add("partner");
-		bidirectionalSet.add("cousin");
-		bidirectionalSet.add("home address");
+		nondirecctionalSet.add("married");
+		nondirecctionalSet.add("sibiling");
+		nondirecctionalSet.add("friend");
+		nondirecctionalSet.add("divorced");
+		nondirecctionalSet.add("partner");
+		nondirecctionalSet.add("cousin");
 	}
 
 	private String getLabel(Person person) {
@@ -68,7 +68,8 @@ public class NetworkBuilder {
 		if (person.getHomeAddress() != null && person.getHomeAddress().getLocation() != null) {
 			Location location = person.getHomeAddress().getLocation();
 			state.nodes.add(createNode(location));
-			state.edges.add(createEdge(person, location, "home address"));
+			state.edges.add(createEdge(person, location, LIVES_AT));
+			
 		}
 
 	}
@@ -80,7 +81,7 @@ public class NetworkBuilder {
 
 		for (Occupant occupant : location.getOccupants()) {
 			state.nodes.add(createNode(occupant.getPerson()));
-			state.edges.add(createEdge(location, occupant.getPerson(), "home address"));
+			state.edges.add(createEdge( occupant.getPerson(),location, LIVES_AT));
 		}
 
 	}
@@ -93,6 +94,7 @@ public class NetworkBuilder {
 			appendNode(state, (Location) entity);
 
 	}
+
 
 	private Edge createEdge(Entity source, Entity target, String label) {
 		Edge edge = new Edge(getId(source), getId(target), label.toLowerCase());
@@ -121,7 +123,7 @@ public class NetworkBuilder {
 	
 	private boolean isBidirecctional(String type)
 	{
-		return bidirectionalSet.contains(type.toLowerCase());
+		return nondirecctionalSet.contains(type.toLowerCase());
 	}
 
 	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
