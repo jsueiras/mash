@@ -36,12 +36,19 @@ window.mash_graph_Network = function () {
             },
             font: {
                 color: gray,
-                size: 12,
+                size: 0,
                 strokeColor: white,
                 strokeWidth: 2,
             },
         },
         groups: {
+            AGE: {
+                shape: 'circle',
+                color: {
+                    background: lightYellow,
+                    border: lightYellow,
+                },
+            },
             FEMALES: {
                 color: {
                     border: lightRed,
@@ -72,6 +79,36 @@ window.mash_graph_Network = function () {
                     color: blue,
                 },
             },
+            FEMALES_UNDERAGE: {
+                color: {
+                    border: lightRed,
+                    highlight: {
+                        border: red,
+                    },
+                },
+                font: {
+                    color: red,
+                },
+                icon: {
+                    code: '\uf182',
+                    color: lightRed,
+                },
+            },
+            MALES_UNDERAGE: {
+                color: {
+                    border: lightBlue,
+                    highlight: {
+                        border: blue,
+                    },
+                },
+                font: {
+                    color: blue,
+                },
+                icon: {
+                    code: '\uf183',
+                    color: lightBlue,
+                },
+            },
             PERSONS: {
                 icon: {
                     code: '\uf007',
@@ -93,6 +130,9 @@ window.mash_graph_Network = function () {
                 },
             },
         },
+        interaction: {
+            hover: true
+        },
         layout: {
             randomSeed: 0,
             hierarchical: false,
@@ -100,12 +140,12 @@ window.mash_graph_Network = function () {
         physics: {
             solver: 'forceAtlas2Based',
             forceAtlas2Based: {
-                gravitationalConstant: -50,
-                centralGravity: 0.01,
-                springConstant: 0.01,
-                springLength: 100,
-                damping: 0.4,
-                avoidOverlap: 0,
+                //gravitationalConstant: -50,
+                //centralGravity: 0.01,
+                //springConstant: 0.01,
+                //springLength: 100,
+                //damping: 0.4,
+                //avoidOverlap: 0,
             },
         },
     }
@@ -118,6 +158,55 @@ window.mash_graph_Network = function () {
     };
 
     var network = null;
+    var hoverEdgeID = null
+    var selectionEdgeIDs = null;
+
+    function showHoverLabel(edgeID) {
+        if (hoverEdgeID != null) {
+            hideHoverLabel(hoverEdgeID);
+        }
+        hoverEdgeID = edgeID;
+        showEdgeLabel(edgeID);
+    }
+
+    function hideHoverLabel(edgeID) {
+        if (selectionEdgeIDs.indexOf(edgeID) < 0) {
+            hideEdgeLabel(edgeID);
+        }
+    }
+
+    function showEdgeLabel(edgeID) {
+        edges.update({
+            id: edgeID,
+            font: {
+                size: 12,
+            },
+        });
+    }
+
+    function hideEdgeLabel(edgeID) {
+        edges.update({
+            id: edgeID,
+            font: {
+                size: 0,
+            },
+        });
+    }
+
+    function toggleSelectionLabels(nodeIDs, edgeIDs) {
+        hoverEdgeID = null;
+        if (selectionEdgeIDs != null) {
+            selectionEdgeIDs.map(function (edgeID) {
+                hideEdgeLabel(edgeID);
+            });
+        }
+        console.log(edgeIDs);
+        edgeIDs.map(function (edgeID) {
+            console.log(edgeID);
+            showEdgeLabel(edgeID);
+        });
+        selectionEdgeIDs = edgeIDs;
+    }
 
     // Handle changes from the server-side
     this.onStateChange = function () {
@@ -132,6 +221,16 @@ window.mash_graph_Network = function () {
             edges: edges,
         };
         network = new vis.Network(container, data, options);
+
+        network.on("hoverEdge", function (params) {
+            showHoverLabel(params.edge);
+        });
+        network.on("blurEdge", function (params) {
+            hideHoverLabel(params.edge);
+        });
+        network.on("select", function (params) {
+            toggleSelectionLabels(params.nodes, params.edges);
+        });
 
         network.redraw();
     }

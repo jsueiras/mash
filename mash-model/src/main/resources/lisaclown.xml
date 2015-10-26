@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <persons xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
-     <person>
-     <id>maggie</id>
-	<firstName>Maggie</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>2014-01-12</dateOfBirth>
+   <person>
+   <id>lisa2</id>
+	<firstName>Lisa</firstName>
+	<lastName>Clown</lastName>
+	<dateOfBirth>2007-09-28</dateOfBirth>
     <gender>Female</gender>
 	<homeAddress>
 	   <location>
-	   <numberOrName>742</numberOrName>
+	   <numberOrName>745</numberOrName>
 	    <street>Evergreen Terrace</street>
 		<city>Springfield</city>
 	  </location>	

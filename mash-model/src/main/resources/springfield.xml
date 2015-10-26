@@ -14,4 +14,25 @@
 		<city>Springfield</city>
 		<postcode>28003</postcode>
 	  </location>	
+	  <location>
+       <id>springfield743</id>
+	   <numberOrName>743</numberOrName>
+	    <street>Evergreen Terrace</street>
+		<city>Springfield</city>
+		<postcode>28003</postcode>
+	  </location>
+	  <location>
+       <id>springfield745</id>
+	   <numberOrName>745</numberOrName>
+	    <street>Evergreen Terrace</street>
+		<city>Springfield</city>
+		<postcode>28003</postcode>
+	  </location>
+	  <location>
+       <id>springfield747</id>
+	   <numberOrName>747</numberOrName>
+	    <street>Evergreen Terrace</street>
+		<city>Springfield</city>
+		<postcode>28003</postcode>
+	  </location>
 </locations>

@@ -3,6 +3,7 @@ package com.mash.data.service.impl;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,8 +32,25 @@ public class DefaultRepositoryTest {
 
 		Repository rep = new DefaultRepository();
 		Query query = new Query();
-		query.setFirstName("Simpson");
+		query.setLastName("Simpson");
 		List<Person> p = rep.findPersons(query,null);
+		assertNotNull(p);
+
+	}
+	
+	@Test
+	public void testGetSampson() throws IOException {
+
+		Repository rep = new DefaultRepository();
+		Query query = new Query();
+		query.setLastName("Sampson");
+		List<Person> p = rep.findPersons(query,null);
+		List<String> ids = new ArrayList<String>();
+		for (Person person : p) {
+			ids.add(person.getId());
+			
+		}
+		rep.findEntitiesById(ids, null);
 		assertNotNull(p);
 
 	}
@@ -41,9 +59,8 @@ public class DefaultRepositoryTest {
 
 	@Test
 	public void testGetLocation() {
-
 		Repository rep = new DefaultRepository();
-		Location p = rep.findLocationById("location",null);
+		Location p = rep.findLocationById("springfield743",null);
 		assertNotNull(p);
 		assertTrue(p.getOccupants().size()==1);
 	}

@@ -54,7 +54,7 @@ public class NetworkPanel extends CssLayout {
 		   if (value!=null)
 		   {
 			   TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
-			   addComponent(new Network(reason.getNetworkState()));
+			   if (reason!=null) addComponent(new Network(reason.getNetworkState()));
 		   }	   
 		  
 	}

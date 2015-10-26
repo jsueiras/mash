@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <person xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
-	 <id>marge</id>
-	<firstName>Marge</firstName>
-	<lastName>Simpson</lastName>
+	 <id>granma</id>
+	<firstName>Granma</firstName>
+	<lastName>Bouvier</lastName>
 	<dateOfBirth>1954-03-19</dateOfBirth>
     <gender>Female</gender>
 	<homeAddress>
 	   <location>
-	   <id>springfield742</id>
-	   <numberOrName>742</numberOrName>
+	   <id>springfield747</id>
+	   <numberOrName>747</numberOrName>
 	    <street>Evergreen Terrace</street>
 		<city>Springfield</city>
 	  </location>	
 	</homeAddress>
 	<household>
 	<relation>
-	<type>married</type>
+	<type>mother</type>
 	<person>
-	  <id>homer</id>
+	  <id>marge2</id>
+   </person>
+</relation>
+	<relation>
+	<type>grandmother</type>
+	<person>
+	  <id>bart2</id>
 </person>
 </relation>
 <relation>
-  <type>mother</type>
+  <type>grandmother</type>
 <person>
-	 <id>bart</id>
+	 <id>maggie2</id>
 </person>
 </relation>
 <relation>
-  <type>mother</type>
+  <type>grandmother</type>
 	<person>
-	 <id>lisa</id>
-</person>
-</relation>
-<relation>
-    <type>mother</type>
-	<person>
-	 <id>maggie</id>
+	 <id>lisa2</id>
 </person>
 </relation>
 </household>

@@ -71,7 +71,7 @@ public abstract class AbstractPage extends CustomComponent {
     String activeEntry = null;
     if (toolBar != null) {
       activeEntry = toolBar.getCurrentEntryKey();
-      content.removeComponent(toolBar);
+      mainLayout.removeComponent(toolBar);
     }
 
     // Create menu bar

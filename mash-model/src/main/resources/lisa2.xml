@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <person xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
-    <id>homer</id>
-	<firstName>Homer</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>1955-05-12</dateOfBirth>
-    <gender>Male</gender>
+   <id>lisa2</id>
+	<firstName>Lisa</firstName>
+	<lastName>Clown</lastName>
+	<dateOfBirth>2007-09-28</dateOfBirth>
+    <gender>Female</gender>
 	<homeAddress>
 	   <location>
-	   <id>springfield742</id>
-	  </location>	
+	   <id>springfield745</id>
+	   </location>
 	</homeAddress>
 	<household>
 	<relation>
-	<type>married</type>
+	<type>daughter</type>
 	<person>
-	 <id>marge</id>
+	 <id>marge2</id>
 </person>
 </relation>
 <relation>
-  <type>father</type>
+  <type>daughter</type>
 <person>
-	 <id>bart</id>
+	 <id>krusty</id>
 </person>
 </relation>
 <relation>
-  <type>father</type>
+  <type>halfsister</type>
 	<person>
-	 <id>lisa</id>
+	   <id>bart2</id>
 </person>
 </relation>
 <relation>
-    <type>father</type>
+    <type>Sibiling</type>
 	<person>
-	 <id>maggie</id>
+	 <id>maggie2</id>
 </person>
 </relation>
 </household>

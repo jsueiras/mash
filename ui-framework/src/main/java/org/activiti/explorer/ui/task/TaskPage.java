@@ -63,6 +63,8 @@ public abstract class TaskPage extends AbstractProcessStartPage{
   protected LazyLoadingQuery lazyLoadingQuery;
    protected NetworkPanel taskEventPanel;
 
+private TaskDetailPanel detailComponent;
+
 
 
 
@@ -91,7 +93,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
 
   @Override
   protected ToolBar createMenuBar() {
-    return new TaskMenuBar(getSearchListener(),this);
+    return new TaskMenuBar(this);
   }
 
   protected SearchTabEventListener getSearchListener() {
@@ -158,7 +160,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
   protected Component createDetailComponents(String id) {
 	  Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
     Task task = taskService.createTaskQuery().taskId(id).singleResult();
-    Component detailComponent = new TaskDetailPanel(task, TaskPage.this);
+    detailComponent = new TaskDetailPanel(task, TaskPage.this);
     getTaskEventPanel().initTask(task);
     return detailComponent;
   }
@@ -199,7 +201,7 @@ public abstract class TaskPage extends AbstractProcessStartPage{
   public  void showStartForm(ProcessDefinition processDefinition,
 			StartFormData startFormData) 
 	{
-	  
+	  	detailComponent.showProcessStartForm(startFormData, processDefinition);
 	}
 	  
   

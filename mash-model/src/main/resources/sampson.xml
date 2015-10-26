@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <persons xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
 <person>
-    <id>homer</id>
+    <id>homer2</id>
 	<firstName>Homer</firstName>
-	<lastName>Simpson</lastName>
+	<lastName>Sampson</lastName>
 	<dateOfBirth>1955-05-12</dateOfBirth>
     <gender>Male</gender>
 	<homeAddress>
@@ -14,24 +14,11 @@
 	  </location>	
 	</homeAddress>
 	</person>
+
 	<person>
-	 <id>marge</id>
-	<firstName>Marge</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>1954-03-19</dateOfBirth>
-    <gender>Female</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
-	<person>
-	 <id>bart</id>
+	 <id>bart2</id>
 	<firstName>Bart</firstName>
-	<lastName>Simpson</lastName>
+	<lastName>Sampson</lastName>
 	<dateOfBirth>2005-04-01</dateOfBirth>
     <gender>Male</gender>
 	<homeAddress>
@@ -42,11 +29,12 @@
 	  </location>	
 	</homeAddress>
 </person>
-	<person>
-	 <id>lisa</id>
-	<firstName>Lisa</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>2007-09-28</dateOfBirth>
+
+<person>
+	 <id>marge2</id>
+	<firstName>Marge</firstName>
+	<lastName>Sampson</lastName>
+	<dateOfBirth>1954-03-19</dateOfBirth>
     <gender>Female</gender>
 	<homeAddress>
 	   <location>
@@ -55,19 +43,6 @@
 		<city>Springfield</city>
 	  </location>	
 	</homeAddress>
-</person>
-	<person>
-	 <id>maggie</id>
-	<firstName>Maggie</firstName>
-	<lastName>Simpson</lastName>
-	<dateOfBirth>2014-01-12</dateOfBirth>
-    <gender>Female</gender>
-	<homeAddress>
-	   <location>
-	   <numberOrName>742</numberOrName>
-	    <street>Evergreen Terrace</street>
-		<city>Springfield</city>
-	  </location>	
-	</homeAddress>
-</person>
+	</person>
+
 </persons>
