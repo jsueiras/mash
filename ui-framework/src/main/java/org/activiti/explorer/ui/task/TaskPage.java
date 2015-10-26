@@ -201,6 +201,12 @@ private TaskDetailPanel detailComponent;
   public  void showStartForm(ProcessDefinition processDefinition,
 			StartFormData startFormData) 
 	{
+	  if (detailComponent == null)
+	  {
+		  detailComponent = new TaskDetailPanel(null, TaskPage.this);
+		  setDetailComponent(detailComponent);
+		  
+	  }	  
 	  	detailComponent.showProcessStartForm(startFormData, processDefinition);
 	}
 	  

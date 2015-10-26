@@ -121,6 +121,8 @@ public class TaskDetailPanel extends DetailPanel {
     centralLayout.setMargin(true);
     setDetailContainer(centralLayout);
 
+    if (task!=null)
+    {	
     initHeader();
     initDescriptionAndClaimButton();
     initProcessLink();
@@ -129,6 +131,7 @@ public class TaskDetailPanel extends DetailPanel {
     initSubTasks();
     initRelatedContent();
     initTaskForm();
+    }
 
   }
 
@@ -440,7 +443,7 @@ protected boolean isCurrentUserOwner() {
   }
   
   public void showProcessStartForm(StartFormData startFormData,final ProcessDefinition processDefinition) {
-	    if(taskForm == null) {
+	
 	    	taskForm = new FormPropertiesForm();
 	    	taskForm.setSubmitButtonCaption(i18nManager.getMessage(Messages.PROCESS_START));
 	    	taskForm.setCancelButtonCaption(i18nManager.getMessage(Messages.BUTTON_CANCEL));
@@ -461,7 +464,7 @@ protected boolean isCurrentUserOwner() {
 	           init();
 	        }
 	      });
-	    }
+	    
 	    taskForm.setFormProperties(startFormData.getFormProperties());
 	    
 	    taskForm.setEnabled(true);
