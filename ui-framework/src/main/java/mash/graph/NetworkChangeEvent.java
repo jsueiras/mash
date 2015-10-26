@@ -10,6 +10,7 @@ public class NetworkChangeEvent extends Event {
 
   
 	private NetworkState newState;
+	
    
     
     

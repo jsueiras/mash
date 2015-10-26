@@ -54,7 +54,7 @@ public class NetworkPanel extends CssLayout {
 		   if (value!=null)
 		   {
 			   TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
-			   if (reason!=null) addComponent(new Network(reason.getNetworkState()));
+			   if (reason!=null && reason.getNetworkState()!=null) addComponent(new Network(reason.getNetworkState()));
 		   }	   
 		  
 	}
@@ -111,12 +111,14 @@ public class NetworkPanel extends CssLayout {
 		NetworkState state = new NetworkState();
 		state.edges = new HashSet<Edge>();
 		state.nodes = new HashSet<Node>();
-		
+		List<Entity> primaryLinks;
 		if (isLocation) {
-			builder.addNodesToNetwork(state, getLocationPrimaryLinks(id));
+			primaryLinks = getLocationPrimaryLinks(id);
+			builder.addNodesToNetwork(state, primaryLinks);
 			
 		} else {
-			builder.addNodesToNetwork(state, getPersonPrimaryLinks(id));
+			primaryLinks = getPersonPrimaryLinks(id);
+			builder.addNodesToNetwork(state, primaryLinks);
 		}		
 		 fireEvent(new NetworkChangeEvent(NetworkPanel.this, state));
 				
