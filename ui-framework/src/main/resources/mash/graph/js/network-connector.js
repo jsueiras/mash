@@ -159,7 +159,7 @@ window.mash_graph_Network = function () {
 
     var network = null;
     var hoverEdgeID = null
-    var selectionEdgeIDs = null;
+    var selectionEdgeIDs = {};
 
     function showHoverLabel(edgeID) {
         if (hoverEdgeID != null) {
@@ -195,7 +195,7 @@ window.mash_graph_Network = function () {
 
     function toggleSelectionLabels(nodeIDs, edgeIDs) {
         hoverEdgeID = null;
-        if (selectionEdgeIDs != null) {
+        if (selectionEdgeIDs.length > 0) {
             selectionEdgeIDs.map(function (edgeID) {
                 hideEdgeLabel(edgeID);
             });
@@ -208,21 +208,22 @@ window.mash_graph_Network = function () {
         selectionEdgeIDs = edgeIDs;
     }
 
-    container = this.getElement();
+    var self = this;
+    container = self.getElement();
 
     // Handle changes in Vaadin layout
-    this.addResizeListener(this.getElement(), function () {
+    self.addResizeListener(self.getElement(), function () {
         network.redraw();
     });
 
     // Handle changes from the server-side
-    this.onStateChange = function () {
+    self.onStateChange = function () {
         if (network != null) {
             network.destroy();
         }
 
-        nodes = new vis.DataSet(this.getState().nodes);
-        edges = new vis.DataSet(this.getState().edges);
+        nodes = new vis.DataSet(self.getState().nodes);
+        edges = new vis.DataSet(self.getState().edges);
         data = {
             nodes: nodes,
             edges: edges,
@@ -237,6 +238,10 @@ window.mash_graph_Network = function () {
         });
         network.on("select", function (params) {
             toggleSelectionLabels(params.nodes, params.edges);
+        });
+        network.on('selectNode',function(params){
+            // Server callback
+            self.onSelectNode(params);
         });
 
         network.redraw();
