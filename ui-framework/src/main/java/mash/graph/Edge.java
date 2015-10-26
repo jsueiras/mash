@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Edge implements Serializable {
 
+	
+	private static final long serialVersionUID = 130821260933146318L;
+	
 	public final String from;
 	public final String to;
 	public String label = "";

@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 public class Node implements Serializable {
+	
+	private static final long serialVersionUID = -2561388826782706977L;
+
 	public enum Group {
 		FEMALES, FEMALES_UNDERAGE, MALES, MALES_UNDERAGE, PERSONS, LOCATIONS, AGE;
 	}
