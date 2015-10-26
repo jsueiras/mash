@@ -5,10 +5,8 @@ import com.mash.data.service.Repository;
 import com.mash.data.service.SecurityInfo;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
@@ -105,14 +103,17 @@ public class MarklogicRepositoryTest {
 		Repository rep = new MarklogicRepositoryImpl("http://localhost:8042/v1/resources/");
 		Query query = new Query();
 		query.setFirstName("Pimpernel");
-		//todo put some values in the sec
-		Person p = rep.findPersons(query,new SecurityInfo("1", "1", "Triage")).get(0);
+		SecurityInfo securityInfo = new SecurityInfo("test-case-user", "process-id", "stage");
+		List<Person> response = rep.findPersons(query, securityInfo);
+		assertEquals(1, response.size());
+
+		Person p = response.get(0);
 		assertNotNull(p);
 		assertEquals("Pimpernel", p.getFirstName());
 		assertEquals("SANDYMAN", p.getLastName());
 		assertNotNull(p.getId());
 
-		Person personById = rep.findPersonById(p.getId(),new SecurityInfo("1", "1", "Triage"));
+		Person personById = rep.findPersonById(p.getId(), securityInfo);
 		assertEquals(p.getId(), personById.getId());
 	}
 

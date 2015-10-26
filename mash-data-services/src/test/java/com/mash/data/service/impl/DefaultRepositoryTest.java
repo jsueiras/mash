@@ -59,11 +59,10 @@ public class DefaultRepositoryTest {
 
 	@Test
 	public void testGetLocation() {
-
 		Repository rep = new DefaultRepository();
-		Location p = rep.findLocationById("springfield742",null);
+		Location p = rep.findLocationById("springfield743",null);
 		assertNotNull(p);
-		assertTrue(p.getOccupants().size()>3);
+		assertTrue(p.getOccupants().size()==1);
 	}
 
 	@Test

@@ -12,7 +12,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2CollectionHttpMessageConverter;
@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MarklogicRepositoryImpl implements Repository {
@@ -78,12 +79,21 @@ public class MarklogicRepositoryImpl implements Repository {
 
 	@Override
 	public Person findPersonById(String id, SecurityInfo info) {
-	   return restTemplate.getForObject(baseUrl + PERSON_PATH + "?rs:id=" + id, Person.class);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("case-user", info.getUserId());
+		headers.add("process-id", info.getProcessInstanceId());
+
+		return restTemplate.exchange(baseUrl + PERSON_PATH + "?rs:id=" + id, HttpMethod.GET,
+				new HttpEntity(headers), Person.class).getBody();
 	}
 
 	@Override
 	public List<Person> findPersons(Query query, SecurityInfo info) throws IOException {
-		return restTemplate.postForObject(baseUrl + PERSON_PATH, query, Persons.class).getPersons();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("user", info.getUserId());
+
+		return restTemplate.exchange(baseUrl + PERSON_PATH, HttpMethod.POST,
+				new HttpEntity<>(query, headers), Persons.class).getBody().getPersons();
 	}
 
 	@Override
