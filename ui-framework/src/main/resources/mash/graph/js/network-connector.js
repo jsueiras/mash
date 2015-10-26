@@ -10,7 +10,7 @@ window.mash_graph_Network = function () {
     var lightRed = 'rgb(251,215,201)';
     var lightYellow = 'rgb(253,229,204)';
 
-    var container = this.getElement();
+    var container = null;
     var options = {
         nodes: {
             color: gray,
@@ -207,6 +207,13 @@ window.mash_graph_Network = function () {
         });
         selectionEdgeIDs = edgeIDs;
     }
+
+    container = this.getElement();
+
+    // Handle changes in Vaadin layout
+    this.addResizeListener(this.getElement(), function () {
+        network.redraw();
+    });
 
     // Handle changes from the server-side
     this.onStateChange = function () {
