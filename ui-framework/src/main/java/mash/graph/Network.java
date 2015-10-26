@@ -1,26 +1,12 @@
 package mash.graph;
 
-import com.mash.data.service.Repository;
-import com.mash.model.catalog.Entity;
-import com.mash.model.catalog.Location;
-import com.mash.model.catalog.Occupant;
-import com.mash.model.catalog.Person;
-import com.mash.model.catalog.Relation;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractJavaScriptComponent;
-
 import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
-import elemental.json.JsonException;
-import elemental.json.JsonValue;
-import mash.graph.util.NetworkBuilder;
 
-import org.activiti.explorer.ExplorerApp;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @JavaScript({"js/network-connector.js"})
@@ -32,7 +18,8 @@ public class Network extends AbstractJavaScriptComponent {
 		addStyleName("mash-network");
 		setSizeFull();
 
-		initNetwork(state);
+		getState().nodes = state.nodes;
+		getState().edges = state.edges;
 
 		addFunction("onSelectNode", new JavaScriptFunction() {
 			@Override
@@ -45,11 +32,9 @@ public class Network extends AbstractJavaScriptComponent {
 		});
 	}
 
-	private void initNetwork(NetworkState newState) {
-		getState().nodes = newState.nodes;
-		getState().edges = newState.edges;
+	public void selectNodes(String... nodeIds) {
+		callFunction("selectNodes", nodeIds);
 	}
-
 
 	@Override
 	protected NetworkState getState() {
