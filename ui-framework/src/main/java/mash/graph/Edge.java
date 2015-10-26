@@ -8,8 +8,9 @@ public class Edge implements Serializable {
 
 	public final String from;
 	public final String to;
-	public String label;
+	public String label = "";
 	public final Arrows arrows = new Arrows();
+	public int length;
 
 	public Edge(String from, String to) {
 		this.from = from;

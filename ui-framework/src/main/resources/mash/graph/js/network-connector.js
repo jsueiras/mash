@@ -42,6 +42,13 @@ window.mash_graph_Network = function () {
             },
         },
         groups: {
+            AGE: {
+                shape: 'circle',
+                color: {
+                    background: lightYellow,
+                    border: lightYellow,
+                },
+            },
             FEMALES: {
                 color: {
                     border: lightRed,
@@ -133,12 +140,12 @@ window.mash_graph_Network = function () {
         physics: {
             solver: 'forceAtlas2Based',
             forceAtlas2Based: {
-                gravitationalConstant: -50,
-                centralGravity: 0.01,
-                springConstant: 0.01,
-                springLength: 100,
-                damping: 0.4,
-                avoidOverlap: 0,
+                //gravitationalConstant: -50,
+                //centralGravity: 0.01,
+                //springConstant: 0.01,
+                //springLength: 100,
+                //damping: 0.4,
+                //avoidOverlap: 0,
             },
         },
     }

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Node implements Serializable {
 	public enum Group {
-		FEMALES, FEMALES_UNDERAGE, MALES, MALES_UNDERAGE, PERSONS, LOCATIONS;
+		FEMALES, FEMALES_UNDERAGE, MALES, MALES_UNDERAGE, PERSONS, LOCATIONS, AGE;
 	}
 
 	public final String id;

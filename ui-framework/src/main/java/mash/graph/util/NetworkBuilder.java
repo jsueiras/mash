@@ -22,7 +22,7 @@ public class NetworkBuilder {
 
 	private static final String LIVES_AT = "lives at";
 	private static final Set<String> nondirecctionalSet = new HashSet<String>();
-	
+
 	static
 	{
 		nondirecctionalSet.add("married");
@@ -59,7 +59,9 @@ public class NetworkBuilder {
 		state.nodes.add(createNode(person));
 		if (person.getHousehold() != null) {
 			for (Relation relation : person.getHousehold().getRelations()) {
-				state.nodes.add(createNode(relation.getPerson()));
+				Person relatedPerson = relation.getPerson();
+				state.nodes.add(createNode(relatedPerson));
+				appendAge(state, relatedPerson);
 				state.edges.add(createEdge(person, relation.getPerson(), relation.getType()));
 
 			}
@@ -69,9 +71,23 @@ public class NetworkBuilder {
 			Location location = person.getHomeAddress().getLocation();
 			state.nodes.add(createNode(location));
 			state.edges.add(createEdge(person, location, LIVES_AT));
-			
 		}
+		appendAge(state, person);
+	}
 
+	private void appendAge(NetworkState state, Person person) {
+		XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
+		int age = age(dateOfBirth);
+		String personId = person.getId();
+		String ageId = "age-" + personId;
+
+		Node ageNode = new Node(ageId, "" + age, Node.Group.AGE);
+		state.nodes.add(ageNode);
+
+		Edge ageEdge = new Edge(personId, ageId, "age");
+		ageEdge.length = 0;
+		ageEdge.arrows.to = false;
+		state.edges.add(ageEdge);
 	}
 
 
@@ -119,21 +135,26 @@ public class NetworkBuilder {
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		return node;
 	}
-	
-	
+
+
 	private boolean isBidirecctional(String type)
 	{
 		return nondirecctionalSet.contains(type.toLowerCase());
 	}
 
 	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
-		
+
 		boolean underAge = false;
 		if  (dateOfBirth!=null)
-		
+
 			underAge=Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
 						LocalDate.now()).getYears() < 18;
 		return underAge;
+	}
+
+	private int age(XMLGregorianCalendar dateOfBirth) {
+		return Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
+				LocalDate.now()).getYears();
 	}
 
 
