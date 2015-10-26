@@ -466,7 +466,37 @@ protected boolean isCurrentUserOwner() {
 	    
 	    taskForm.setEnabled(true);
 	    centralLayout.removeAllComponents();
+	    initProcessHeader(processDefinition);
 	    centralLayout.addComponent(taskForm);
 	  }
+  
+  protected void initProcessHeader(ProcessDefinition processDefinition) {
+	    GridLayout taskDetails = new GridLayout(2, 2);
+	    taskDetails.setWidth(100, Unit.PERCENTAGE);
+	    taskDetails.addStyleName(ExplorerLayout.STYLE_TITLE_BLOCK);
+	    taskDetails.setSpacing(true);
+	    //taskDetails.setMargin(false, false, true, false);
+	    taskDetails.setColumnExpandRatio(1, 1.0f);
+	    centralLayout.addComponent(taskDetails);
+
+	    // Add image
+	    Embedded image = new Embedded(null, Images.TASK_50);
+	    taskDetails.addComponent(image, 0, 0, 0, 1);
+
+	    // Add task name
+	    Label nameLabel = new Label(processDefinition.getName());
+	    nameLabel.addStyleName(Reindeer.LABEL_H2);
+	    taskDetails.addComponent(nameLabel, 1, 0);
+	    taskDetails.setComponentAlignment(nameLabel, Alignment.MIDDLE_LEFT);
+
+	    // Properties
+	   // HorizontalLayout propertiesLayout = new HorizontalLayout();
+	   // propertiesLayout.setSpacing(true);
+	    //taskDetails.addComponent(propertiesLayout);
+
+	
+	    //initCreateTime(propertiesLayout);
+	  }
+
 
 }

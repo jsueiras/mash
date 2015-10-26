@@ -35,5 +35,11 @@
 	 <id>bart2</id>
 </person>
 </relation>
+<relation>
+    <type>granddaughter</type>
+	<person>
+	 <id>granma</id>
+</person>
+</relation>
 </household>
 </person>
