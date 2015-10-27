@@ -106,9 +106,7 @@ public class SearchForm extends VerticalLayout {
 
   protected void initButtons() {
     submitFormButton = new Button();
-    cancelFormButton = new Button();
     submitFormButton.setCaption("Search");
-    cancelFormButton.setCaption("Clear");
 
     HorizontalLayout buttons = new HorizontalLayout();
     buttons.setSpacing(true);
@@ -116,9 +114,6 @@ public class SearchForm extends VerticalLayout {
     buttons.addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
     buttons.addComponent(submitFormButton);
     buttons.setComponentAlignment(submitFormButton, Alignment.BOTTOM_RIGHT);
-
-    buttons.addComponent(cancelFormButton);
-    buttons.setComponentAlignment(cancelFormButton, Alignment.BOTTOM_RIGHT);
 
     Label buttonSpacer = new Label();
     buttons.addComponent(buttonSpacer);

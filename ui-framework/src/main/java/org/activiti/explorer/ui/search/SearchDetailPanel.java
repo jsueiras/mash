@@ -48,143 +48,132 @@ import com.vaadin.ui.themes.Reindeer;
  */
 public class SearchDetailPanel extends DetailPanel {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  protected ProcessDefinition processDefinition;
-  protected I18nManager i18nManager;
+	protected ProcessDefinition processDefinition;
+	protected I18nManager i18nManager;
 
-  protected VerticalLayout detailContainer;
-  protected VerticalLayout processDefinitionStartForm;
+	protected VerticalLayout detailContainer;
+	protected VerticalLayout processDefinitionStartForm;
 
-  protected Map<String, String> savedFormProperties;
+	protected Map<String, String> savedFormProperties;
 
-  private LazyLoadingQuery lazyLoadingQuery;
-  private LazyLoadingContainer taskListContainer;
-  private Repository repository;
-  private Table personTable;
-  private Table locationTable;
-  private boolean isLocation;
+	private LazyLoadingQuery lazyLoadingQuery;
+	private LazyLoadingContainer taskListContainer;
+	private Repository repository;
+	private Table personTable;
+	private Table locationTable;
+	private boolean isLocation;
 
-private HorizontalLayout resultsContainer;
-private VerticalLayout treeContainer;
-private SearchTabEventListener tabEventListener;
+	private HorizontalLayout resultsContainer;
+	private VerticalLayout treeContainer;
+	private SearchTabEventListener tabEventListener;
 
-  public SearchDetailPanel() {
-    this.i18nManager = ExplorerApp.get().getI18nManager();
-    this.repository = ExplorerApp.get().getMashRepository();
-    initUi();
-  }
-
-
-
-protected void initUi() {
-	addStyleName("search-detail-panel");
-	setSizeFull();
-
-    detailContainer = new VerticalLayout();
-	detailContainer.setId("detail-container");
-    detailContainer.setMargin(true);
-    detailContainer.setWidth(100, Unit.PERCENTAGE);
-	detailContainer.setHeightUndefined();
-	setDetailContainer(detailContainer);
-
-    initForm();
-    initResults();
-  }
-
-  private void initResults() {
-	resultsContainer = new HorizontalLayout();
-	resultsContainer.setWidth(100, Unit.PERCENTAGE);
-	resultsContainer.setHeightUndefined();
-	resultsContainer.setSpacing(true);
-
-    personTable = createPersonTable();
-    locationTable=createLocationTable();
-    locationTable.addValueChangeListener(getListSelectionListener());
-    personTable.addValueChangeListener(getListSelectionListener());
-
-    resultsContainer.addComponent(locationTable);
-	resultsContainer.addComponent(personTable);
-
-	resultsContainer.setVisible(false);
-	detailContainer.addComponent(resultsContainer);
-  }
-
- protected void initForm() {
-     SearchForm search = new SearchForm();
-     search.addListener(new SearchRequestEventListener());
-
-	detailContainer.addComponent(search);
-  }
-
-
-  public class SearchRequestEventListener extends SearchFormEventListener
-  {
-
-
-	@Override
-	protected void handleFormSubmit(SearchFormEvent event) {
-		Query query = event.getQuery();
-		if (!isLocationQuery(query))
-		{
-			locationTable.setVisible(false);
-		  List<Person> results;
-
-		try {
-			results = repository.findPersons(query,null);
-			  appendResults(results,personTable);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-    	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_CLEAR,isLocation,null ));
-
-		}
-		else
-		{
-		  personTable.setVisible(false);
-		  List<Location> results;
-		try {
-			results = repository.findLocations(query.getSampleLocation(),null);
-			 appendResults(results,locationTable);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		}
+	public SearchDetailPanel() {
+		this.i18nManager = ExplorerApp.get().getI18nManager();
+		this.repository = ExplorerApp.get().getMashRepository();
+		initUi();
 	}
 
 
+	protected void initUi() {
+		addStyleName("search-detail-panel");
 
-	private boolean isLocationQuery(Query query) {
-		isLocation= (query.getLastName() == null || query.getLastName().length() == 0)
-				&& (query.getFirstName() ==null || query.getFirstName().length() == 0)
-				&& query.getDateOfBirthFrom() ==null
-				&& query.getDateOfBirthTo()==null
-				&& query.getGender()==null;
-		return isLocation;
+		detailContainer = new VerticalLayout();
+		detailContainer.setId("detail-container");
+		detailContainer.setMargin(true);
+		detailContainer.setSizeFull();
+		setDetailContainer(detailContainer);
 
+		initForm();
+		initResults();
 	}
 
-	@Override
-	protected void handleFormCancel(SearchFormEvent event) {
-		ExplorerApp.get().showNotification("Cancel", "Cancel");
+	private void initResults() {
+		resultsContainer = new HorizontalLayout();
+		resultsContainer.setSizeFull();
+		resultsContainer.setSpacing(true);
 
+		personTable = createPersonTable();
+		locationTable = createLocationTable();
+		locationTable.addValueChangeListener(getListSelectionListener());
+		personTable.addValueChangeListener(getListSelectionListener());
+
+		resultsContainer.addComponent(locationTable);
+		locationTable.setSizeFull();
+		resultsContainer.addComponent(personTable);
+		personTable.setSizeFull();
+
+		resultsContainer.setVisible(false);
+		detailContainer.addComponent(resultsContainer);
+	}
+
+	protected void initForm() {
+		SearchForm search = new SearchForm();
+		search.addListener(new SearchRequestEventListener());
+
+		search.setWidth(100, Unit.PERCENTAGE);
+		search.setHeightUndefined();
+		detailContainer.addComponent(search);
+		detailContainer.setExpandRatio(search, 0);
 	}
 
 
+	public class SearchRequestEventListener extends SearchFormEventListener {
+
+		@Override
+		protected void handleFormSubmit(SearchFormEvent event) {
+			Query query = event.getQuery();
+			if (!isLocationQuery(query)) {
+				locationTable.setVisible(false);
+				List<Person> results;
+
+				try {
+					results = repository.findPersons(query, null);
+					appendResults(results, personTable);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_CLEAR, isLocation, null));
+
+			} else {
+				personTable.setVisible(false);
+				List<Location> results;
+				try {
+					results = repository.findLocations(query.getSampleLocation(), null);
+					appendResults(results, locationTable);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
 
 
+		private boolean isLocationQuery(Query query) {
+			isLocation = (query.getLastName() == null || query.getLastName().length() == 0) &&
+					(query.getFirstName() == null || query.getFirstName().length() == 0) &&
+					query.getDateOfBirthFrom() == null && query.getDateOfBirthTo() == null && query.getGender() ==
+					null;
+			return isLocation;
+
+		}
+
+		@Override
+		protected void handleFormCancel(SearchFormEvent event) {
+			ExplorerApp.get().showNotification("Cancel", "Cancel");
+
+		}
 
 
-  }
+	}
 
 
 	protected Table createPersonTable() {
 		Table personTable = new Table();
-		personTable.setWidth(100, Unit.PERCENTAGE);
 		personTable.setPageLength(10);
 		personTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		personTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
@@ -214,7 +203,6 @@ protected void initUi() {
 
 	protected Table createLocationTable() {
 		Table locationTable = new Table();
-		locationTable.setWidth(100, Unit.PERCENTAGE);
 		locationTable.setPageLength(10);
 		locationTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		locationTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
@@ -254,22 +242,19 @@ protected void initUi() {
 	}
 
 
+	protected ValueChangeListener getListSelectionListener() {
+		return new Property.ValueChangeListener() {
+			private static final long serialVersionUID = 1L;
 
-	 protected ValueChangeListener getListSelectionListener() {
-		    return new Property.ValueChangeListener() {
-		      private static final long serialVersionUID = 1L;
-		      public void valueChange(ValueChangeEvent event) {
-		    	  String id = (String) event.getProperty().getValue();
-		    	  if (id!=null)
-		    	  {
-		    	  fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_SELECT,isLocation,id ));
-		    	  }
+			public void valueChange(ValueChangeEvent event) {
+				String id = (String) event.getProperty().getValue();
+				if (id != null) {
+					fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_SELECT, isLocation, id));
+				}
 
-		      }
-		    };
-		  }
-
-
+			}
+		};
+	}
 
 
 }
