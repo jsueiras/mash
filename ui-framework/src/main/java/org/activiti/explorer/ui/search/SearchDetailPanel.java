@@ -179,24 +179,12 @@ public class SearchDetailPanel extends DetailPanel {
 		personTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 		personTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 
-
-		//this.lazyLoadingQuery = createLazyLoadingQuery();
-		//this.taskListContainer = new LazyLoadingContainer(lazyLoadingQuery, 30);
-		//taskTable.setContainerDataSource(taskListContainer);
-
 		// Create column header
 		personTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
-		personTable.setColumnWidth("", 22);
-
 		personTable.addContainerProperty("Name", String.class, null);
-		personTable.setColumnWidth("Name", 250);
-
 		personTable.addContainerProperty("Address", String.class, null);
-		personTable.setColumnWidth("Address", 250);
-
 		personTable.addContainerProperty("DOB", String.class, null);
-		personTable.setColumnWidth("DOB", 50);
-
+		
 
 		return personTable;
 	}

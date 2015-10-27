@@ -21,27 +21,21 @@ public class TableBuilder {
 	protected static Table createPersonTable() {
 		Table personTable = new Table();
 		personTable.setWidth(100, Unit.PERCENTAGE);
-		personTable.setPageLength(10);
+		personTable.setPageLength(2);
 		personTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		personTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 		personTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 
 	// Create column header
 		personTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
-		personTable.setColumnWidth("", 22);
-
+		
 		personTable.addContainerProperty("Name", String.class, null);
-		personTable.setColumnWidth("Name", 250);
-
 		personTable.addContainerProperty("Address", String.class, null);
-		personTable.setColumnWidth("Address", 250);
-
+	
 		personTable.addContainerProperty("DOB", String.class, null);
-		personTable.setColumnWidth("DOB", 50);
-
+	
 		personTable.addContainerProperty("Relationship", String.class, null);
-		personTable.setColumnWidth("Relationship", 50);
-
+	
 
 		return personTable;
 	}
