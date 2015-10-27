@@ -21,7 +21,7 @@ public class TriageSearchValue implements Serializable {
 	private static final long serialVersionUID = 4666745825592153896L;
 	private String value;
 	private NetworkState networkState;
-	private List<TriagePersonSummary> subjects;
+	private transient List<TriagePersonSummary> subjects;
 	
 
 	public TriageSearchValue(String value, NetworkState networkState, List<TriagePersonSummary> subjects) {

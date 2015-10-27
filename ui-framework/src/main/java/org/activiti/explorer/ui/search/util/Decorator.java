@@ -1,4 +1,4 @@
-package org.activiti.explorer.ui.search.person;
+package org.activiti.explorer.ui.search.util;
 
 import java.text.SimpleDateFormat;
 
@@ -150,5 +150,7 @@ public class Decorator {
 		}		
 	    		
 	}
+	
+	
 
 }

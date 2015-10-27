@@ -25,7 +25,7 @@ import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.DetailPanel;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.ui.search.SearchFormEvent;
-import org.activiti.explorer.ui.search.person.Decorator;
+import org.activiti.explorer.ui.search.util.Decorator;
 import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
 import com.mash.data.service.Query;

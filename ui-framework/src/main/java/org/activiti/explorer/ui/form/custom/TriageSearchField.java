@@ -22,6 +22,7 @@ import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.cglib.core.Predicate;
 import org.springframework.cglib.core.Transformer;
 
+import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
 import com.vaadin.client.ui.Field;
@@ -36,6 +37,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component.Event;
 import com.vaadin.ui.Component.Listener;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 public class TriageSearchField extends CustomField<String> {
@@ -53,6 +55,7 @@ public class TriageSearchField extends CustomField<String> {
 	private String label;
 	private NetworkState networkState;
 	private List<TriagePersonSummary> subjects;
+	protected Table table;
 
 	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
 		this.values = values;
@@ -77,13 +80,14 @@ public class TriageSearchField extends CustomField<String> {
 		overallLayout.setWidth(100, Unit.PERCENTAGE);
 		initCombo();
 		initActions();
-
+	    initTable();
 		overallLayout.addComponent(comboBox);
 		overallLayout.setExpandRatio(comboBox, 1);
 		comboBox.setWidth(100, Unit.PERCENTAGE);
 
 		overallLayout.addComponent(searchButton);
 		overallLayout.setExpandRatio(searchButton, 0);
+		overallLayout.addComponent(table);
 
 		return overallLayout;
 	}
@@ -139,6 +143,13 @@ public class TriageSearchField extends CustomField<String> {
 			}});
 
 	}
+	
+	private void initTable()
+	{
+		table = TableBuilder.createPersonTable();
+		
+
+	}
 
 	@Override
 	public Class<? extends String> getType() {
@@ -177,60 +188,61 @@ public class TriageSearchField extends CustomField<String> {
 	 {
 		 return new NetworkChangeListener() {
 
-		/**
-			 * 
-			 */
+		
 			private static final long serialVersionUID = -8340156883977266632L;
 
 		@Override
 		protected void handleNetworkChange(NetworkChangeEvent event) {
 			networkState = event.getNewState();
-		    subjects = CollectionUtils.transform( 
-		    CollectionUtils.filter(event.getPrimaryLinks(), new Predicate() {	
-				@Override
-				public boolean evaluate(Object arg0) {
-					// TODO Auto-generated method stub
-					return arg0 instanceof Person;
-				}
-			}), new Transformer(){
-
-		    	private String tranformAddress(Person person)
-		    	{
-		    	    String address = "";
-		    	   if (person.getHomeAddress() !=null && person.getHomeAddress().getLocation()!=null )
-		    	   {
-		    		   Location location= person.getHomeAddress().getLocation();
-		    		   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
-		    	   }	   
-		    	   return address;
-		    	}
-		    	
-		    	private String getValue(String s)
-		    	{
-		    		return (s!=null)?s:"";
-		    	}
-		    
-				@Override
-				public Object transform(Object arg0) {
-					// TODO Auto-generated method stub
-					Person person = (Person)arg0;
-					TriagePersonSummary summary = new TriagePersonSummary();
-					summary.setFirstName(person.getFirstName());
-					summary.setLastName(person.getLastName());
-					if (person.getDateOfBirth()!=null)
-					{
-						summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
-					}	
-					summary.setHomeAddress(tranformAddress(person));
-					return summary;
-				}});
-			
-		}
-
-
-	   };
+		    summarizePersonData(event.getPrimaryLinks());
+		    TableBuilder.appendResults(subjects, table);
+	   }
+		
+	 };
 	 }
 
+     private void summarizePersonData(List<Entity> links)
+     {
+    	 subjects = CollectionUtils.transform( 
+    			    CollectionUtils.filter(links, new Predicate() {	
+    					@Override
+    					public boolean evaluate(Object arg0) {
+    						// TODO Auto-generated method stub
+    						return arg0 instanceof Person;
+    					}
+    				}), new Transformer(){
 
+    			    	private String tranformAddress(Person person)
+    			    	{
+    			    	    String address = "";
+    			    	   if (person.getHomeAddress() !=null && person.getHomeAddress().getLocation()!=null )
+    			    	   {
+    			    		   Location location= person.getHomeAddress().getLocation();
+    			    		   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
+    			    	   }	   
+    			    	   return address;
+    			    	}
+    			    	
+    			    	private String getValue(String s)
+    			    	{
+    			    		return (s!=null)?s:"";
+    			    	}
+    			    
+    					@Override
+    					public Object transform(Object arg0) {
+    						// TODO Auto-generated method stub
+    						Person person = (Person)arg0;
+    						TriagePersonSummary summary = new TriagePersonSummary();
+    						summary.setFirstName(person.getFirstName());
+    						summary.setLastName(person.getLastName());
+    						if (person.getDateOfBirth()!=null)
+    						{
+    							summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
+    						}	
+    						summary.setHomeAddress(tranformAddress(person));
+    						return summary;
+    					}});
+    			    	 
+        }
 
 }
