@@ -42,6 +42,14 @@ public class Network extends AbstractJavaScriptComponent {
 		return state;
 	}
 
+	public void addNodeSelectionListener(NodeSelectionListener listener) {
+		nodeSelectionListeners.add(listener);
+	}
+
+	public boolean removeNodeSelectionListener(NodeSelectionListener listener) {
+		return nodeSelectionListeners.remove(listener);
+	}
+
 	public static interface NodeSelectionListener {
 		public void nodeSelected(NodeSelectedEvent event);
 	}
