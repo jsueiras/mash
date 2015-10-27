@@ -246,14 +246,20 @@ window.mash_graph_Network = function () {
         network.redraw();
     });
 
+    self.add = function(newNodes, newEdges) {
+        nodes.add(newNodes);
+        edges.add(newEdges);
+    }
+
     // Handle changes from the server-side
     self.onStateChange = function () {
         if (network != null) {
             network.destroy();
         }
 
-        nodes = new vis.DataSet(self.getState().nodes);
-        edges = new vis.DataSet(self.getState().edges);
+        var state = self.getState();
+        nodes = new vis.DataSet(state.nodes);
+        edges = new vis.DataSet(state.edges);
         data = {
             nodes: nodes,
             edges: edges,
