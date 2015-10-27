@@ -64,7 +64,7 @@ window.mash_graph_Network = function () {
                 },
                 icon: {
                     code: '\uf182',
-                    color: lightOrange,
+                    color: orange,
                 },
             },
             FEMALES_UNEXPLORED: {
