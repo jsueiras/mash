@@ -16,7 +16,8 @@ public class Node implements Serializable {
 	public final String id;
 	public String label;
 	public Group group;
-	public int age;
+	public int age = -1;
+	public boolean primary = false;
 
 	public Node(String id) {
 		if (id == null) {
