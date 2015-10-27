@@ -56,210 +56,191 @@ import com.vaadin.ui.Button.ClickListener;
  */
 public class SearchForm extends VerticalLayout {
 
-  private static final long serialVersionUID = -3197331726904715949L;
+	private static final long serialVersionUID = -3197331726904715949L;
 
-  // Services
-  protected transient FormService formService;
-  protected I18nManager i18nManager;
+	// Services
+	protected transient FormService formService;
+	protected I18nManager i18nManager;
 
-  // UI
-  protected Label formTitle;
-  protected Button submitFormButton;
-  protected Button cancelFormButton;
+	// UI
+	protected Label formTitle;
+	protected Button submitFormButton;
+	protected Button cancelFormButton;
 
-  public SearchForm() {
-    super();
-    this.setSpacing(true);
-    formService = ProcessEngines.getDefaultProcessEngine().getFormService();
-    this.i18nManager = ExplorerApp.get().getI18nManager();
+	public SearchForm() {
+		super();
+		this.setSpacing(true);
+		formService = ProcessEngines.getDefaultProcessEngine().getFormService();
+		this.i18nManager = ExplorerApp.get().getI18nManager();
 
-    addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
-    addStyleName(ExplorerLayout.STYLE_FORM_PROPERTIES);
+		addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
+		addStyleName(ExplorerLayout.STYLE_FORM_PROPERTIES);
 
-    initTitle();
-    initFormFields();
-    initButtons();
-    initListeners();
-  }
-
-
+		initTitle();
+		initFormFields();
+		initButtons();
+		initListeners();
+	}
 
 
-  public void setFormHelp(String caption) {
-    formTitle.setValue(caption);
-    formTitle.setVisible(caption != null);
-  }
+	public void setFormHelp(String caption) {
+		formTitle.setValue(caption);
+		formTitle.setVisible(caption != null);
+	}
 
-  /**
-   * Clear all (writable) values in the form.
-   */
-  public void clear() {
-    //formPropertiesComponent.setFormProperties(formPropertiesComponent.getFormProperties());
-  }
+	/**
+	 * Clear all (writable) values in the form.
+	 */
+	public void clear() {
+		//formPropertiesComponent.setFormProperties(formPropertiesComponent.getFormProperties());
+	}
 
-  protected void initTitle() {
-    formTitle = new Label();
-    formTitle.addStyleName(ExplorerLayout.STYLE_H4);
-    formTitle.setVisible(false);
-    addComponent(formTitle);
-  }
+	protected void initTitle() {
+		formTitle = new Label();
+		formTitle.addStyleName(ExplorerLayout.STYLE_H4);
+		formTitle.setVisible(false);
+		addComponent(formTitle);
+	}
 
-  protected void initButtons() {
-    submitFormButton = new Button();
-    submitFormButton.setCaption("Search");
+	protected void initButtons() {
+		submitFormButton = new Button();
+		submitFormButton.setCaption("Search");
 
-    HorizontalLayout buttons = new HorizontalLayout();
-    buttons.setSpacing(true);
-    buttons.setWidth(100, UNITS_PERCENTAGE);
-    buttons.addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
-    buttons.addComponent(submitFormButton);
-    buttons.setComponentAlignment(submitFormButton, Alignment.BOTTOM_RIGHT);
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);
+		buttons.setWidth(100, UNITS_PERCENTAGE);
+		buttons.addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
+		buttons.addComponent(submitFormButton);
+		buttons.setComponentAlignment(submitFormButton, Alignment.BOTTOM_RIGHT);
 
-    Label buttonSpacer = new Label();
-    buttons.addComponent(buttonSpacer);
-    buttons.setExpandRatio(buttonSpacer, 1.0f);
-    addComponent(buttons);
-  }
+		Label buttonSpacer = new Label();
+		buttons.addComponent(buttonSpacer);
+		buttons.setExpandRatio(buttonSpacer, 1.0f);
+		addComponent(buttons);
+	}
 
-  protected void initFormFields() {
-    addGroup(getTextField("First Name", "firstName"), getTextField("Last Name", "lastName"));
-    addGroup(getDateField("Born on or after", "dateOfBirthFrom", "dd-MM-yyyy"),
-            getDateField("Born before or on", "dateOfBirthTo", "dd-MM-yyyy"), genderCombo());
-    addGroup(getTextField("Number", "sampleLocation.numberOrName"), getTextField("Street", "sampleLocation.street"));
-    addGroup(getTextField("City", "sampleLocation.city"), getTextField("Postcode", "sampleLocation.postcode"));
-  }
+	protected void initFormFields() {
+		addGroup(getTextField("First Name", "firstName"), getTextField("Last Name", "lastName"));
+		addGroup(getDateField("Born on or after", "dateOfBirthFrom", "dd-MM-yyyy"),
+				getDateField("Born before or on", "dateOfBirthTo", "dd-MM-yyyy"), genderCombo());
+		addGroup(getTextField("Number", "sampleLocation.numberOrName"),
+				getTextField("Street", "sampleLocation.street"));
+		addGroup(getTextField("City", "sampleLocation.city"), getTextField("Postcode", "sampleLocation.postcode"));
+	}
 
-  private void addGroup(Component... contents) {
-    HorizontalLayout group = new HorizontalLayout();
-	addStyleName("group");
-    group.setSpacing(true);
-    group.setSizeUndefined();
+	private void addGroup(Component... contents) {
+		HorizontalLayout group = new HorizontalLayout();
+		addStyleName("group");
+		group.setSpacing(true);
+		group.setSizeUndefined();
 
-    for (Component component : contents) {
-      group.addComponent(component);
-      if ((component.getWidthUnits() == Unit.PERCENTAGE) && (component.getWidth() == 100)) {
-        group.setExpandRatio(component, 1);
-        group.setWidth(100, Unit.PERCENTAGE);
-      }
-      else {
-        group.setExpandRatio(component, 0);
-      }
-    }
-    addComponent(group);
-  }
-
-
-  private OptionGroup genderCombo() {
-    OptionGroup gender = new OptionGroup("Gender");
-    gender.setId("gender");
-	gender.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
-    gender.setRequired(false);
-    gender.setNullSelectionAllowed(true);
-    gender.addItem("F");
-    gender.setItemCaption("F", "Female");
-    gender.addItem("M");
-    gender.setItemCaption("M", "Male");
-    return gender;
-}
-
-private TextField getTextField(String label, String id) {
-	TextField lastName = new TextField(label);
-	lastName.setRequired(false);
-	lastName.setEnabled(true);
-	lastName.setRequiredError("Search required");
-	lastName.setWidth(100, Unit.PERCENTAGE);
-	lastName.setId(id);
-	return lastName;
-}
-
-private PopupDateField getDateField(String label, String id,String datePattern)
-{
-    PopupDateField dateField = new PopupDateField(label);
-    dateField.setId(id);
-	dateField.setWidth(9, Unit.EM);
-    dateField.setDateFormat(datePattern);
-    dateField.setRequired(false);
-    dateField.setEnabled(true);
-    return dateField;
-}
+		for (Component component : contents) {
+			group.addComponent(component);
+			if ((component.getWidthUnits() == Unit.PERCENTAGE) && (component.getWidth() == 100)) {
+				group.setExpandRatio(component, 1);
+				group.setWidth(100, Unit.PERCENTAGE);
+			} else {
+				group.setExpandRatio(component, 0);
+			}
+		}
+		addComponent(group);
+	}
 
 
-  public  Query getSearchQuery() throws InvalidValueException {
-	    // Commit the form to ensure validation is executed
+	private OptionGroup genderCombo() {
+		OptionGroup gender = new OptionGroup("Gender");
+		gender.setId("gender");
+		gender.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		gender.setRequired(false);
+		gender.setNullSelectionAllowed(true);
+		gender.addItem("F");
+		gender.setItemCaption("F", "Female");
+		gender.addItem("M");
+		gender.setItemCaption("M", "Male");
+		return gender;
+	}
 
-	    Query queryBean = new Query();
-	    queryBean.setSampleLocation(new Location());
-	    populateQueryBean(queryBean,this);
+	private TextField getTextField(String label, String id) {
+		TextField lastName = new TextField(label);
+		lastName.setRequired(false);
+		lastName.setEnabled(true);
+		lastName.setRequiredError("Search required");
+		lastName.setWidth(100, Unit.PERCENTAGE);
+		lastName.setId(id);
+		return lastName;
+	}
 
-	    return queryBean;
-	  }
+	private PopupDateField getDateField(String label, String id, String datePattern) {
+		PopupDateField dateField = new PopupDateField(label);
+		dateField.setId(id);
+		dateField.setWidth(9, Unit.EM);
+		dateField.setDateFormat(datePattern);
+		dateField.setRequired(false);
+		dateField.setEnabled(true);
+		return dateField;
+	}
 
 
+	public Query getSearchQuery() throws InvalidValueException {
+		// Commit the form to ensure validation is executed
 
+		Query queryBean = new Query();
+		queryBean.setSampleLocation(new Location());
+		populateQueryBean(queryBean, this);
 
-private void populateQueryBean(Query queryBean, AbstractOrderedLayout root) {
-	// Get values from fields defined for each form property
+		return queryBean;
+	}
 
-	for (int i=0;i<root.getComponentCount();i++) {
-	   Component component = root.getComponent(i);
-	  if(component instanceof Field) {
-	    Field field = (Field) component;
+	private void populateQueryBean(Query queryBean, AbstractOrderedLayout root) {
+		// Get values from fields defined for each form property
+
+		for (int i = 0; i < root.getComponentCount(); i++) {
+			Component component = root.getComponent(i);
+			if (component instanceof Field) {
+				Field field = (Field) component;
 
 				try {
-					PropertyUtils.setNestedProperty(queryBean,field.getId(),field.getValue());
+					PropertyUtils.setNestedProperty(queryBean, field.getId(), field.getValue());
 				} catch (IllegalAccessException | InvocationTargetException
 						| NoSuchMethodException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-	  }
-	  else if (component instanceof AbstractOrderedLayout)
-	  {
-		  populateQueryBean(queryBean, (AbstractOrderedLayout) component);
-	  }
+			} else if (component instanceof AbstractOrderedLayout) {
+				populateQueryBean(queryBean, (AbstractOrderedLayout) component);
+			}
 
+		}
 	}
-}
 
+	protected void initListeners() {
+		submitFormButton.addClickListener(new ClickListener() {
 
-protected void initListeners() {
-    submitFormButton.addClickListener(new ClickListener() {
+			private static final long serialVersionUID = -6091586145870618870L;
 
-      private static final long serialVersionUID = -6091586145870618870L;
+			public void buttonClick(ClickEvent event) {
+				// Extract the submitted values from the form. Throws exception when validation fails.
+				try {
+					Query queryBean = getSearchQuery();
+					fireEvent(new SearchFormEvent(SearchForm.this, SearchFormEvent.TYPE_SUBMIT, queryBean));
+					submitFormButton.setComponentError(null);
+				} catch (InvalidValueException ive) {
+					// Error is presented to user by the form component
+				}
+			}
+		});
+	}
 
-      public void buttonClick(ClickEvent event) {
-        // Extract the submitted values from the form. Throws exception when validation fails.
-        try {
-          Query queryBean= getSearchQuery();
-          fireEvent(new SearchFormEvent(SearchForm.this, SearchFormEvent.TYPE_SUBMIT,queryBean ));
-          submitFormButton.setComponentError(null);
-        } catch(InvalidValueException ive) {
-          // Error is presented to user by the form component
-        }
-      }
-    });
+	public void hideCancelButton() {
+		cancelFormButton.setVisible(false);
+	}
 
-    cancelFormButton.addClickListener(new ClickListener() {
-
-      private static final long serialVersionUID = -8980500491522472381L;
-
-      public void buttonClick(ClickEvent event) {
-        fireEvent(new SearchFormEvent(SearchForm.this, SearchFormEvent.TYPE_CANCEL));
-        submitFormButton.setComponentError(null);
-      }
-    });
-  }
-
-  public void hideCancelButton() {
-    cancelFormButton.setVisible(false);
-  }
-
-  protected void addEmptySpace(ComponentContainer container) {
-    Label emptySpace = new Label("&nbsp;", Label.CONTENT_XHTML);
-    emptySpace.setSizeUndefined();
-    container.addComponent(emptySpace);
-  }
+	protected void addEmptySpace(ComponentContainer container) {
+		Label emptySpace = new Label("&nbsp;", Label.CONTENT_XHTML);
+		emptySpace.setSizeUndefined();
+		container.addComponent(emptySpace);
+	}
 
 
 }
