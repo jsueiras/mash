@@ -174,6 +174,12 @@ window.mash_graph_Network = function () {
     var hoverNodeId = null;
     var selectionEdgeIds = [];
 
+    function showLabels(nodeIDs, edgeIDs) {
+        edgeIDs.forEach(function (edgeID) {
+            showEdgeLabel(edgeID);
+        });
+    }
+
     function blurLastHover() {
         if (hoverEdgeId != null) {
             onBlurEdge(hoverEdgeId);
@@ -191,9 +197,8 @@ window.mash_graph_Network = function () {
     }
 
     function onBlurEdge(edgeId) {
-        if (selectionEdgeIds.indexOf(edgeId) < 0) {
-            hideEdgeLabel(edgeId);
-        }
+        hideEdgeLabel(edgeId);
+        showLabels(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
     function onHoverNode(nodeId) {
@@ -207,10 +212,9 @@ window.mash_graph_Network = function () {
 
     function onBlurNode(nodeId) {
         network.getConnectedEdges(nodeId).forEach(function (edgeId) {
-            if (selectionEdgeIds.indexOf(edgeId) < 0) {
-                hideEdgeLabel(edgeId);
-            }
+            hideEdgeLabel(edgeId);
         });
+        showLabels(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
     function showEdgeLabel(edgeID) {
@@ -232,15 +236,13 @@ window.mash_graph_Network = function () {
     }
 
     function onSelect(nodeIDs, edgeIDs) {
+        blurLastHover();
         hoverEdgeId = null;
+
         selectionEdgeIds.forEach(function (edgeID) {
             hideEdgeLabel(edgeID);
         });
-        console.log(edgeIDs);
-        edgeIDs.forEach(function (edgeID) {
-            console.log(edgeID);
-            showEdgeLabel(edgeID);
-        });
+        showLabels(nodeIDs, edgeIDs)
         selectionEdgeIds = edgeIDs;
     }
 
@@ -305,6 +307,9 @@ window.mash_graph_Network = function () {
             onBlurNode(params.node);
         });
         network.on("select", function (params) {
+            onSelect(params.nodes, params.edges);
+        });
+        network.on("dragStart", function (params) {
             onSelect(params.nodes, params.edges);
         });
 
