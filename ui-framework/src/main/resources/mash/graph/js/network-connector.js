@@ -209,18 +209,25 @@ window.mash_graph_Network = function () {
     }
 
     // Handle changes from the server-side
-    function drawBadges(context) {
+    function drawBadges(canvasContext) {
         nodes.forEach(function (node) {
             console.log(node);
+            if (node.age > -1) {
+                var nodePosition = network.getPositions([node.id]);
+                var x = nodePosition[node.id].x + 20;
+                var y = nodePosition[node.id].y - 20;
+
+                canvasContext.strokeStyle = gray;
+                canvasContext.fillStyle = gray;
+                canvasContext.lineWidth = 4;
+                canvasContext.circle(x, y, 10);
+                canvasContext.fill();
+                canvasContext.stroke();
+
+                canvasContext.fillStyle = white;
+                canvasContext.fillText("" + node.age, x, y);
+            }
         });
-        //var nodeId = 1;
-        //var nodePosition = network.getPositions([nodeId]);
-        //context.strokeStyle = '#294475';
-        //context.lineWidth = 4;
-        //context.fillStyle = '#A6D5F7';
-        //context.circle(nodePosition[nodeId].x, nodePosition[nodeId].y, 20);
-        //context.fill();
-        //context.stroke();
     }
 
     // Handle changes in Vaadin layout
@@ -252,8 +259,8 @@ window.mash_graph_Network = function () {
             toggleSelectionLabels(params.nodes, params.edges);
         });
 
-        network.on("afterDrawing", function (context) {
-            drawBadges(context);
+        network.on("afterDrawing", function (canvasContext) {
+            drawBadges(canvasContext);
         });
 
         network.on('selectNode', function (params) {
