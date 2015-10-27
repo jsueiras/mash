@@ -110,8 +110,6 @@ public class NetworkBuilder {
 				group = Node.Group.FEMALES;
 			} else if ("male".equalsIgnoreCase(person.getGender())) {
 				group = Node.Group.MALES;
-			} else {
-				group = Node.Group.PERSONS;
 			}
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
