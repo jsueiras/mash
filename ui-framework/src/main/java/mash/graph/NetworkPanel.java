@@ -55,9 +55,9 @@ public class NetworkPanel extends VerticalSplitPanel {
 		Object value = runtimeService.getVariable(task.getProcessInstanceId(), TRIAGE_REASON);
 		if (value != null) {
 			TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
-			NetworkState networkState = reason.getNetworkState();
-			if (reason != null && networkState != null) {
-				network = new Network(networkState.nodes, networkState.edges);
+			
+			if (reason != null && reason.getNetworkState() != null) {
+				network = new Network(reason.getNetworkState().nodes, reason.getNetworkState().edges);
 				setFirstComponent(network);
 			}
 		}
