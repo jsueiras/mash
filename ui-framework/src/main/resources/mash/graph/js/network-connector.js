@@ -10,11 +10,14 @@ window.mash_graph_Network = function () {
     var lightRed = 'rgb(251,215,201)';
     var lightYellow = 'rgb(253,229,204)';
 
+    var edgeFontSize = 12;
+
     var options = {
         nodes: {
             color: gray,
             font: {
                 color: gray,
+                face: 'Open Sans',
                 strokeColor: white,
                 strokeWidth: 2,
             },
@@ -181,7 +184,7 @@ window.mash_graph_Network = function () {
         edges.update({
             id: edgeID,
             font: {
-                size: 12,
+                size: edgeFontSize,
             },
         });
     }
@@ -217,15 +220,16 @@ window.mash_graph_Network = function () {
                 var x = nodePosition[node.id].x + 20;
                 var y = nodePosition[node.id].y - 20;
 
-                canvasContext.strokeStyle = gray;
-                canvasContext.fillStyle = gray;
-                canvasContext.lineWidth = 4;
-                canvasContext.circle(x, y, 10);
-                canvasContext.fill();
-                canvasContext.stroke();
+                canvasContext.lineWidth = 2;
+                //canvasContext.strokeStyle = gray;
+                //canvasContext.fillStyle = gray;
+                //canvasContext.circle(x, y, 10);
+                //canvasContext.fill();
+                //canvasContext.stroke();
 
                 canvasContext.fillStyle = white;
-                canvasContext.fillText("" + node.age, x, y);
+                canvasContext.font = "" + edgeFontSize + "px 'Open Sans'";
+                canvasContext.fillText("" + node.age, nodePosition[node.id].x, nodePosition[node.id].y);
             }
         });
     }
