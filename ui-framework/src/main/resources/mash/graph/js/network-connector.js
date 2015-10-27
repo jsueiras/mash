@@ -170,21 +170,47 @@ window.mash_graph_Network = function () {
 
     var container = self.getElement();
     var network = null;
-    var hoverEdgeID = null
-    var selectionEdgeIDs = [];
+    var hoverEdgeId = null;
+    var hoverNodeId = null;
+    var selectionEdgeIds = [];
 
-    function showHoverLabel(edgeID) {
-        if (hoverEdgeID != null) {
-            hideHoverLabel(hoverEdgeID);
+    function blurLastHover() {
+        if (hoverEdgeId != null) {
+            onBlurEdge(hoverEdgeId);
         }
-        hoverEdgeID = edgeID;
-        showEdgeLabel(edgeID);
+        if (hoverNodeId != null) {
+            onBlurNode(hoverNodeId);
+        }
     }
 
-    function hideHoverLabel(edgeID) {
-        if (selectionEdgeIDs.indexOf(edgeID) < 0) {
-            hideEdgeLabel(edgeID);
+    function onHoverEdge(edgeId) {
+        blurLastHover();
+
+        hoverEdgeId = edgeId;
+        showEdgeLabel(edgeId);
+    }
+
+    function onBlurEdge(edgeId) {
+        if (selectionEdgeIds.indexOf(edgeId) < 0) {
+            hideEdgeLabel(edgeId);
         }
+    }
+
+    function onHoverNode(nodeId) {
+        blurLastHover();
+
+        hoverNodeId = nodeId;
+        network.getConnectedEdges(nodeId).forEach(function (edgeId) {
+            showEdgeLabel(edgeId);
+        });
+    }
+
+    function onBlurNode(nodeId) {
+        network.getConnectedEdges(nodeId).forEach(function (edgeId) {
+            if (selectionEdgeIds.indexOf(edgeId) < 0) {
+                hideEdgeLabel(edgeId);
+            }
+        });
     }
 
     function showEdgeLabel(edgeID) {
@@ -205,21 +231,21 @@ window.mash_graph_Network = function () {
         });
     }
 
-    function toggleSelectionLabels(nodeIDs, edgeIDs) {
-        hoverEdgeID = null;
-        selectionEdgeIDs.map(function (edgeID) {
+    function onSelect(nodeIDs, edgeIDs) {
+        hoverEdgeId = null;
+        selectionEdgeIds.forEach(function (edgeID) {
             hideEdgeLabel(edgeID);
         });
         console.log(edgeIDs);
-        edgeIDs.map(function (edgeID) {
+        edgeIDs.forEach(function (edgeID) {
             console.log(edgeID);
             showEdgeLabel(edgeID);
         });
-        selectionEdgeIDs = edgeIDs;
+        selectionEdgeIds = edgeIDs;
     }
 
-    // Handle changes from the server-side
-    function drawBadges(canvasContext) {
+    // draw badges after vis.js finishes drawing
+    function onAfterDrawing(canvasContext) {
         nodes.forEach(function (node) {
             console.log(node);
             if (node.age > -1) {
@@ -246,7 +272,7 @@ window.mash_graph_Network = function () {
         network.redraw();
     });
 
-    self.add = function(newNodes, newEdges) {
+    self.add = function (newNodes, newEdges) {
         nodes.add(newNodes);
         edges.add(newEdges);
     }
@@ -267,17 +293,23 @@ window.mash_graph_Network = function () {
         network = new vis.Network(container, data, options);
 
         network.on("hoverEdge", function (params) {
-            showHoverLabel(params.edge);
+            onHoverEdge(params.edge);
         });
         network.on("blurEdge", function (params) {
-            hideHoverLabel(params.edge);
+            onBlurEdge(params.edge);
+        });
+        network.on("hoverNode", function (params) {
+            onHoverNode(params.node);
+        });
+        network.on("blurNode", function (params) {
+            onBlurNode(params.node);
         });
         network.on("select", function (params) {
-            toggleSelectionLabels(params.nodes, params.edges);
+            onSelect(params.nodes, params.edges);
         });
 
         network.on("afterDrawing", function (canvasContext) {
-            drawBadges(canvasContext);
+            onAfterDrawing(canvasContext);
         });
 
         network.on('selectNode', function (params) {
