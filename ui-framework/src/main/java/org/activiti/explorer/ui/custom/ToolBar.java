@@ -18,15 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.explorer.ui.custom.ToolbarEntry.ToolbarCommand;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
-
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 
 /**
  * Container for holding {@link ToolbarEntry}s.
@@ -34,7 +29,7 @@ import com.vaadin.ui.Label;
  * @author Frederik Heremans
  * @author Joram Barrez
  */
-public class ToolBar extends HorizontalLayout {
+public class ToolBar extends CssLayout {
 
   private static final long serialVersionUID = 7957488256766569264L;
 
@@ -50,17 +45,7 @@ public class ToolBar extends HorizontalLayout {
     additionalComponents = new ArrayList<Component>();
 
     setWidth("100%");
-    setHeight(36, UNITS_PIXELS);
     addStyleName(ExplorerLayout.STYLE_TOOLBAR);
-    setSpacing(true);
-    //setMargin(false, true, false, true);
-
-    // Add label to fill excess space
-    Label spacer = new Label();
-    spacer.setContentMode(Label.CONTENT_XHTML);
-    spacer.setValue("&nbsp;");
-    addComponent(spacer);
-    setExpandRatio(spacer, 1.0f);
   }
 
   /**
@@ -107,7 +92,6 @@ public class ToolBar extends HorizontalLayout {
     actionButtons.add(button);
     // Button is added after the spacer
     addComponent(button);
-    setComponentAlignment(button, Alignment.MIDDLE_RIGHT);
   }
 
   public void removeAllButtons() {
@@ -171,8 +155,7 @@ public class ToolBar extends HorizontalLayout {
   }
 
   protected void addEntryComponent(ToolbarEntry entry) {
-    addComponent(entry, getComponentCount() - 1 - actionButtons.size());
-    setComponentAlignment(entry, Alignment.MIDDLE_LEFT);
+    addComponentAsFirst(entry);
   }
 
   public String getCurrentEntryKey() {
