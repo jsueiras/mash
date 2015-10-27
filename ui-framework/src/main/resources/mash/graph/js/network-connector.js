@@ -1,16 +1,23 @@
 window.mash_graph_Network = function () {
-    var gray = 'rgb(106,116,124)';
     var white = 'rgb(255,255,255)';
-    var blue = 'rgb(11,87,163)';
-    var green = 'rgb(84,183,78)';
-    var red = 'rgb(236,66,60)';
-    var yellow = 'rgb(245,143,49)';
-    var lightBlue = 'rgb(211,216,236)';
-    var lightGreen = 'rgb(220,237,213)';
-    var lightRed = 'rgb(251,215,201)';
-    var lightYellow = 'rgb(253,229,204)';
+
+    var gray = 'rgb(105,116,123)';
+    var lightGray = 'rgb(215,220,220)';
+
+    var red = 'rgb(248,58,58)';
+    var lightRed = 'rgb(255,214,202)';
+
+    var green = 'rgb(55,185,90)';
+    var lightGreen = 'rgb(218,237,214)';
+
+    var blue = 'rgb(0,86,159)';
+    var lightBlue = 'rgb(211,216,235)';
+
+    var orange = 'rgb(253,141,58)';
+    var lightOrange = 'rgb(255,229,205)';
 
     var edgeFontSize = 12;
+    var badgeSize = 14;
     var fontStrokeWidth = 2;
 
     var options = {
@@ -23,7 +30,7 @@ window.mash_graph_Network = function () {
                 strokeWidth: fontStrokeWidth,
             },
             shadow: {
-                enabled: true,
+                enabled: false,
                 size: 4,
                 x: 0,
                 y: 1,
@@ -47,63 +54,63 @@ window.mash_graph_Network = function () {
         groups: {
             FEMALES: {
                 color: {
-                    border: lightRed,
+                    border: lightOrange,
                     highlight: {
-                        border: red,
+                        border: orange,
                     },
                 },
                 font: {
-                    color: red,
+                    color: orange,
                 },
                 icon: {
                     code: '\uf182',
-                    color: red,
+                    color: lightOrange,
                 },
             },
             FEMALES_UNEXPLORED: {
                 color: {
-                    border: lightRed,
+                    border: lightGray,
                     highlight: {
-                        border: red,
+                        border: gray,
                     },
                 },
                 font: {
-                    color: red,
+                    color: gray,
                 },
                 icon: {
                     code: '\uf182',
-                    color: lightRed,
+                    color: lightGray,
                 },
                 shadow: false,
             },
             MALES: {
                 color: {
-                    border: lightBlue,
+                    border: lightOrange,
                     highlight: {
-                        border: blue,
+                        border: orange,
                     },
                 },
                 font: {
-                    color: blue,
+                    color: orange,
                 },
                 icon: {
                     code: '\uf183',
-                    color: blue,
+                    color: orange,
                 },
             },
             MALES_UNEXPLORED: {
                 color: {
-                    border: lightBlue,
+                    border: lightGray,
                     highlight: {
-                        border: blue,
+                        border: gray,
                     },
                 },
                 font: {
-                    color: blue,
+                    color: gray,
                 },
                 icon: {
                     code: '\uf183',
-                    color: lightBlue,
+                    color: lightGray,
                 },
                 shadow: false,
             },
@@ -124,16 +131,16 @@ window.mash_graph_Network = function () {
             },
             LOCATIONS_UNEXPLORED: {
                 color: {
-                    border: lightGreen,
+                    border: lightGray,
                     highlight: {
-                        border: green,
+                        border: gray,
                     },
                 },
                 font: {
-                    color: green,
+                    color: gray,
                 },
                 icon: {
-                    color: lightGreen,
+                    color: lightGray,
                     code: '\uf015',
                 },
                 shadow: false,
@@ -246,10 +253,15 @@ window.mash_graph_Network = function () {
         selectionEdgeIds = edgeIDs;
     }
 
-    // draw badges after vis.js finishes drawing
+    // draw before vis.js finishes drawing
+    function onBeforeDrawing(canvasContext) {
+    }
+
+    // draw after vis.js finishes drawing
     function onAfterDrawing(canvasContext) {
         nodes.forEach(function (node) {
-            console.log(node);
+            var nodePosition = network.getPositions([node.id]);
+
             if (node.age > -1) {
                 var nodePosition = network.getPositions([node.id]);
                 var x = nodePosition[node.id].x + 20;
@@ -265,6 +277,14 @@ window.mash_graph_Network = function () {
                 canvasContext.fillStyle = white;
                 canvasContext.font = "" + edgeFontSize + "px 'Open Sans'";
                 canvasContext.fillText("" + node.age, nodePosition[node.id].x, nodePosition[node.id].y);
+            }
+
+            if (node.primary) {
+                canvasContext.lineWidth = fontStrokeWidth;
+                canvasContext.fillStyle = red;
+                canvasContext.font = "" + badgeSize + "px 'FontAwesome'";
+                var offset = 20;
+                canvasContext.fillText("\uf132", nodePosition[node.id].x + offset, nodePosition[node.id].y - offset);
             }
         });
     }
@@ -313,6 +333,9 @@ window.mash_graph_Network = function () {
             onSelect(params.nodes, params.edges);
         });
 
+        network.on("beforeDrawing", function (canvasContext) {
+            onBeforeDrawing(canvasContext);
+        });
         network.on("afterDrawing", function (canvasContext) {
             onAfterDrawing(canvasContext);
         });
