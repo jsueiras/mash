@@ -30,7 +30,7 @@ window.mash_graph_Network = function () {
                 strokeWidth: fontStrokeWidth,
             },
             shadow: {
-                enabled: false,
+                enabled: true,
                 size: 4,
                 x: 0,
                 y: 1,
