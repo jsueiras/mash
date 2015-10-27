@@ -5,16 +5,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 
 public class Node implements Serializable {
-	
-	private static final long serialVersionUID = -2561388826782706977L;
-
-	public enum Group {
+	public static enum Group {
 		FEMALES, FEMALES_UNDERAGE, MALES, MALES_UNDERAGE, PERSONS, LOCATIONS, AGE;
 	}
+
+	private static final long serialVersionUID = -2561388826782706977L;
 
 	public final String id;
 	public String label;
 	public Group group;
+	public int age;
 
 	public Node(String id) {
 		if (id == null) {

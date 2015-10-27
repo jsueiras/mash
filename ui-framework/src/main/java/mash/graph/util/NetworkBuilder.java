@@ -21,16 +21,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class NetworkBuilder {
 
 	private static final String LIVES_AT = "lives at";
-	private static final Set<String> nondirecctionalSet = new HashSet<String>();
+	private static final Set<String> nondirectionalSet = new HashSet<String>();
 
-	static
-	{
-		nondirecctionalSet.add("married");
-		nondirecctionalSet.add("sibiling");
-		nondirecctionalSet.add("friend");
-		nondirecctionalSet.add("divorced");
-		nondirecctionalSet.add("partner");
-		nondirecctionalSet.add("cousin");
+	static {
+		nondirectionalSet.add("married");
+		nondirectionalSet.add("sibiling");
+		nondirectionalSet.add("friend");
+		nondirectionalSet.add("divorced");
+		nondirectionalSet.add("partner");
+		nondirectionalSet.add("cousin");
 	}
 
 	private String getLabel(Person person) {
@@ -61,7 +60,6 @@ public class NetworkBuilder {
 			for (Relation relation : person.getHousehold().getRelations()) {
 				Person relatedPerson = relation.getPerson();
 				state.nodes.add(createNode(relatedPerson));
-				appendAge(state, relatedPerson);
 				state.edges.add(createEdge(person, relation.getPerson(), relation.getType()));
 
 			}
@@ -72,24 +70,7 @@ public class NetworkBuilder {
 			state.nodes.add(createNode(location));
 			state.edges.add(createEdge(person, location, LIVES_AT));
 		}
-		appendAge(state, person);
 	}
-
-	private void appendAge(NetworkState state, Person person) {
-		XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
-		int age = age(dateOfBirth);
-		String personId = person.getId();
-		String ageId = "age-" + personId;
-
-		Node ageNode = new Node(ageId, "" + age, Node.Group.AGE);
-		state.nodes.add(ageNode);
-
-		Edge ageEdge = new Edge(personId, ageId, "age");
-		ageEdge.length = 0;
-		ageEdge.arrows.to = false;
-		state.edges.add(ageEdge);
-	}
-
 
 	private void appendNode(NetworkState state, Location location) {
 
@@ -97,7 +78,7 @@ public class NetworkBuilder {
 
 		for (Occupant occupant : location.getOccupants()) {
 			state.nodes.add(createNode(occupant.getPerson()));
-			state.edges.add(createEdge( occupant.getPerson(),location, LIVES_AT));
+			state.edges.add(createEdge(occupant.getPerson(), location, LIVES_AT));
 		}
 
 	}
@@ -114,49 +95,44 @@ public class NetworkBuilder {
 
 	private Edge createEdge(Entity source, Entity target, String label) {
 		Edge edge = new Edge(getId(source), getId(target), label.toLowerCase());
-		edge.arrows.to = !isBidirecctional(label);
+		edge.arrows.to = !isBidirectional(label);
 		return edge;
 	}
 
 	private Node createNode(Entity entity) {
 		Node.Group group = Node.Group.LOCATIONS;
+		int age = -1;
 		if (entity instanceof Person) {
 			Person person = (Person) entity;
 			XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
-			boolean underAge = isUnderAge(dateOfBirth);
+			age = age(dateOfBirth);
 			if ("female".equalsIgnoreCase(person.getGender())) {
-				group = underAge ? Node.Group.FEMALES_UNDERAGE : Node.Group.FEMALES;
+				group = Node.Group.FEMALES;
 			} else if ("male".equalsIgnoreCase(person.getGender())) {
-				group = underAge ? Node.Group.MALES_UNDERAGE : Node.Group.MALES;
+				group = Node.Group.MALES;
 			} else {
 				group = Node.Group.PERSONS;
 			}
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
+		node.age = age;
 		return node;
 	}
 
-
-	private boolean isBidirecctional(String type)
-	{
-		return nondirecctionalSet.contains(type.toLowerCase());
-	}
-
-	private boolean isUnderAge(XMLGregorianCalendar dateOfBirth) {
-
-		boolean underAge = false;
-		if  (dateOfBirth!=null)
-
-			underAge=Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
-						LocalDate.now()).getYears() < 18;
-		return underAge;
+	private boolean isBidirectional(String type) {
+		return nondirectionalSet.contains(type.toLowerCase());
 	}
 
 	private int age(XMLGregorianCalendar dateOfBirth) {
-		return Period.between(LocalDate.of(dateOfBirth.getYear(), dateOfBirth.getMonth(), dateOfBirth.getDay()),
-				LocalDate.now()).getYears();
+		if (dateOfBirth != null) {
+			int year = dateOfBirth.getYear();
+			int month = dateOfBirth.getMonth();
+			int day = dateOfBirth.getDay();
+			return Period.between(LocalDate.of(year, month, day), LocalDate.now()).getYears();
+		} else {
+			return -1;
+		}
 	}
-
 
 	public NetworkState initNetworkState(List<Entity> entities) {
 		NetworkState state = new NetworkState();

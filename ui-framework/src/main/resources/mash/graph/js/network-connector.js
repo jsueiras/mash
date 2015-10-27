@@ -210,7 +210,9 @@ window.mash_graph_Network = function () {
 
     // Handle changes from the server-side
     function drawBadges(context) {
-
+        nodes.forEach(function (node) {
+            console.log(node);
+        });
         //var nodeId = 1;
         //var nodePosition = network.getPositions([nodeId]);
         //context.strokeStyle = '#294475';
