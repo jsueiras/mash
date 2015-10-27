@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.vaadin.server.FontAwesome;
 
+import com.vaadin.server.Resource;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
@@ -48,6 +49,7 @@ import org.activiti.explorer.ui.task.data.UnassignedListQuery;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import org.apache.batik.svggen.font.Font;
 
 /**
  * The menu bar which is shown when 'Tasks' is selected in the main menu.
@@ -63,8 +65,8 @@ public class TaskMenuBar extends ToolBar {
   public static final String ENTRY_INBOX = "inbox";
   public static final String ENTRY_UNASSIGNED = "unassigned";
   public static final String ENTRY_NEW = "new";
- 
-  
+
+
   public static final String ENTRY_QUEUED = "queued";
   public static final String ENTRY_INVOLVED = "involved";
   public static final String ENTRY_ARCHIVED = "archived";
@@ -104,7 +106,7 @@ private ProcessDefinition mashDefinition;
     LoggedInUser user = ExplorerApp.get().getLoggedInUser();
 
     // TODO: the counts should be done later by eg a Refresher component
-    
+
     // Inbox
     long inboxCount = new InboxListQuery(user.getId()).size();
     ToolbarEntry inboxEntry = addToolbarEntry(ENTRY_INBOX, i18nManager.getMessage(Messages.TASK_MENU_INBOX), new ToolbarCommand() {
@@ -139,36 +141,37 @@ private ProcessDefinition mashDefinition;
         viewManager.showPopupWindow(searchPopupWindow);
       }
     });
-    
-    addProcessButton( "New Triage", triageDefinition);
-    addProcessButton( "Open Triage", mashDefinition);
-	
-	
+
+    addProcessButton( "New Triage", FontAwesome.PLUS, triageDefinition);
+    addProcessButton( "Open Triage", FontAwesome.FOLDER_OPEN, mashDefinition);
+
+
   }
 
-private void addProcessButton(String label, ProcessDefinition processDef) {
+private void addProcessButton(String label, Resource icon, ProcessDefinition processDef) {
 	Button newTriage = new Button();
+	newTriage.setIcon(icon);
     newTriage.setCaption(label);
     newTriage.setHtmlContentAllowed(true);
     addButton(newTriage);
 
     ProcessDefinitionPage processDefinitionPage;
-	
+
 	newTriage.addClickListener(new StartProcessInstanceClickListener(processDef, taskPage));
 }
 
 private void initProcessesDefinition() {
-	
+
 	triageDefinition = repositoryService
     .createProcessDefinitionQuery()
     .latestVersion()
     .active().processDefinitionKey("triage").list().get(0);
-	
+
 	mashDefinition = repositoryService
 		    .createProcessDefinitionQuery()
 		    .latestVersion()
 		    .active().processDefinitionKey("mash").list().get(0);
-	
+
 }
 
 }
