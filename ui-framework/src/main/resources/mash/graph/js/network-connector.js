@@ -11,6 +11,7 @@ window.mash_graph_Network = function () {
     var lightYellow = 'rgb(253,229,204)';
 
     var edgeFontSize = 12;
+    var fontStrokeWidth = 2;
 
     var options = {
         nodes: {
@@ -19,7 +20,7 @@ window.mash_graph_Network = function () {
                 color: gray,
                 face: 'Open Sans',
                 strokeColor: white,
-                strokeWidth: 2,
+                strokeWidth: fontStrokeWidth,
             },
             shadow: {
                 enabled: true,
@@ -40,17 +41,10 @@ window.mash_graph_Network = function () {
                 color: gray,
                 size: 0,
                 strokeColor: white,
-                strokeWidth: 2,
+                strokeWidth: fontStrokeWidth,
             },
         },
         groups: {
-            AGE: {
-                shape: 'circle',
-                color: {
-                    background: lightYellow,
-                    border: lightYellow,
-                },
-            },
             FEMALES: {
                 color: {
                     border: lightRed,
@@ -65,6 +59,22 @@ window.mash_graph_Network = function () {
                     code: '\uf182',
                     color: red,
                 },
+            },
+            FEMALES_UNEXPLORED: {
+                color: {
+                    border: lightRed,
+                    highlight: {
+                        border: red,
+                    },
+                },
+                font: {
+                    color: red,
+                },
+                icon: {
+                    code: '\uf182',
+                    color: lightRed,
+                },
+                shadow: false,
             },
             MALES: {
                 color: {
@@ -81,22 +91,7 @@ window.mash_graph_Network = function () {
                     color: blue,
                 },
             },
-            FEMALES_UNDERAGE: {
-                color: {
-                    border: lightRed,
-                    highlight: {
-                        border: red,
-                    },
-                },
-                font: {
-                    color: red,
-                },
-                icon: {
-                    code: '\uf182',
-                    color: lightRed,
-                },
-            },
-            MALES_UNDERAGE: {
+            MALES_UNEXPLORED: {
                 color: {
                     border: lightBlue,
                     highlight: {
@@ -110,11 +105,7 @@ window.mash_graph_Network = function () {
                     code: '\uf183',
                     color: lightBlue,
                 },
-            },
-            PERSONS: {
-                icon: {
-                    code: '\uf007',
-                },
+                shadow: false,
             },
             LOCATIONS: {
                 color: {
@@ -131,6 +122,22 @@ window.mash_graph_Network = function () {
                     code: '\uf015',
                 },
             },
+            LOCATIONS_UNEXPLORED: {
+                color: {
+                    border: lightGreen,
+                    highlight: {
+                        border: green,
+                    },
+                },
+                font: {
+                    color: green,
+                },
+                icon: {
+                    color: lightGreen,
+                    code: '\uf015',
+                },
+                shadow: false,
+            },
         },
         interaction: {
             hover: true
@@ -144,7 +151,7 @@ window.mash_graph_Network = function () {
             forceAtlas2Based: {
                 //gravitationalConstant: -50,
                 //centralGravity: 0.01,
-                //springConstant: 0.01,
+                //springConstant: 0.08,
                 //springLength: 100,
                 //damping: 0.4,
                 //avoidOverlap: 0,
@@ -220,7 +227,7 @@ window.mash_graph_Network = function () {
                 var x = nodePosition[node.id].x + 20;
                 var y = nodePosition[node.id].y - 20;
 
-                canvasContext.lineWidth = 2;
+                canvasContext.lineWidth = fontStrokeWidth;
                 //canvasContext.strokeStyle = gray;
                 //canvasContext.fillStyle = gray;
                 //canvasContext.circle(x, y, 10);
