@@ -10,7 +10,6 @@ window.mash_graph_Network = function () {
     var lightRed = 'rgb(251,215,201)';
     var lightYellow = 'rgb(253,229,204)';
 
-    var container = null;
     var options = {
         nodes: {
             color: gray,
@@ -150,16 +149,19 @@ window.mash_graph_Network = function () {
         },
     }
 
+    var self = this;
+
     var nodes = new vis.DataSet([]);
     var edges = new vis.DataSet([]);
     var data = {
         nodes: nodes,
-        edges: edges
+        edges: edges,
     };
 
+    var container = self.getElement();
     var network = null;
     var hoverEdgeID = null
-    var selectionEdgeIDs = {};
+    var selectionEdgeIDs = [];
 
     function showHoverLabel(edgeID) {
         if (hoverEdgeID != null) {
@@ -195,11 +197,9 @@ window.mash_graph_Network = function () {
 
     function toggleSelectionLabels(nodeIDs, edgeIDs) {
         hoverEdgeID = null;
-        if (selectionEdgeIDs.length > 0) {
-            selectionEdgeIDs.map(function (edgeID) {
-                hideEdgeLabel(edgeID);
-            });
-        }
+        selectionEdgeIDs.map(function (edgeID) {
+            hideEdgeLabel(edgeID);
+        });
         console.log(edgeIDs);
         edgeIDs.map(function (edgeID) {
             console.log(edgeID);
@@ -208,11 +208,21 @@ window.mash_graph_Network = function () {
         selectionEdgeIDs = edgeIDs;
     }
 
-    var self = this;
-    container = self.getElement();
+    // Handle changes from the server-side
+    function drawBadges(context) {
+
+        //var nodeId = 1;
+        //var nodePosition = network.getPositions([nodeId]);
+        //context.strokeStyle = '#294475';
+        //context.lineWidth = 4;
+        //context.fillStyle = '#A6D5F7';
+        //context.circle(nodePosition[nodeId].x, nodePosition[nodeId].y, 20);
+        //context.fill();
+        //context.stroke();
+    }
 
     // Handle changes in Vaadin layout
-    self.addResizeListener(self.getElement(), function () {
+    self.addResizeListener(container, function () {
         network.redraw();
     });
 
@@ -239,11 +249,16 @@ window.mash_graph_Network = function () {
         network.on("select", function (params) {
             toggleSelectionLabels(params.nodes, params.edges);
         });
-        network.on('selectNode',function(params){
+
+        network.on("afterDrawing", function (context) {
+            drawBadges(context);
+        });
+
+        network.on('selectNode', function (params) {
             // Server callback
             self.onSelectNode(params);
         });
 
         network.redraw();
-    }
+    };
 }
