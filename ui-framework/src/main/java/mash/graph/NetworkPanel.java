@@ -122,7 +122,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 			primaryLinks = getPersonPrimaryLinks(id);
 			builder.addNodesToNetwork(state, primaryLinks);
 		}
-		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state));
+		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state,primaryLinks));
 
 		return new Network(state.nodes, state.edges);
 

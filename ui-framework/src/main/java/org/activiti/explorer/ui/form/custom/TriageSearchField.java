@@ -1,6 +1,7 @@
 package org.activiti.explorer.ui.form.custom;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,11 +11,19 @@ import mash.graph.NetworkState;
 
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.ui.Images;
+import org.activiti.explorer.ui.form.custom.TriageSearchValue.TriagePersonSummary;
 import org.activiti.explorer.ui.search.SearchPopupWindow;
 import org.activiti.explorer.ui.search.SearchTabEvent;
 import org.activiti.explorer.ui.search.SearchTabEventListener;
+import org.apache.commons.collections.functors.TransformerClosure;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.target.HotSwappableTargetSource;
+import org.springframework.cglib.core.CollectionUtils;
+import org.springframework.cglib.core.Predicate;
+import org.springframework.cglib.core.Transformer;
 
+import com.mash.model.catalog.Location;
+import com.mash.model.catalog.Person;
 import com.vaadin.client.ui.Field;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -43,6 +52,7 @@ public class TriageSearchField extends CustomField<String> {
 	private SearchTabEventListener searchListener;
 	private String label;
 	private NetworkState networkState;
+	private List<TriagePersonSummary> subjects;
 
 	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
 		this.values = values;
@@ -62,25 +72,25 @@ public class TriageSearchField extends CustomField<String> {
 	protected Component initContent() {
 
 
-		HorizontalLayout horizontalLayout = new HorizontalLayout();
-		horizontalLayout.setSpacing(true);
-		horizontalLayout.setWidth(100, Unit.PERCENTAGE);
+		VerticalLayout overallLayout = new VerticalLayout();
+		overallLayout.setSpacing(true);
+		overallLayout.setWidth(100, Unit.PERCENTAGE);
 		initCombo();
 		initActions();
 
-		horizontalLayout.addComponent(comboBox);
-		horizontalLayout.setExpandRatio(comboBox, 1);
+		overallLayout.addComponent(comboBox);
+		overallLayout.setExpandRatio(comboBox, 1);
 		comboBox.setWidth(100, Unit.PERCENTAGE);
 
-		horizontalLayout.addComponent(searchButton);
-		horizontalLayout.setExpandRatio(searchButton, 0);
+		overallLayout.addComponent(searchButton);
+		overallLayout.setExpandRatio(searchButton, 0);
 
-		return horizontalLayout;
+		return overallLayout;
 	}
 
 	  protected  void initActions() {
 		    searchButton = new Button();
-		    searchButton.setCaption("Search");
+		    searchButton.setCaption("Search subjects");
 		    searchButton.setIcon(FontAwesome.SEARCH);
 		    searchButton.setEnabled(false);
 
@@ -159,7 +169,7 @@ public class TriageSearchField extends CustomField<String> {
 
 	 @Override
 	 public String getValue(){
-		 return new TriageSearchValue( (String)comboBox.getValue(), networkState).objectToString();
+		 return new TriageSearchValue( (String)comboBox.getValue(), networkState,subjects).objectToString();
 	 }
 
 
@@ -167,9 +177,54 @@ public class TriageSearchField extends CustomField<String> {
 	 {
 		 return new NetworkChangeListener() {
 
+		/**
+			 * 
+			 */
+			private static final long serialVersionUID = -8340156883977266632L;
+
 		@Override
 		protected void handleNetworkChange(NetworkChangeEvent event) {
 			networkState = event.getNewState();
+		    subjects = CollectionUtils.transform( 
+		    CollectionUtils.filter(event.getPrimaryLinks(), new Predicate() {	
+				@Override
+				public boolean evaluate(Object arg0) {
+					// TODO Auto-generated method stub
+					return arg0 instanceof Person;
+				}
+			}), new Transformer(){
+
+		    	private String tranformAddress(Person person)
+		    	{
+		    	    String address = "";
+		    	   if (person.getHomeAddress() !=null && person.getHomeAddress().getLocation()!=null )
+		    	   {
+		    		   Location location= person.getHomeAddress().getLocation();
+		    		   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
+		    	   }	   
+		    	   return address;
+		    	}
+		    	
+		    	private String getValue(String s)
+		    	{
+		    		return (s!=null)?s:"";
+		    	}
+		    
+				@Override
+				public Object transform(Object arg0) {
+					// TODO Auto-generated method stub
+					Person person = (Person)arg0;
+					TriagePersonSummary summary = new TriagePersonSummary();
+					summary.setFirstName(person.getFirstName());
+					summary.setLastName(person.getLastName());
+					if (person.getDateOfBirth()!=null)
+					{
+						summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
+					}	
+					summary.setHomeAddress(tranformAddress(person));
+					return summary;
+				}});
+			
 		}
 
 
