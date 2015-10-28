@@ -13,6 +13,8 @@
 package org.activiti.explorer.ui.login;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.explorer.ExplorerApp;
@@ -22,14 +24,8 @@ import org.activiti.explorer.identity.LoggedInUser;
 import org.springframework.web.util.HtmlUtils;
 
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 
@@ -60,8 +56,9 @@ public class ExplorerLoginForm extends VerticalLayout implements ClickListener {
   protected static final String STYLE_LOGIN_BUTTON = "login-button";
 
   public ExplorerLoginForm() {
-	  // setMargin(true);
-	  this.setSizeFull();
+	  setSizeFull();
+	  setId("explorer-login-form");
+	  setIcon(new ThemeResource("branding/mash logo only.png"));
 
 	  I18nManager i18nManager = ExplorerApp.get().getI18nManager();
 	  loginHandler = ExplorerApp.get().getLoginHandler();
@@ -69,10 +66,8 @@ public class ExplorerLoginForm extends VerticalLayout implements ClickListener {
 	  passwordCaption = HtmlUtils.htmlEscape(i18nManager.getMessage(Messages.LOGIN_PASSWORD));
 	  submitCaption = HtmlUtils.htmlEscape(i18nManager.getMessage(Messages.LOGIN_BUTTON));
 
-
-	  Label title = new Label(i18nManager.getMessage(Messages.LOGIN_TITLE));
-	  title.addStyleName(Reindeer.LABEL_H1);
-
+	  Image title = new Image(null, new ThemeResource("branding/mash logo only.png"));
+	  title.setWidth(300, Unit.PIXELS);
 
 	  // Create the user input field
 	  user = new TextField(usernameCaption);
@@ -94,13 +89,14 @@ public class ExplorerLoginForm extends VerticalLayout implements ClickListener {
 	  loginButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
 
 	  VerticalLayout fields = new VerticalLayout();
+	  fields.setId("fields");
 
 	  fields.addComponent(title);
 	  fields.addComponent(user);
 	  fields.addComponent(password);
 	  fields.addComponent(loginButton);
 	  fields.setSpacing(true);
-	  fields.setMargin(new MarginInfo(true, true, true, false));
+	  fields.setMargin(false);
 	  fields.setSizeUndefined();
 	  addComponent(fields);
 	  setComponentAlignment(fields, Alignment.MIDDLE_CENTER);

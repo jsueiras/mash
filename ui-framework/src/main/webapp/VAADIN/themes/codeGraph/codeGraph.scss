@@ -6,4 +6,10 @@
   .group {
     @include valo-horizontallayout-wrapping-style();
   }
+
+  #explorer-login-form,
+  .header {
+    background-image: url('branding/MASH powerpoint.jpg');
+    background-size: cover;
+  }
 }

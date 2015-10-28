@@ -16,6 +16,8 @@ package org.activiti.explorer.ui.mainlayout;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.*;
 import org.activiti.explorer.Environments;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
@@ -26,13 +28,8 @@ import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.profile.ChangePasswordPopupWindow;
 
 import com.vaadin.server.Resource;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ChameleonTheme;
@@ -84,44 +81,15 @@ public class MainMenuBar extends HorizontalLayout {
     //setMargin(false, true, false, false);
 
     initTitle();
-    initButtons();
     initProfileButton();
   }
 
-  protected void initButtons() {
-    // TODO: fixed widths based on i18n strings?
-    Button taskButton = addMenuButton(ViewManager.MAIN_NAVIGATION_TASK, i18nManager.getMessage(Messages.MAIN_MENU_TASKS), Images.MAIN_MENU_TASKS, false, 80);
-    taskButton.addClickListener(new ShowTasksClickListener());
-    menuItemButtons.put(ViewManager.MAIN_NAVIGATION_TASK, taskButton);
-
-    Button processButton = addMenuButton(ViewManager.MAIN_NAVIGATION_PROCESS, i18nManager.getMessage(Messages.MAIN_MENU_PROCESS), Images.MAIN_MENU_PROCESS, false, 80);
-    processButton.addClickListener(new ShowProcessDefinitionsClickListener());
-    menuItemButtons.put(ViewManager.MAIN_NAVIGATION_PROCESS, processButton);
-
-    Button reportingButton = addMenuButton(ViewManager.MAIN_NAVIGATION_REPORT, i18nManager.getMessage(Messages.MAIN_MENU_REPORTS), Images.MAIN_MENU_REPORTS, false, 80);
-    reportingButton.addClickListener(new ShowReportsClickListener());
-    menuItemButtons.put(ViewManager.MAIN_NAVIGATION_REPORT, reportingButton);
-//
-//    if (ExplorerApp.get().getLoggedInUser().isAdmin()) {
-//      Button manageButton = addMenuButton(ViewManager.MAIN_NAVIGATION_MANAGE, i18nManager.getMessage(Messages.MAIN_MENU_MANAGEMENT), Images.MAIN_MENU_MANAGE, false, 90);
-//      manageButton.addListener(new ShowManagementClickListener());
-//      menuItemButtons.put(ViewManager.MAIN_NAVIGATION_MANAGE, manageButton);
-//    }
-  }
-
   protected void initTitle() {
-    Label title = new Label();
-    title.addStyleName(Reindeer.LABEL_H1);
-
-    if (ExplorerApp.get().getEnvironment().equals(Environments.ALFRESCO)) {
-      title.addStyleName(ExplorerLayout.STYLE_WORKFLOW_CONSOLE_LOGO);
-    } else {
-      title.addStyleName(ExplorerLayout.STYLE_APPLICATION_LOGO);
-    }
-
+    Image title = new Image(null, new ThemeResource("branding/mash logo only.png"));
+    title.setHeight(60, Unit.PIXELS);
+    title.addStyleName(ExplorerLayout.STYLE_APPLICATION_LOGO);
     addComponent(title);
-
-    setExpandRatio(title, 1.0f);
+    setExpandRatio(title, 0);
   }
 
   protected Button addMenuButton(String type, String label, Resource icon, boolean active, float width) {
