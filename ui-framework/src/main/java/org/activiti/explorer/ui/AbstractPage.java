@@ -118,7 +118,7 @@ public abstract class AbstractPage extends CustomComponent {
     content.addComponent(splitPanel);
     content.setExpandRatio(splitPanel, 1);
     splitPanel.setSizeFull();
-    splitPanel.setSplitPosition(480, Unit.PIXELS);
+    splitPanel.setSplitPosition(505, Unit.PIXELS);
 
     mainLayout.setId("outer-panel");
     splitPanel.setId("inner-panel");

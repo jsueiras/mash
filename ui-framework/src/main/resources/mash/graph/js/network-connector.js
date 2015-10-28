@@ -261,19 +261,12 @@ window.mash_graph_Network = function () {
     function onAfterDrawing(canvasContext) {
         nodes.forEach(function (node) {
             var nodePosition = network.getPositions([node.id]);
+            var offset = 20;
 
             if (node.age > -1) {
                 var nodePosition = network.getPositions([node.id]);
-                var x = nodePosition[node.id].x + 20;
-                var y = nodePosition[node.id].y - 20;
 
                 canvasContext.lineWidth = fontStrokeWidth;
-                //canvasContext.strokeStyle = gray;
-                //canvasContext.fillStyle = gray;
-                //canvasContext.circle(x, y, 10);
-                //canvasContext.fill();
-                //canvasContext.stroke();
-
                 canvasContext.fillStyle = white;
                 canvasContext.font = "" + edgeFontSize + "px 'Open Sans'";
                 canvasContext.fillText("" + node.age, nodePosition[node.id].x, nodePosition[node.id].y);
@@ -281,10 +274,16 @@ window.mash_graph_Network = function () {
 
             if (node.primary) {
                 canvasContext.lineWidth = fontStrokeWidth;
+                canvasContext.fillStyle = blue;
+                canvasContext.font = "" + badgeSize + "px 'FontAwesome'";
+                canvasContext.fillText("\uf132", nodePosition[node.id].x - offset, nodePosition[node.id].y - offset);
+            }
+
+            if (node.warning) {
+                canvasContext.lineWidth = fontStrokeWidth;
                 canvasContext.fillStyle = red;
                 canvasContext.font = "" + badgeSize + "px 'FontAwesome'";
-                var offset = 20;
-                canvasContext.fillText("\uf132", nodePosition[node.id].x + offset, nodePosition[node.id].y - offset);
+                canvasContext.fillText("\uf071", nodePosition[node.id].x + offset, nodePosition[node.id].y - offset);
             }
         });
     }
