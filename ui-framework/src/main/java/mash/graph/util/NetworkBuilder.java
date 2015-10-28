@@ -3,12 +3,14 @@ package mash.graph.util;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import mash.graph.Edge;
 import mash.graph.NetworkState;
 import mash.graph.Node;
+import mash.graph.Node.Group;
 
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
@@ -100,16 +102,16 @@ public class NetworkBuilder {
 	}
 
 	private Node createNode(Entity entity) {
-		Node.Group group = Node.Group.LOCATIONS;
+		Node.Group group = Node.Group.LOCATIONS_UNEXPLORED;
 		int age = -1;
 		if (entity instanceof Person) {
 			Person person = (Person) entity;
 			XMLGregorianCalendar dateOfBirth = person.getDateOfBirth();
 			age = age(dateOfBirth);
 			if ("female".equalsIgnoreCase(person.getGender())) {
-				group = Node.Group.FEMALES;
+				group = Node.Group.FEMALES_UNEXPLORED;
 			} else if ("male".equalsIgnoreCase(person.getGender())) {
-				group = Node.Group.MALES;
+				group = Node.Group.MALES_UNEXPLORED;
 			}
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
@@ -139,9 +141,22 @@ public class NetworkBuilder {
 	}
 
 	public void addNodesToNetwork(NetworkState state, List<Entity> entities) {
+		Set expandedIds = new HashSet<String>();
 		for (Entity entity : entities) {
 			appendNode(state, entity);
+			expandedIds.add(entity.getId());
 		}
+		for (Iterator<Node> iterator = state.nodes.iterator(); iterator.hasNext();) {
+			Node node = iterator.next();
+			if (expandedIds.contains(node.id)) {
+				setExpanded(node); 
+			}
+		}
+	}
+
+	private void setExpanded(Node node) {
+		String currentGroup = node.group.toString();
+		node.group = Group.valueOf(currentGroup.replace("_UNEXPLORED", ""));
 	}
 
 
