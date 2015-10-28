@@ -73,5 +73,8 @@ public class Network extends AbstractJavaScriptComponent {
 		public NodeSelectedEvent(String nodeId) {
 			this.nodeId = nodeId;
 		}
+		public String getNodeId() {
+			return nodeId;
+		}
 	}
 }

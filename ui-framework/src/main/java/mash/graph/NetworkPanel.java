@@ -8,6 +8,9 @@ import java.util.Set;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
+
+import mash.graph.Network.NodeSelectedEvent;
+import mash.graph.Network.NodeSelectionListener;
 import mash.graph.util.NetworkBuilder;
 
 import org.activiti.engine.ProcessEngines;
@@ -33,9 +36,13 @@ public class NetworkPanel extends VerticalSplitPanel {
 	private static final String TRIAGE_REASON = "triageReason";
 	private RuntimeService runtimeService;
 	private Network network = null;
+	private Repository mashRep;
+	private NetworkBuilder builder;
 
 	public NetworkPanel() {
 		this.runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+		mashRep = ExplorerApp.get().getMashRepository();
+		builder = new NetworkBuilder();
 		setSecondComponent(new TabSheet());
 
 		setSplitPosition(100, Unit.PERCENTAGE);
@@ -46,6 +53,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 		setFirstComponent(null);
 		if (id != null) {
 			network = initNetwork(isLocation, id);
+			network.addNodeSelectionListener(getNodeSelectionListener());
 			setFirstComponent(network);
 		}
 	}
@@ -58,6 +66,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 			
 			if (reason != null && reason.getNetworkState() != null) {
 				network = new Network(reason.getNetworkState().nodes, reason.getNetworkState().edges);
+				network.addNodeSelectionListener(getNodeSelectionListener());
 				setFirstComponent(network);
 			}
 		}
@@ -65,7 +74,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 
 	private List<Entity> getPersonPrimaryLinks(String id) {
-		Repository mashRep = ExplorerApp.get().getMashRepository();
+		
 		List<String> ids = new ArrayList<String>();
 		Person person = mashRep.findPersonById(id, null);
 		List<Entity> entities;
@@ -88,7 +97,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	private List<Entity> getLocationPrimaryLinks(String id) {
-		Repository mashRep = ExplorerApp.get().getMashRepository();
+		
 		Location location = mashRep.findLocationById(id, null);
 		List<Entity> entities;
 		if (location.getOccupants() != null && location.getOccupants().size() > 0) {
@@ -109,7 +118,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	private Network initNetwork(boolean isLocation, String id) {
-		NetworkBuilder builder = new NetworkBuilder();
+	
 		NetworkState state = new NetworkState();
 		state.edges = new HashSet<>();
 		state.nodes = new HashSet<>();
@@ -131,6 +140,25 @@ public class NetworkPanel extends VerticalSplitPanel {
 	public void addNetworkChangeEventListener(NetworkChangeListener listener) {
 		addListener(listener);
 	}
+	
+    public NodeSelectionListener getNodeSelectionListener()
+    {
+    	return new NodeSelectionListener() {
+			
+			@Override
+			public void nodeSelected(NodeSelectedEvent event) {
+				if (event.getNodeId()!= null)
+				{
+					List<String> ids = new ArrayList<String>();
+					ids.add(event.getNodeId());
+				    List<Entity> entities = mashRep.findEntitiesById(ids, null);
+				    NetworkState state = new NetworkState();
+				    builder.addNodesToNetwork(state, entities);
+				    network.add(state.nodes, state.edges);
+				}		
+			}
+		};
+    }
 
 
 }
