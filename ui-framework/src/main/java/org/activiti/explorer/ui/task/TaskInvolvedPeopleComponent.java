@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@ package org.activiti.explorer.ui.task;
 import java.util.Collection;
 import java.util.List;
 
+import com.vaadin.server.FontAwesome;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.IdentityLink;
@@ -45,53 +46,53 @@ import com.vaadin.ui.VerticalLayout;
 
 /**
  * Component for a {@link TaskPage} that displays all people involved with the task.
- * 
+ *
  * @author Joram Barrez
  */
 public class TaskInvolvedPeopleComponent extends CustomComponent {
 
   private static final long serialVersionUID = 1L;
-  
+
   protected transient TaskService taskService;
   protected I18nManager i18nManager;
   protected ViewManager viewManager;
-  
+
   protected Task task;
   protected TaskDetailPanel taskDetailPanel;
   protected VerticalLayout layout;
   protected Label title;
   protected Button addPeopleButton;
   protected GridLayout peopleGrid;
-  
+
   public TaskInvolvedPeopleComponent(Task task, TaskDetailPanel taskDetailPanel) {
     this.task = task;
     this.taskDetailPanel = taskDetailPanel;
      this.i18nManager = ExplorerApp.get().getI18nManager();
     this.viewManager = ExplorerApp.get().getViewManager();
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
-    
+
     initUi();
   }
-  
+
   protected void initUi() {
     addStyleName(ExplorerLayout.STYLE_DETAIL_BLOCK);
     addStyleName(ExplorerLayout.STYLE_INVOLVE_PEOPLE);
-    
+
     initLayout();
     initHeader();
     initPeopleGrid();
   }
-  
+
   protected void initLayout() {
     this.layout = new VerticalLayout();
     setCompositionRoot(layout);
   }
-  
+
   protected void initHeader() {
     HorizontalLayout headerLayout = new HorizontalLayout();
     headerLayout.setWidth(100, UNITS_PERCENTAGE);
     layout.addComponent(headerLayout);
-    
+
     initTitle(headerLayout);
     initAddPeopleButton(headerLayout);
   }
@@ -106,15 +107,17 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
 
   protected void initAddPeopleButton(HorizontalLayout headerLayout) {
     addPeopleButton = new Button();
+    addPeopleButton.setId("add-people-button");
     addPeopleButton.addStyleName(ExplorerLayout.STYLE_ADD);
+    addPeopleButton.setIcon(FontAwesome.PLUS);
     headerLayout.addComponent(addPeopleButton);
-    
+
     addPeopleButton.addListener(new ClickListener() {
-      
+
       public void buttonClick(ClickEvent event) {
-        final SelectUsersPopupWindow involvePeoplePopupWindow = 
+        final SelectUsersPopupWindow involvePeoplePopupWindow =
           new SelectUsersPopupWindow(i18nManager.getMessage(Messages.PEOPLE_INVOLVE_POPUP_CAPTION), true);
-        
+
         involvePeoplePopupWindow.addListener(new SubmitEventListener() {
           protected void submitted(SubmitEvent event) {
             Collection<String> selectedUserIds = involvePeoplePopupWindow.getSelectedUserIds();
@@ -122,18 +125,18 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
               String role = involvePeoplePopupWindow.getSelectedUserRole(userId);
               taskService.addUserIdentityLink(task.getId(), userId, role);
             }
-            
+
             taskDetailPanel.notifyPeopleInvolvedChanged();
           }
           protected void cancelled(SubmitEvent event) {
           }
         });
-        
+
         viewManager.showPopupWindow(involvePeoplePopupWindow);
       }
     });
   }
-  
+
   protected void initPeopleGrid() {
     peopleGrid = new GridLayout();
     peopleGrid.setColumns(2);
@@ -141,21 +144,21 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
     //peopleGrid.setMargin(true, false, false, false);
     peopleGrid.setWidth(100, UNITS_PERCENTAGE);
     layout.addComponent(peopleGrid);
-    
+
     populatePeopleGrid();
   }
-  
+
   protected void populatePeopleGrid() {
     initOwner();
     initAssignee();
     initInvolvedPeople();
   }
-  
+
   protected void initOwner() {
     UserDetailsComponent ownerDetails = createOwnerComponent();
     peopleGrid.addComponent(ownerDetails);
   }
-  
+
   protected UserDetailsComponent createOwnerComponent() {
     String roleMessage = task.getOwner() != null ? Messages.TASK_OWNER : Messages.TASK_NO_OWNER;
     return new UserDetailsComponent(task.getOwner(),
@@ -163,12 +166,12 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
             i18nManager.getMessage(Messages.TASK_OWNER_TRANSFER),
             new ChangeOwnershipListener(task, taskDetailPanel));
   }
-  
+
   protected void initAssignee() {
     UserDetailsComponent assigneeDetails = createAssigneeComponent();
     peopleGrid.addComponent(assigneeDetails);
   }
-  
+
   protected UserDetailsComponent createAssigneeComponent() {
    String roleMessage = task.getAssignee() != null ? Messages.TASK_ASSIGNEE : Messages.TASK_NO_ASSIGNEE;
    return new UserDetailsComponent(
@@ -177,15 +180,15 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
             i18nManager.getMessage(Messages.TASK_ASSIGNEE_REASSIGN),
             new ReassignAssigneeListener(task, taskDetailPanel));
   }
-  
+
   protected void initInvolvedPeople() {
     List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(task.getId());
-    for (final IdentityLink identityLink : identityLinks) { 
+    for (final IdentityLink identityLink : identityLinks) {
       if (identityLink.getUserId() != null) { // only user identity links, ignoring the group ids
         if (!IdentityLinkType.ASSIGNEE.equals(identityLink.getType())
                 && !IdentityLinkType.OWNER.equals(identityLink.getType())) {
           UserDetailsComponent involvedDetails = new UserDetailsComponent(
-                  identityLink.getUserId(), 
+                  identityLink.getUserId(),
                   identityLink.getType(),
                   i18nManager.getMessage(Messages.TASK_INVOLVED_REMOVE),
                   new RemoveInvolvedPersonListener(identityLink, task, taskDetailPanel));
@@ -194,23 +197,23 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
       }
     }
   }
-  
+
   public void refreshPeopleGrid() {
     task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
     peopleGrid.removeAllComponents();
     populatePeopleGrid();
   }
-  
+
   public void refreshAssignee() {
     task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
     peopleGrid.removeComponent(1, 0);
     peopleGrid.addComponent(createAssigneeComponent(), 1, 0);
   }
-  
+
   public void refreshOwner() {
     task = taskService.createTaskQuery().taskId(task.getId()).singleResult();
     peopleGrid.removeComponent(0, 0);
     peopleGrid.addComponent(createOwnerComponent(), 0, 0);
   }
-  
+
 }

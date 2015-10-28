@@ -118,11 +118,13 @@ public class TaskDetailPanel extends DetailPanel {
 
     // Central panel: all task data
     this.centralLayout = new VerticalLayout();
+    centralLayout.setId("central-layout");
     centralLayout.setMargin(true);
+    centralLayout.setSpacing(true);
     setDetailContainer(centralLayout);
 
     if (task!=null)
-    {	
+    {
     initHeader();
     initDescriptionAndClaimButton();
     initProcessLink();
@@ -441,20 +443,20 @@ protected boolean isCurrentUserOwner() {
     relatedContent.refreshTaskAttachments();
     //taskPage.getTaskEventPanel().refreshTaskEvents();
   }
-  
+
   public void showProcessStartForm(StartFormData startFormData,final ProcessDefinition processDefinition) {
-	
+
 	    	taskForm = new FormPropertiesForm();
 	    	taskForm.setSubmitButtonCaption(i18nManager.getMessage(Messages.PROCESS_START));
 	    	taskForm.setCancelButtonCaption(i18nManager.getMessage(Messages.BUTTON_CANCEL));
-	      
+
 	      // When form is submitted/cancelled, show the info again
 	    	taskForm.addListener(new FormPropertiesEventListener() {
 	        private static final long serialVersionUID = 1L;
 	        protected void handleFormSubmit(FormPropertiesEvent event) {
-	        	 Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());	
+	        	 Authentication.setAuthenticatedUserId(ExplorerApp.get().getLoggedInUser().getId());
 	          formService.submitStartFormData(processDefinition.getId(), event.getFormProperties());
-	          
+
 	          // Show notification
 	          ExplorerApp.get().showNotification(MessageFormat.format(
 	            i18nManager.getMessage(Messages.PROCESS_STARTED_NOTIFICATION), getProcessDisplayName(processDefinition)));
@@ -464,15 +466,15 @@ protected boolean isCurrentUserOwner() {
 	           init();
 	        }
 	      });
-	    
+
 	    taskForm.setFormProperties(startFormData.getFormProperties());
-	    
+
 	    taskForm.setEnabled(true);
 	    centralLayout.removeAllComponents();
 	    initProcessHeader(processDefinition);
 	    centralLayout.addComponent(taskForm);
 	  }
-  
+
   protected void initProcessHeader(ProcessDefinition processDefinition) {
 	    GridLayout taskDetails = new GridLayout(2, 2);
 	    taskDetails.setWidth(100, Unit.PERCENTAGE);
@@ -497,7 +499,7 @@ protected boolean isCurrentUserOwner() {
 	   // propertiesLayout.setSpacing(true);
 	    //taskDetails.addComponent(propertiesLayout);
 
-	
+
 	    //initCreateTime(propertiesLayout);
 	  }
 

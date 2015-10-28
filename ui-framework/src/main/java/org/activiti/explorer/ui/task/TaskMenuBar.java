@@ -107,8 +107,11 @@ private ProcessDefinition mashDefinition;
 
     // TODO: the counts should be done later by eg a Refresher component
 
+<<<<<<< HEAD
     ToolbarPopupEntry taskItem = addPopupEntry(ENTRY_TASKS, (i18nManager.getMessage(Messages.TASK_MENU_TASKS)));
     
+=======
+>>>>>>> origin/sprint2
     // Inbox
     long inboxCount = new InboxListQuery(user.getId()).size();
     
