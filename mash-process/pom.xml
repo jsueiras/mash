@@ -61,6 +61,14 @@
 			<artifactId>model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+		  <dependency>
+			<groupId>com.mash</groupId>
+			<artifactId>mash-process-util</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 
 		<dependency>
 			<groupId>org.docx4j</groupId>

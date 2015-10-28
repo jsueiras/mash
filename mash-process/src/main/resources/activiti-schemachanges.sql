@@ -16,3 +16,8 @@ ADD CONSTRAINT `ACT_FK_TASK_EXE`
   FOREIGN KEY (`EXECUTION_ID_`)
   REFERENCES `activiti`.`act_ru_execution` (`ID_`)
   ON DELETE CASCADE;
+  
+  ALTER TABLE `activiti`.`act_hi_detail` 
+CHANGE COLUMN `TEXT_` `TEXT_` VARCHAR(16000) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NULL DEFAULT NULL ;
+
+  
