@@ -14,6 +14,7 @@ package org.activiti.explorer.ui;
 
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.explorer.ui.custom.ToolBar;
 
 
@@ -79,6 +80,7 @@ public abstract class AbstractPage extends CustomComponent {
     if (menuBar != null) {
       toolBar = createMenuBar();
       toolBar.setId("tool-bar");
+      toolBar.addStyleName("v-panel-caption");
       mainLayout.addComponentAsFirst(toolBar);
       mainLayout.setExpandRatio(toolBar, 0);
 

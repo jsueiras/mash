@@ -27,6 +27,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
@@ -65,24 +66,23 @@ public class TaskListHeader extends Panel {
     //layout.setMargin(false, true, false, true);
     setContent(layout);
     
-    initInputField();
-    initKeyboardListener();
-//    initSortMenu();
+    //initInputField();
+    //initKeyboardListener();
+    // initSortMenu();
   }   
 
   protected void initInputField() {
     // Csslayout is used to style inputtext as rounded
     CssLayout csslayout = new CssLayout();
-    csslayout.setHeight(24, UNITS_PIXELS);
+    csslayout.setHeight(48, UNITS_PIXELS);
     csslayout.setWidth(100, UNITS_PERCENTAGE);
     layout.addComponent(csslayout);
     
-    inputField = new TextField();
-    inputField.setWidth(100, UNITS_PERCENTAGE);
-    inputField.addStyleName(ExplorerLayout.STYLE_SEARCHBOX);
-    inputField.setInputPrompt(i18nManager.getMessage(Messages.TASK_CREATE_NEW));
-    inputField.focus();
-    csslayout.addComponent(inputField);
+     ListSelect list = new ListSelect();
+     list.addItem("Assigned to me");
+     list.addItem("Unassigned");
+     
+     layout.addComponent(list);
     
     layout.setComponentAlignment(csslayout, Alignment.MIDDLE_LEFT);
     layout.setExpandRatio(csslayout, 1.0f);

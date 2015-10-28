@@ -106,6 +106,7 @@ public class SearchDetailPanel extends DetailPanel {
 
 		resultsContainer.setVisible(false);
 		detailContainer.addComponent(resultsContainer);
+		detailContainer.setExpandRatio(resultsContainer, 1);
 	}
 
 	protected void initForm() {
@@ -171,42 +172,33 @@ public class SearchDetailPanel extends DetailPanel {
 
 	}
 
-
 	protected Table createPersonTable() {
 		Table personTable = new Table();
-		personTable.setPageLength(10);
 		personTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		personTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 		personTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 
 		// Create column header
 		personTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
+
 		personTable.addContainerProperty("Name", String.class, null);
 		personTable.addContainerProperty("Address", String.class, null);
 		personTable.addContainerProperty("DOB", String.class, null);
-		
 
 		return personTable;
 	}
 
 	protected Table createLocationTable() {
 		Table locationTable = new Table();
-		locationTable.setPageLength(10);
 		locationTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		locationTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 		locationTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 
 		// Create column header
 		locationTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
-		locationTable.setColumnWidth("", 22);
-
 
 		locationTable.addContainerProperty("Address", String.class, null);
-		locationTable.setColumnWidth("Address", 250);
-
 		locationTable.addContainerProperty("Postcode", String.class, null);
-		locationTable.setColumnWidth("Postcode", 80);
-
 
 		return locationTable;
 	}
