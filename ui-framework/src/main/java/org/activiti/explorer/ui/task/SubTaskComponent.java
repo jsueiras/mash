@@ -14,6 +14,7 @@ package org.activiti.explorer.ui.task;
 
 import java.util.List;
 
+import com.vaadin.server.FontAwesome;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
@@ -167,7 +168,9 @@ public class SubTaskComponent extends CustomComponent {
 
   protected void initAddButton() {
     addSubTaskButton = new Button();
+    addSubTaskButton.setId("add-sub-task-button");
     addSubTaskButton.addStyleName(ExplorerLayout.STYLE_ADD);
+    addSubTaskButton.setIcon(FontAwesome.PLUS);
    // addSubTaskPanel.addComponent(addSubTaskButton);
     addSubTaskButton.addListener(new ClickListener() {
       public void buttonClick(ClickEvent event) {
