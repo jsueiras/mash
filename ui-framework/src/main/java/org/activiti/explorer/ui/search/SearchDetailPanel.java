@@ -23,6 +23,7 @@ import org.activiti.explorer.data.LazyLoadingContainer;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.DetailPanel;
+import org.activiti.explorer.ui.custom.PopupWindow;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
 import org.activiti.explorer.ui.search.SearchFormEvent;
 import org.activiti.explorer.ui.search.util.Decorator;
@@ -69,7 +70,10 @@ public class SearchDetailPanel extends DetailPanel {
 	private VerticalLayout treeContainer;
 	private SearchTabEventListener tabEventListener;
 
-	public SearchDetailPanel() {
+	private PopupWindow parent;
+
+	public SearchDetailPanel(PopupWindow parent) {
+		this.parent = parent;
 		this.i18nManager = ExplorerApp.get().getI18nManager();
 		this.repository = ExplorerApp.get().getMashRepository();
 		initUi();
@@ -230,6 +234,7 @@ public class SearchDetailPanel extends DetailPanel {
 				String id = (String) event.getProperty().getValue();
 				if (id != null) {
 					fireEvent(new SearchTabEvent(SearchDetailPanel.this, SearchTabEvent.TYPE_SELECT, isLocation, id));
+					parent.close();
 				}
 
 			}

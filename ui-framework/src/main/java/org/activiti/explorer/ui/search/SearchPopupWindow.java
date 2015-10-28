@@ -34,7 +34,7 @@ public class SearchPopupWindow extends PopupWindow {
     setWidth(40, Unit.EM);
     setHeight(95, Unit.PERCENTAGE);
 
-    searchPanel = new SearchDetailPanel();
+    searchPanel = new SearchDetailPanel(this);
     searchPanel.setId("search-panel");
     searchPanel.setSizeFull();
     setContent(searchPanel);
