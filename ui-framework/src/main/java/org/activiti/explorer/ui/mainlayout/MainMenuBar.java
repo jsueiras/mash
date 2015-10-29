@@ -63,7 +63,7 @@ public class MainMenuBar extends HorizontalLayout {
    * Highlights the given main navigation in the menubar.
    */
   public synchronized void setMainNavigation(String navigation) {
-   
+
     currentMainNavigation = navigation;
 
     Button current = menuItemButtons.get(navigation);
@@ -73,21 +73,20 @@ public class MainMenuBar extends HorizontalLayout {
   }
 
   protected void init() {
-    setHeight(54, UNITS_PIXELS);
-    setWidth(100, UNITS_PERCENTAGE);
-
-    //setMargin(false, true, false, false);
+    setHeightUndefined();
+    setWidth(100, Unit.PERCENTAGE);
 
     initTitle();
     initProfileButton();
   }
 
   protected void initTitle() {
-    Image title = new Image(null, new ThemeResource("branding/mash logo only.png"));
-    title.setHeight(60, Unit.PIXELS);
+    Label title = new Label("Multi Agency Safeguarding Hub");
     title.addStyleName(ExplorerLayout.STYLE_APPLICATION_LOGO);
+    title.setSizeUndefined();
     addComponent(title);
-    setExpandRatio(title, 0);
+    setComponentAlignment(title, Alignment.MIDDLE_LEFT);
+    setExpandRatio(title, 1);
   }
 
   protected Button addMenuButton(String type, String label, Resource icon, boolean active, float width) {
@@ -97,7 +96,8 @@ public class MainMenuBar extends HorizontalLayout {
     button.setIcon(icon);
 
     addComponent(button);
-    setComponentAlignment(button, Alignment.TOP_CENTER);
+    setComponentAlignment(button, Alignment.MIDDLE_RIGHT);
+    setExpandRatio(button, 0);
 
     return button;
   }

@@ -10,7 +10,9 @@ import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonValue;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @JavaScript({"js/network-connector.js"})
@@ -40,7 +42,9 @@ public class Network extends AbstractJavaScriptComponent {
 
 	public void add(Set<Node> nodes, Set<Edge> edges) {
 		NetworkState state = getState();
+		state.nodes.removeAll(nodes);
 		state.nodes.addAll(nodes);
+		state.edges.removeAll(edges);
 		state.edges.addAll(edges);
 		callFunction("add", GSON.toJson(nodes), GSON.toJson(edges));
 	}
@@ -50,6 +54,10 @@ public class Network extends AbstractJavaScriptComponent {
 	}
 
 	public void updateNodes(Node... nodes) {
+		NetworkState state = getState();
+		List<Node> nodeArray = Arrays.asList(nodes);
+		state.nodes.removeAll(nodeArray);
+		state.nodes.addAll(nodeArray);
 		callFunction("updateNodes", nodes);
 	}
 
