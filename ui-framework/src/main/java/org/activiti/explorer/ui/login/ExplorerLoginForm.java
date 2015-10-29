@@ -101,7 +101,7 @@ public class ExplorerLoginForm extends VerticalLayout implements ClickListener {
 	  addComponent(fields);
 	  setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 
-
+	  user.focus();
   }
 
 @Override
