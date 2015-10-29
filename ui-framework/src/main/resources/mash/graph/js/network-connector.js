@@ -305,6 +305,10 @@ window.mash_graph_Network = function () {
         onSelect(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
+    self.updateNodes = function (nodes) {
+        nodes.update(nodes);
+    }
+
     // Handle changes from the server-side
     self.onStateChange = function () {
         if (network != null) {

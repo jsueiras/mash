@@ -49,6 +49,10 @@ public class Network extends AbstractJavaScriptComponent {
 		callFunction("selectNodes", nodeIds);
 	}
 
+	public void updateNodes(Node... nodes) {
+		callFunction("updateNodes", nodes);
+	}
+
 	@Override
 	protected NetworkState getState() {
 		NetworkState state = (NetworkState) super.getState();
