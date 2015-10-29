@@ -180,8 +180,19 @@ private TaskDetailPanel detailComponent;
 
   @Override
   public Component getSearchComponent() {
-    return new TaskListHeader();
+	  String labelPage;
+	  if (this instanceof UnassignedPage)
+	  {
+		labelPage  = TaskListHeader.ENTRY_UNASSIGNED;  
+	  }
+	  else
+	  {
+		labelPage =  TaskListHeader.ENTRY_INBOX;
+	  }	  
+    return new TaskListHeader(labelPage);
   }
+  
+  
 
   @Override
   public void refreshSelectNext() {

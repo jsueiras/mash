@@ -107,27 +107,27 @@ private ProcessDefinition mashDefinition;
 
     // TODO: the counts should be done later by eg a Refresher component
 
-    ToolbarPopupEntry taskItem = addPopupEntry(ENTRY_TASKS, (i18nManager.getMessage(Messages.TASK_MENU_TASKS)));
-    
-    // Inbox
-    long inboxCount = new InboxListQuery(user.getId()).size();
-    
-    taskItem.addMenuItem( i18nManager.getMessage(Messages.TASK_MENU_INBOX) + " (" + inboxCount + ")", new ToolbarCommand() {
-      public void toolBarItemSelected() {
-        viewManager.showInboxPage();
-      }
-    });
-    
-  
-
-    long unassignedCount = new UnassignedListQuery(user.getId()).size();
-    taskItem.addMenuItem( i18nManager.getMessage(Messages.TASK_MENU_QUEUED) + " (" + unassignedCount + ")", new ToolbarCommand() {
-
-      public void toolBarItemSelected() {
-        viewManager.showUnassignedPage();
-      }
-    });
-   
+//    ToolbarPopupEntry taskItem = addPopupEntry(ENTRY_TASKS, (i18nManager.getMessage(Messages.TASK_MENU_TASKS)));
+//    
+//    // Inbox
+//    long inboxCount = new InboxListQuery(user.getId()).size();
+//    
+//    taskItem.addMenuItem( i18nManager.getMessage(Messages.TASK_MENU_INBOX) + " (" + inboxCount + ")", new ToolbarCommand() {
+//      public void toolBarItemSelected() {
+//        viewManager.showInboxPage();
+//      }
+//    });
+//    
+//  
+//
+//    long unassignedCount = new UnassignedListQuery(user.getId()).size();
+//    taskItem.addMenuItem( i18nManager.getMessage(Messages.TASK_MENU_QUEUED) + " (" + unassignedCount + ")", new ToolbarCommand() {
+//
+//      public void toolBarItemSelected() {
+//        viewManager.showUnassignedPage();
+//      }
+//    });
+//   
     
   
      

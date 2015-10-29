@@ -19,12 +19,17 @@ import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
 import org.activiti.explorer.Messages;
+import org.activiti.explorer.ViewManager;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
+import org.apache.bcel.generic.NEW;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.ListSelect;
@@ -33,6 +38,8 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.Reindeer;
+
+import elemental.html.EntriesCallback;
 
 
 /**
@@ -51,10 +58,17 @@ public class TaskListHeader extends Panel {
   
   protected HorizontalLayout layout;
   protected TextField inputField;
+
+private ViewManager viewManager;
   
-  public TaskListHeader() {
+  public static final String ENTRY_INBOX = "inbox";
+  public static final String ENTRY_UNASSIGNED = "unassigned";
+ 
+  
+  public TaskListHeader(String pageSelected) {
     this.i18nManager = ExplorerApp.get().getI18nManager();
     this.taskService = ProcessEngines.getDefaultProcessEngine().getTaskService();
+    this.viewManager = ExplorerApp.get().getViewManager();
 
     addStyleName(Reindeer.PANEL_LIGHT);
     addStyleName(ExplorerLayout.STYLE_SEARCHBOX);
@@ -66,26 +80,46 @@ public class TaskListHeader extends Panel {
     //layout.setMargin(false, true, false, true);
     setContent(layout);
     
-    //initInputField();
+    initInputField(pageSelected);
     //initKeyboardListener();
     // initSortMenu();
   }   
 
-  protected void initInputField() {
+  protected void initInputField(String pageSelected) {
     // Csslayout is used to style inputtext as rounded
-    CssLayout csslayout = new CssLayout();
-    csslayout.setHeight(48, UNITS_PIXELS);
-    csslayout.setWidth(100, UNITS_PERCENTAGE);
-    layout.addComponent(csslayout);
-    
-     ListSelect list = new ListSelect();
-     list.addItem("Assigned to me");
-     list.addItem("Unassigned");
+   
+     ComboBox list = new ComboBox();
+     list.addItem(ENTRY_INBOX);
+      list.setItemCaption(ENTRY_INBOX,i18nManager.getMessage(Messages.TASK_MENU_INBOX));
+      
+     list.addItem(ENTRY_UNASSIGNED);
+     list.setItemCaption(ENTRY_UNASSIGNED,i18nManager.getMessage(Messages.TASK_MENU_QUEUED));
+     list.setNullSelectionAllowed(false);
+     list.setValue(pageSelected);
      
+     
+     Property.ValueChangeListener listener = new Property.ValueChangeListener() {
+    	    public void valueChange(ValueChangeEvent event) {
+    	      String window = (String) event.getProperty().getValue();
+    	      if (ENTRY_UNASSIGNED.equals(window))
+    	      {
+    	    	 viewManager.showUnassignedPage();
+    	      }	 
+    	      else
+    	      {
+    	    	  viewManager.showInboxPage();
+    	      } 	  
+    	    }
+    	};
+    	list.addValueChangeListener(listener);
+		
+		
      layout.addComponent(list);
+     
+     
     
-    layout.setComponentAlignment(csslayout, Alignment.MIDDLE_LEFT);
-    layout.setExpandRatio(csslayout, 1.0f);
+    //layout.setComponentAlignment(csslayout);
+    //layout.setExpandRatio(csslayout, 1.0f);
   }
   
   protected void initKeyboardListener() {
