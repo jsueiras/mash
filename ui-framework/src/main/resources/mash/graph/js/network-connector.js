@@ -294,25 +294,27 @@ window.mash_graph_Network = function () {
     });
 
     self.add = function (newNodes, newEdges) {
-        nodes.add(newNodes);
-        edges.add(newEdges);
+        nodes.add(JSON.parse(newNodes));
+        edges.add(JSON.parse(newEdges));
+        network.redraw();
     }
 
     self.selectNodes = function (nodeIds) {
-        network.selectNodes(nodeIds);
+        network.selectNodes(JSON.parse(nodeIds));
 
         // programmatic selection does not fire an event
         onSelect(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
-    self.updateNodes = function (nodes) {
-        nodes.update(nodes);
+    self.updateNodes = function (newNodes) {
+        nodes.update(JSON.parse(newNodes));
+        network.redraw();
     }
 
-    // Handle changes from the server-side
+    // Handle initialization from the server-side
     self.onStateChange = function () {
         if (network != null) {
-            network.destroy();
+            return;
         }
 
         var state = self.getState();

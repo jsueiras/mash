@@ -42,11 +42,22 @@ public class Network extends AbstractJavaScriptComponent {
 
 	public void add(Set<Node> nodes, Set<Edge> edges) {
 		NetworkState state = getState();
-		state.nodes.removeAll(nodes);
-		state.nodes.addAll(nodes);
-		state.edges.removeAll(edges);
-		state.edges.addAll(edges);
-		callFunction("add", GSON.toJson(nodes), GSON.toJson(edges));
+
+		Set<Node> nodesToAdd = new HashSet<>();
+		for (Node node : nodes) {
+			if (state.nodes.add(node)) {
+				nodesToAdd.add(node);
+			}
+		}
+
+		Set<Edge> edgesToAdd = new HashSet<>();
+		for (Edge edge : edges) {
+			if (state.edges.add(edge)) {
+				edgesToAdd.add(edge);
+			}
+		}
+
+		callFunction("add", GSON.toJson(nodesToAdd), GSON.toJson(edgesToAdd));
 	}
 
 	public void selectNodes(String... nodeIds) {
@@ -55,10 +66,17 @@ public class Network extends AbstractJavaScriptComponent {
 
 	public void updateNodes(Node... nodes) {
 		NetworkState state = getState();
-		List<Node> nodeArray = Arrays.asList(nodes);
-		state.nodes.removeAll(nodeArray);
-		state.nodes.addAll(nodeArray);
-		callFunction("updateNodes", nodes);
+
+		Set<Node> nodesToUpdate = new HashSet<>();
+		for (Node node : nodes) {
+			if (state.nodes.contains(node)) {
+				state.nodes.remove(node);
+				state.nodes.add(node);
+				nodesToUpdate.add(node);
+			}
+		}
+
+		callFunction("updateNodes", GSON.toJson(nodesToUpdate));
 	}
 
 	@Override
