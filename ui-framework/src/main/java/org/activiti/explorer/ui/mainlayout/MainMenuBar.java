@@ -16,6 +16,7 @@ package org.activiti.explorer.ui.mainlayout;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import org.activiti.explorer.Environments;
@@ -109,6 +110,7 @@ public class MainMenuBar extends HorizontalLayout {
     MenuBar profileMenu = new MenuBar();
     profileMenu.addStyleName(ExplorerLayout.STYLE_HEADER_PROFILE_BOX);
     MenuItem rootItem = profileMenu.addItem(user.getFirstName() + " " + user.getLastName(), null);
+    rootItem.setIcon(FontAwesome.USER);
     rootItem.setStyleName(ExplorerLayout.STYLE_HEADER_PROFILE_MENU);
 
     if(useProfile()) {
