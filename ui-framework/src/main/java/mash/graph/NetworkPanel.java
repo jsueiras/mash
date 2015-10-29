@@ -153,11 +153,16 @@ public class NetworkPanel extends VerticalSplitPanel {
 					ids.add(event.getNodeId());
 				    List<Entity> entities = mashRep.findEntitiesById(ids, null);
 				    NetworkState state = new NetworkState();
-				    builder.addNodesToNetwork(state, entities);
+				    Node expanded = builder.addNodesToNetwork(state, entities.get(0));
+				    network.updateNodes(expanded);
 				    network.add(state.nodes, state.edges);
+				   
 				}		
 			}
+		
 		};
+		
+		
     }
 
 

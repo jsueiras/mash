@@ -55,9 +55,10 @@ public class NetworkBuilder {
 			return getLabel((Location) entity);
 	}
 
-	private void appendNode(NetworkState state, Person person) {
+	private Node appendNode(NetworkState state, Person person) {
 
-		state.nodes.add(createNode(person));
+		Node newNode = createNode(person);
+		state.nodes.add(newNode);
 		if (person.getHousehold() != null) {
 			for (Relation relation : person.getHousehold().getRelations()) {
 				Person relatedPerson = relation.getPerson();
@@ -72,25 +73,28 @@ public class NetworkBuilder {
 			state.nodes.add(createNode(location));
 			state.edges.add(createEdge(person, location, LIVES_AT));
 		}
+		return newNode;
 	}
 
-	private void appendNode(NetworkState state, Location location) {
+	private Node appendNode(NetworkState state, Location location) {
 
-		state.nodes.add(createNode(location));
+		Node newNode = createNode(location);
+		state.nodes.add(newNode);
 
 		for (Occupant occupant : location.getOccupants()) {
 			state.nodes.add(createNode(occupant.getPerson()));
 			state.edges.add(createEdge(occupant.getPerson(), location, LIVES_AT));
 		}
+		return newNode;
 
 	}
 
-	private void appendNode(NetworkState state, Entity entity) {
+	private Node appendNode(NetworkState state, Entity entity) {
 
 		if (entity instanceof Person)
-			appendNode(state, (Person) entity);
+			return appendNode(state, (Person) entity);
 		else
-			appendNode(state, (Location) entity);
+			return appendNode(state, (Location) entity);
 
 	}
 
@@ -152,6 +156,14 @@ public class NetworkBuilder {
 				setExpanded(node); 
 			}
 		}
+	}
+	
+	public Node addNodesToNetwork(NetworkState state, Entity entity) {
+		Set expandedIds = new HashSet<String>();
+	
+			Node result = appendNode(state, entity);
+			setExpanded(result);
+			return result;
 	}
 
 	private void setExpanded(Node node) {
