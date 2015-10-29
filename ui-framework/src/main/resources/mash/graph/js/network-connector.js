@@ -298,6 +298,13 @@ window.mash_graph_Network = function () {
         edges.add(newEdges);
     }
 
+    self.selectNodes = function (nodeIds) {
+        network.selectNodes(nodeIds);
+
+        // programmatic selection does not fire an event
+        onSelect(network.getSelectedNodes(), network.getSelectedEdges());
+    }
+
     // Handle changes from the server-side
     self.onStateChange = function () {
         if (network != null) {
