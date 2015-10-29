@@ -63,9 +63,7 @@ public class MainMenuBar extends HorizontalLayout {
    * Highlights the given main navigation in the menubar.
    */
   public synchronized void setMainNavigation(String navigation) {
-    if(currentMainNavigation != null) {
-      menuItemButtons.get(currentMainNavigation).removeStyleName(ExplorerLayout.STYLE_ACTIVE);
-    }
+   
     currentMainNavigation = navigation;
 
     Button current = menuItemButtons.get(navigation);
