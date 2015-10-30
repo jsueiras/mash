@@ -47,7 +47,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 		setFirstComponent(null);
 		if (id != null) {
 			network = initNetwork(isLocation, id);
-			network.addClickListener(ClickEvent.Type.selectNode, getNodeSelectionListener());
+			network.addClickListener(ClickEvent.Name.selectNode, getNodeSelectionListener());
 			setFirstComponent(network);
 		}
 	}
@@ -60,7 +60,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 			if (reason != null && reason.getNetworkState() != null) {
 				network = new Network(reason.getNetworkState().nodes, reason.getNetworkState().edges);
-				network.addClickListener(ClickEvent.Type.selectNode, getNodeSelectionListener());
+				network.addClickListener(ClickEvent.Name.selectNode, getNodeSelectionListener());
 				setFirstComponent(network);
 			}
 		}

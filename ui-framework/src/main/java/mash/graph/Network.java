@@ -15,9 +15,9 @@ import java.util.*;
 public class Network extends AbstractJavaScriptComponent {
 	private static final Gson GSON = new Gson();
 
-	private Map<ClickEvent.Type, Set<ClickListener>> clickListeners =
-			new HashMap<ClickEvent.Type, Set<ClickListener>>() {{
-				Arrays.stream(ClickEvent.Type.values()).forEach(type -> put(type, new HashSet<ClickListener>()));
+	private Map<ClickEvent.Name, Set<ClickListener>> clickListeners =
+			new HashMap<ClickEvent.Name, Set<ClickListener>>() {{
+				Arrays.stream(ClickEvent.Name.values()).forEach(type -> put(type, new HashSet<ClickListener>()));
 			}};
 
 	public Network(Set<Node> nodes, Set<Edge> edges) {
@@ -31,8 +31,8 @@ public class Network extends AbstractJavaScriptComponent {
 			@Override
 			public void call(JsonArray arguments) {
 				JsonObject json = arguments.getObject(0);
-				String name = json.getString("name");
-				for (ClickListener listener : clickListeners.get(ClickEvent.Type.valueOf(name))) {
+				ClickEvent.Name name = ClickEvent.Name.valueOf(json.getString("name"));
+				for (ClickListener listener : clickListeners.get(name)) {
 
 					JsonArray selectedNodeIds = json.getArray("selectedNodeIds");
 					Set<String> selectedNodeIdSet = new HashSet<>();
@@ -48,8 +48,10 @@ public class Network extends AbstractJavaScriptComponent {
 					}
 					String[] selectedEdgeIdArray = selectedEdgeIdSet.toArray(new String[selectedEdgeIdSet.size()]);
 
-					String atNodeId = json.hasKey(ClickEvent.AT_NODE_ID) ? json.getString(ClickEvent.AT_NODE_ID) : null;
-					String atEdgeId = json.hasKey(ClickEvent.AT_EDGE_ID) ? json.getString(ClickEvent.AT_EDGE_ID) : null;
+					String atNodeId = json.hasKey(ClickEvent.AT_NODE_ID) ? json.getString(ClickEvent.AT_NODE_ID) :
+							null;
+					String atEdgeId = json.hasKey(ClickEvent.AT_EDGE_ID) ? json.getString(ClickEvent.AT_EDGE_ID) :
+							null;
 					ClickEvent event =
 							new ClickEvent(name, atNodeId, atEdgeId, selectedNodeIdArray, selectedEdgeIdArray);
 					listener.clicked(event);
@@ -103,12 +105,12 @@ public class Network extends AbstractJavaScriptComponent {
 		return state;
 	}
 
-	public void addClickListener(ClickEvent.Type type, ClickListener listener) {
-		clickListeners.get(type).add(listener);
+	public void addClickListener(ClickEvent.Name name, ClickListener listener) {
+		clickListeners.get(name).add(listener);
 	}
 
-	public boolean removeClickListener(ClickEvent.Type type, ClickListener listener) {
-		return clickListeners.get(type).remove(listener);
+	public boolean removeClickListener(ClickEvent.Name name, ClickListener listener) {
+		return clickListeners.get(name).remove(listener);
 	}
 
 	public static interface ClickListener {
@@ -119,19 +121,19 @@ public class Network extends AbstractJavaScriptComponent {
 		private static final String AT_NODE_ID = "atNodeId";
 		private static final String AT_EDGE_ID = "atEdgeId";
 
-		public enum Type {
+		public enum Name {
 			click, doubleClick, oncontext, hold, release,
 			select, selectNode, selectEdge,
 			dragStart, dragging, dragEnd;
 		}
 
-		public final String name;
+		public final Name name;
 		public final String atNodeId;
 		public final String atEdgeId;
 		public final String[] selectedNodeIds;
 		public final String[] selectedEdgeIds;
 
-		public ClickEvent(String name, String atNodeId, String atEdgeId, String[] selectedNodeIds,
+		public ClickEvent(Name name, String atNodeId, String atEdgeId, String[] selectedNodeIds,
 						  String[] selectedEdgeIds) {
 			this.name = name;
 			this.atNodeId = atNodeId;
