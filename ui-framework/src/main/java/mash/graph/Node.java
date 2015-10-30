@@ -14,21 +14,22 @@ public class Node implements Serializable {
 	private static final long serialVersionUID = -2561388826782706977L;
 
 	public final String id;
-	public String label;
+	public final String label;
+
 	public Group group;
+
+	/** Tooltip */
+	public String title;
+
 	public int age = -1;
 	public boolean primary = false;
 	public boolean warning = false;
 
-	public Node(String id) {
+	public Node(String id, String label, Group group) {
 		if (id == null) {
 			throw new IllegalArgumentException("Node.id cannot be null.");
 		}
 		this.id = id;
-	}
-
-	public Node(String id, String label, Group group) {
-		this(id);
 		this.label = label;
 		this.group = group;
 	}

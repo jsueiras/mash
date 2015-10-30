@@ -284,17 +284,6 @@ window.mash_graph_Network = function () {
         });
     }
 
-    // Handle changes in Vaadin layout
-    self.addResizeListener(container, function () {
-        network.redraw();
-    });
-
-    self.add = function (newNodes, newEdges) {
-        nodes.add(JSON.parse(newNodes));
-        edges.add(JSON.parse(newEdges));
-        network.redraw();
-    }
-
     self.selectNodes = function (nodeIds) {
         network.selectNodes(JSON.parse(nodeIds));
 
@@ -302,10 +291,21 @@ window.mash_graph_Network = function () {
         onSelect(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
+    self.add = function (newNodes, newEdges) {
+        nodes.add(JSON.parse(newNodes));
+        edges.add(JSON.parse(newEdges));
+        network.redraw();
+    }
+
     self.updateNodes = function (newNodes) {
         nodes.update(JSON.parse(newNodes));
         network.redraw();
     }
+
+    // Handle changes in Vaadin layout
+    self.addResizeListener(container, function () {
+        network.redraw();
+    });
 
     // Handle initialization from the server-side
     self.onStateChange = function () {

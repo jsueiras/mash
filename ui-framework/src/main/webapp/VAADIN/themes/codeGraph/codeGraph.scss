@@ -30,10 +30,18 @@
   }
 
   .logo {
-    color: rgb(105,116,123);
+    color: rgb(105, 116, 123);
     font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 20px;
     padding: 0 12px;
+  }
+
+  .vis-network-tooltip {
+    @extend .v-tooltip;
+
+    &:empty {
+      display: none;
+    }
   }
 }

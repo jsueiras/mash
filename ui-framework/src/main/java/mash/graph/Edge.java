@@ -6,22 +6,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Edge implements Serializable {
 
-	
+
 	private static final long serialVersionUID = 130821260933146318L;
-	
+
 	public final String from;
 	public final String to;
-	public String label = "";
+	public final String label;
 	public final Arrows arrows = new Arrows();
-	public int length;
 
-	public Edge(String from, String to) {
-		this.from = from;
-		this.to = to;
-	}
+	/** Tooltip */
+	public String title;
 
 	public Edge(String from, String to, String label) {
-		this(from, to);
+		this.from = from;
+		this.to = to;
 		this.label = label;
 	}
 
@@ -45,6 +43,9 @@ public class Edge implements Serializable {
 		return val;
 	}
 
+	/**
+	 * Determines on which ends of the edge to draw an arrow.
+	 */
 	public static class Arrows implements Serializable{
 		public boolean to = true;
 		public boolean from = false;
