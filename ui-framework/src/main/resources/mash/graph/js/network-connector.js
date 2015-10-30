@@ -185,26 +185,26 @@ window.mash_graph_Network = function () {
 
     function blurLastHover() {
         if (hoverEdgeId != null) {
-            onBlurEdge(hoverEdgeId);
+            client_onBlurEdge(hoverEdgeId);
         }
         if (hoverNodeId != null) {
-            onBlurNode(hoverNodeId);
+            client_onBlurNode(hoverNodeId);
         }
     }
 
-    function onHoverEdge(edgeId) {
+    function client_onHoverEdge(edgeId) {
         blurLastHover();
 
         hoverEdgeId = edgeId;
         showEdgeLabel(edgeId);
     }
 
-    function onBlurEdge(edgeId) {
+    function client_onBlurEdge(edgeId) {
         hideEdgeLabel(edgeId);
         showLabels(network.getSelectedNodes(), network.getSelectedEdges());
     }
 
-    function onHoverNode(nodeId) {
+    function client_onHoverNode(nodeId) {
         blurLastHover();
 
         hoverNodeId = nodeId;
@@ -213,7 +213,7 @@ window.mash_graph_Network = function () {
         });
     }
 
-    function onBlurNode(nodeId) {
+    function client_onBlurNode(nodeId) {
         network.getConnectedEdges(nodeId).forEach(function (edgeId) {
             hideEdgeLabel(edgeId);
         });
@@ -238,7 +238,7 @@ window.mash_graph_Network = function () {
         });
     }
 
-    function onSelect(nodeIDs, edgeIDs) {
+    function client_onSelect(nodeIDs, edgeIDs) {
         blurLastHover();
         hoverEdgeId = null;
 
@@ -250,11 +250,11 @@ window.mash_graph_Network = function () {
     }
 
     // draw before vis.js finishes drawing
-    function onBeforeDrawing(canvasContext) {
+    function client_onBeforeDrawing(canvasContext) {
     }
 
     // draw after vis.js finishes drawing
-    function onAfterDrawing(canvasContext) {
+    function client_onAfterDrawing(canvasContext) {
         nodes.forEach(function (node) {
             var nodePosition = network.getPositions([node.id]);
             var offset = 20;
@@ -288,19 +288,19 @@ window.mash_graph_Network = function () {
         network.selectNodes(JSON.parse(nodeIds));
 
         // programmatic selection does not fire an event
-        onSelect(network.getSelectedNodes(), network.getSelectedEdges());
-    }
+        client_onSelect(network.getSelectedNodes(), network.getSelectedEdges());
+    };
 
     self.add = function (newNodes, newEdges) {
         nodes.add(JSON.parse(newNodes));
         edges.add(JSON.parse(newEdges));
         network.redraw();
-    }
+    };
 
     self.updateNodes = function (newNodes) {
         nodes.update(JSON.parse(newNodes));
         network.redraw();
-    }
+    };
 
     // Handle changes in Vaadin layout
     self.addResizeListener(container, function () {
@@ -323,34 +323,48 @@ window.mash_graph_Network = function () {
         network = new vis.Network(container, data, options);
 
         network.on("hoverEdge", function (params) {
-            onHoverEdge(params.edge);
+            client_onHoverEdge(params.edge);
         });
         network.on("blurEdge", function (params) {
-            onBlurEdge(params.edge);
+            client_onBlurEdge(params.edge);
         });
         network.on("hoverNode", function (params) {
-            onHoverNode(params.node);
+            client_onHoverNode(params.node);
         });
         network.on("blurNode", function (params) {
-            onBlurNode(params.node);
+            client_onBlurNode(params.node);
         });
         network.on("select", function (params) {
-            onSelect(params.nodes, params.edges);
+            client_onSelect(params.nodes, params.edges);
         });
         network.on("dragStart", function (params) {
-            onSelect(params.nodes, params.edges);
+            client_onSelect(params.nodes, params.edges);
         });
 
         network.on("beforeDrawing", function (canvasContext) {
-            onBeforeDrawing(canvasContext);
+            client_onBeforeDrawing(canvasContext);
         });
         network.on("afterDrawing", function (canvasContext) {
-            onAfterDrawing(canvasContext);
+            client_onAfterDrawing(canvasContext);
         });
 
-        network.on('selectNode', function (params) {
-            // Server callback
-            self.onSelectNode(params);
+        ["click", "doubleClick", "oncontext", "hold", "release", "select", "selectNode", "selectEdge", "dragStart", "dragging", "dragEnd"].forEach(function (name) {
+            network.on(name, function (properties) {
+                var params = {
+                    name: name,
+                    atNodeId: network.getNodeAt({
+                        x: properties.pointer.DOM.x,
+                        y: properties.pointer.DOM.y,
+                    }),
+                    atEdgeId: network.getEdgeAt({
+                        x: properties.pointer.DOM.x,
+                        y: properties.pointer.DOM.y,
+                    }),
+                    selectedNodeIds: properties.nodes,
+                    selectedEdgeIds: properties.edges,
+                };
+                self.server_onClick(params);
+            });
         });
 
         network.redraw();

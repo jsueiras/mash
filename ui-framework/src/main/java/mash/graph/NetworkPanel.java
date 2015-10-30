@@ -3,24 +3,19 @@ package mash.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 
-import mash.graph.Network.NodeSelectedEvent;
-import mash.graph.Network.NodeSelectionListener;
+import mash.graph.Network.ClickEvent;
+import mash.graph.Network.ClickListener;
 import mash.graph.util.NetworkBuilder;
 
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.ui.form.custom.TriageSearchValue;
-import org.activiti.explorer.ui.search.SearchDetailPanel;
-import org.activiti.explorer.ui.search.SearchTabEvent;
 
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Entity;
@@ -28,7 +23,6 @@ import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
-import com.vaadin.ui.CssLayout;
 
 public class NetworkPanel extends VerticalSplitPanel {
 
@@ -53,7 +47,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 		setFirstComponent(null);
 		if (id != null) {
 			network = initNetwork(isLocation, id);
-			network.addNodeSelectionListener(getNodeSelectionListener());
+			network.addClickListener(ClickEvent.Type.selectNode, getNodeSelectionListener());
 			setFirstComponent(network);
 		}
 	}
@@ -63,10 +57,10 @@ public class NetworkPanel extends VerticalSplitPanel {
 		Object value = runtimeService.getVariable(task.getProcessInstanceId(), TRIAGE_REASON);
 		if (value != null) {
 			TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
-			
+
 			if (reason != null && reason.getNetworkState() != null) {
 				network = new Network(reason.getNetworkState().nodes, reason.getNetworkState().edges);
-				network.addNodeSelectionListener(getNodeSelectionListener());
+				network.addClickListener(ClickEvent.Type.selectNode, getNodeSelectionListener());
 				setFirstComponent(network);
 			}
 		}
@@ -74,7 +68,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 
 	private List<Entity> getPersonPrimaryLinks(String id) {
-		
+
 		List<String> ids = new ArrayList<String>();
 		Person person = mashRep.findPersonById(id, null);
 		List<Entity> entities;
@@ -97,7 +91,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	private List<Entity> getLocationPrimaryLinks(String id) {
-		
+
 		Location location = mashRep.findLocationById(id, null);
 		List<Entity> entities;
 		if (location.getOccupants() != null && location.getOccupants().size() > 0) {
@@ -118,7 +112,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	private Network initNetwork(boolean isLocation, String id) {
-	
+
 		NetworkState state = new NetworkState();
 		state.edges = new HashSet<>();
 		state.nodes = new HashSet<>();
@@ -140,30 +134,23 @@ public class NetworkPanel extends VerticalSplitPanel {
 	public void addNetworkChangeEventListener(NetworkChangeListener listener) {
 		addListener(listener);
 	}
-	
-    public NodeSelectionListener getNodeSelectionListener()
+
+    public ClickListener getNodeSelectionListener()
     {
-    	return new NodeSelectionListener() {
-			
+    	return new ClickListener() {
+
 			@Override
-			public void nodeSelected(NodeSelectedEvent event) {
-				if (event.getNodeId()!= null)
-				{
+			public void clicked(ClickEvent event) {
+				if (event.selectedNodeIds.length > 0) {
 					List<String> ids = new ArrayList<String>();
-					ids.add(event.getNodeId());
-				    List<Entity> entities = mashRep.findEntitiesById(ids, null);
-				    NetworkState state = new NetworkState();
-				    Node expanded = builder.addNodesToNetwork(state, entities.get(0));
-				    network.updateNodes(expanded);
-				    network.add(state.nodes, state.edges);
-				   
-				}		
+					ids.add(event.selectedNodeIds[0]);
+					List<Entity> entities = mashRep.findEntitiesById(ids, null);
+					NetworkState state = new NetworkState();
+					Node expanded = builder.addNodesToNetwork(state, entities.get(0));
+					network.updateNodes(expanded);
+					network.add(state.nodes, state.edges);
+				}
 			}
-		
 		};
-		
-		
     }
-
-
 }

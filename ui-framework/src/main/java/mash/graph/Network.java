@@ -3,24 +3,22 @@ package mash.graph;
 import com.google.gson.Gson;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
-import com.vaadin.server.JsonCodec;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
-import elemental.json.Json;
 import elemental.json.JsonArray;
-import elemental.json.JsonValue;
+import elemental.json.JsonObject;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @JavaScript({"js/network-connector.js"})
 @StyleSheet({"css/network.css"})
 public class Network extends AbstractJavaScriptComponent {
 	private static final Gson GSON = new Gson();
 
-	private Set<NodeSelectionListener> nodeSelectionListeners = new HashSet<NodeSelectionListener>();
+	private Map<ClickEvent.Type, Set<ClickListener>> clickListeners =
+			new HashMap<ClickEvent.Type, Set<ClickListener>>() {{
+				Arrays.stream(ClickEvent.Type.values()).forEach(type -> put(type, new HashSet<ClickListener>()));
+			}};
 
 	public Network(Set<Node> nodes, Set<Edge> edges) {
 		addStyleName("mash-network");
@@ -29,12 +27,32 @@ public class Network extends AbstractJavaScriptComponent {
 		getState().nodes.addAll(nodes);
 		getState().edges.addAll(edges);
 
-		addFunction("onSelectNode", new JavaScriptFunction() {
+		addFunction("server_onClick", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				for (NodeSelectionListener listener : nodeSelectionListeners) {
-					listener.nodeSelected(
-							new NodeSelectedEvent(arguments.getObject(0).getArray("nodes").get(0).asString()));
+				JsonObject json = arguments.getObject(0);
+				String name = json.getString("name");
+				for (ClickListener listener : clickListeners.get(ClickEvent.Type.valueOf(name))) {
+
+					JsonArray selectedNodeIds = json.getArray("selectedNodeIds");
+					Set<String> selectedNodeIdSet = new HashSet<>();
+					for (int i = 0; i < selectedNodeIds.length(); i++) {
+						selectedNodeIdSet.add(selectedNodeIds.getString(i));
+					}
+					String[] selectedNodeIdArray = selectedNodeIdSet.toArray(new String[selectedNodeIdSet.size()]);
+
+					JsonArray selectedEdgeIds = json.getArray("selectedEdgeIds");
+					Set<String> selectedEdgeIdSet = new HashSet<>();
+					for (int i = 0; i < selectedEdgeIds.length(); i++) {
+						selectedEdgeIdSet.add(selectedEdgeIds.getString(i));
+					}
+					String[] selectedEdgeIdArray = selectedEdgeIdSet.toArray(new String[selectedEdgeIdSet.size()]);
+
+					String atNodeId = json.hasKey(ClickEvent.AT_NODE_ID) ? json.getString(ClickEvent.AT_NODE_ID) : null;
+					String atEdgeId = json.hasKey(ClickEvent.AT_EDGE_ID) ? json.getString(ClickEvent.AT_EDGE_ID) : null;
+					ClickEvent event =
+							new ClickEvent(name, atNodeId, atEdgeId, selectedNodeIdArray, selectedEdgeIdArray);
+					listener.clicked(event);
 				}
 			}
 		});
@@ -85,26 +103,41 @@ public class Network extends AbstractJavaScriptComponent {
 		return state;
 	}
 
-	public void addNodeSelectionListener(NodeSelectionListener listener) {
-		nodeSelectionListeners.add(listener);
+	public void addClickListener(ClickEvent.Type type, ClickListener listener) {
+		clickListeners.get(type).add(listener);
 	}
 
-	public boolean removeNodeSelectionListener(NodeSelectionListener listener) {
-		return nodeSelectionListeners.remove(listener);
+	public boolean removeClickListener(ClickEvent.Type type, ClickListener listener) {
+		return clickListeners.get(type).remove(listener);
 	}
 
-	public static interface NodeSelectionListener {
-		public void nodeSelected(NodeSelectedEvent event);
+	public static interface ClickListener {
+		public void clicked(ClickEvent event);
 	}
 
-	public static class NodeSelectedEvent {
-		private final String nodeId;
+	public static class ClickEvent {
+		private static final String AT_NODE_ID = "atNodeId";
+		private static final String AT_EDGE_ID = "atEdgeId";
 
-		public NodeSelectedEvent(String nodeId) {
-			this.nodeId = nodeId;
+		public enum Type {
+			click, doubleClick, oncontext, hold, release,
+			select, selectNode, selectEdge,
+			dragStart, dragging, dragEnd;
 		}
-		public String getNodeId() {
-			return nodeId;
+
+		public final String name;
+		public final String atNodeId;
+		public final String atEdgeId;
+		public final String[] selectedNodeIds;
+		public final String[] selectedEdgeIds;
+
+		public ClickEvent(String name, String atNodeId, String atEdgeId, String[] selectedNodeIds,
+						  String[] selectedEdgeIds) {
+			this.name = name;
+			this.atNodeId = atNodeId;
+			this.atEdgeId = atEdgeId;
+			this.selectedNodeIds = selectedNodeIds;
+			this.selectedEdgeIds = selectedEdgeIds;
 		}
 	}
 }
