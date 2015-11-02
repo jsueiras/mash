@@ -119,11 +119,11 @@ public class NetworkPanel extends VerticalSplitPanel {
 		List<Entity> primaryLinks;
 		if (isLocation) {
 			primaryLinks = getLocationPrimaryLinks(id);
-			builder.addNodesToNetwork(state, primaryLinks);
+			builder.addNodesToNetwork(state, primaryLinks,true);
 
 		} else {
 			primaryLinks = getPersonPrimaryLinks(id);
-			builder.addNodesToNetwork(state, primaryLinks);
+			builder.addNodesToNetwork(state, primaryLinks,true);
 		}
 		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state,primaryLinks));
 
