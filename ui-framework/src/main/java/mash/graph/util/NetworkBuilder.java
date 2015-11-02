@@ -138,14 +138,16 @@ public class NetworkBuilder {
 		}
 	}
 
-	public NetworkState initNetworkState(List<Entity> entities) {
-		NetworkState state = new NetworkState();
-		addNodesToNetwork(state, entities);
-		return state;
+	
+	
+	public void addNodesToNetwork(NetworkState state, List<Entity> entities)
+	{
+		addNodesToNetwork(state, entities,false);
 	}
 
-	public void addNodesToNetwork(NetworkState state, List<Entity> entities) {
+	public void addNodesToNetwork(NetworkState state, List<Entity> entities,boolean initial) {
 		Set expandedIds = new HashSet<String>();
+	
 		for (Entity entity : entities) {
 			appendNode(state, entity);
 			expandedIds.add(entity.getId());
@@ -155,7 +157,13 @@ public class NetworkBuilder {
 			if (expandedIds.contains(node.id)) {
 				setExpanded(node); 
 			}
+			if (initial && node.id.equals(entities.get(0).getId()))
+			{
+				node.primary = true;
+			}	
 		}
+			
+		
 	}
 	
 	public Node addNodesToNetwork(NetworkState state, Entity entity) {
