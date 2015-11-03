@@ -11,24 +11,23 @@ package com.mash.model.catalog;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Relation complex type.
+ * <p>Java class for SystemId complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Relation">
+ * &lt;complexType name="SystemId">
  *   &lt;complexContent>
- *     &lt;extension base="{http://www.mash.data.com/mashModel}Role">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element ref="{http://www.mash.data.com/mashModel}person"/>
+ *         &lt;element name="system" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="sourceId" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -36,66 +35,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Relation", propOrder = {
-    "type",
-    "person"
+@XmlType(name = "SystemId", propOrder = {
+    "system",
+    "sourceId"
 })
-@XmlRootElement(name = "relation")
-public class Relation
-    extends Role
-{
+public class SystemId {
 
     @XmlElement(required = true)
-    protected String type;
+    protected String system;
     @XmlElement(required = true)
-    protected Person person;
+    protected String sourceId;
 
     /**
-     * Gets the value of the type property.
+     * Gets the value of the system property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getType() {
-        return type;
+    public String getSystem() {
+        return system;
     }
 
     /**
-     * Sets the value of the type property.
+     * Sets the value of the system property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setType(String value) {
-        this.type = value;
+    public void setSystem(String value) {
+        this.system = value;
     }
 
     /**
-     * Gets the value of the person property.
+     * Gets the value of the sourceId property.
      * 
      * @return
      *     possible object is
-     *     {@link Person }
+     *     {@link String }
      *     
      */
-    public Person getPerson() {
-        return person;
+    public String getSourceId() {
+        return sourceId;
     }
 
     /**
-     * Sets the value of the person property.
+     * Sets the value of the sourceId property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Person }
+     *     {@link String }
      *     
      */
-    public void setPerson(Person value) {
-        this.person = value;
+    public void setSourceId(String value) {
+        this.sourceId = value;
     }
 
 }

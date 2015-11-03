@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 
 import mash.graph.Network.ClickEvent;
@@ -15,7 +19,11 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
+import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.form.custom.TriageSearchValue;
+import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
+import org.activiti.explorer.ui.search.util.Decorator;
+import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Entity;
@@ -23,6 +31,8 @@ import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
+import com.mash.model.catalog.Source;
+import com.mash.model.catalog.SystemId;
 
 public class NetworkPanel extends VerticalSplitPanel {
 
@@ -32,12 +42,15 @@ public class NetworkPanel extends VerticalSplitPanel {
 	private Network network = null;
 	private Repository mashRep;
 	private NetworkBuilder builder;
+	private TabSheet detailTabSheet;
 
 	public NetworkPanel() {
 		this.runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
 		mashRep = ExplorerApp.get().getMashRepository();
 		builder = new NetworkBuilder();
-		setSecondComponent(new TabSheet());
+		detailTabSheet = new TabSheet();
+		
+		setSecondComponent(detailTabSheet);
 
 		setSplitPosition(100, Unit.PERCENTAGE);
 		setLocked(true);
@@ -125,10 +138,48 @@ public class NetworkPanel extends VerticalSplitPanel {
 			primaryLinks = getPersonPrimaryLinks(id);
 			builder.addNodesToNetwork(state, primaryLinks,true);
 		}
+		populateDetail(primaryLinks.get(0));
 		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state,primaryLinks));
 
 		return new Network(state.nodes, state.edges);
 
+	}
+	
+	private void populateDetail(Entity entity)
+	{
+		 detailTabSheet.removeAllComponents();
+		for (Source source : entity.getSources()) {
+			detailTabSheet.addTab(createTabDetail(source),source.getAgency());
+		}
+	     setSecondComponent(detailTabSheet);
+
+			setSplitPosition(80, Unit.PERCENTAGE);
+			setLocked(false);
+	}
+
+	private Component createTabDetail(Source source) {
+		VerticalLayout tab =new VerticalLayout();
+		// TODO Auto-generated method stub
+		Table sourcesTable = new Table();
+		sourcesTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
+		sourcesTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
+		sourcesTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+
+		// Create column header
+		sourcesTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
+
+		sourcesTable.addContainerProperty("System", String.class, null);
+		sourcesTable.addContainerProperty("Id", String.class, null);
+		
+		
+		for ( SystemId id : source.getSystemIds()) {
+			sourcesTable.addItem(new Object[]{id.getSystem(), id.getSourceId()},String.format("%s|||%s", id.getSystem() , id.getSourceId()));
+		}
+		sourcesTable.setPageLength(source.getSystemIds().size());
+		
+		tab.addComponent(sourcesTable);
+		
+		return tab;
 	}
 
 	public void addNetworkChangeEventListener(NetworkChangeListener listener) {
@@ -149,6 +200,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 					Node expanded = builder.addNodesToNetwork(state, entities.get(0));
 					network.updateNodes(expanded);
 					network.add(state.nodes, state.edges);
+					populateDetail(entities.get(0));
 				}
 			}
 		};

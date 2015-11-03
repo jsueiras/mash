@@ -14,6 +14,7 @@ import mash.graph.Node.Group;
 
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
+import com.mash.model.catalog.Marker;
 import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
@@ -90,14 +91,23 @@ public class NetworkBuilder {
 	}
 
 	private Node appendNode(NetworkState state, Entity entity) {
-
-		if (entity instanceof Person)
-			return appendNode(state, (Person) entity);
-		else
-			return appendNode(state, (Location) entity);
-
+		Node newNode;
+		if (entity instanceof Person) {
+			newNode = appendNode(state, (Person) entity);
+			
+		}else
+		{
+			newNode = appendNode(state, (Location) entity);
+		}
+		newNode.warning = hasWarning(entity);
+		return newNode;
+	
 	}
 
+
+	private boolean hasWarning(Entity entity) {
+		return (entity.getWarningMarkers().size() >0);
+	}
 
 	private Edge createEdge(Entity source, Entity target, String label) {
 		Edge edge = new Edge(getId(source), getId(target), label.toLowerCase());
