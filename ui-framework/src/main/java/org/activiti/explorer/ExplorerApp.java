@@ -13,6 +13,7 @@
 package org.activiti.explorer;
 
 import com.mash.data.service.Repository;
+import com.mash.data.service.SecurityInfo;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
@@ -21,6 +22,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.server.SpringVaadinServlet;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
+
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.explorer.identity.LoggedInUser;
@@ -48,6 +50,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -182,7 +185,8 @@ public class ExplorerApp extends UI {
 
     invalidatedSession = true;
 
-    super.close();
+    //super.close();
+    viewManager.showLoginPage();
   }
 
   public void setUser(LoggedInUser user) {
@@ -197,8 +201,25 @@ public static ExplorerApp get() {
   public LoggedInUser getLoggedInUser() {
     return (LoggedInUser) getUser();
   }
+  
+  public SecurityInfo getSecurityInfo(String taskType)
+  {
+	  LoggedInUser user = getLoggedInUser();
+	  if (user==null)return null;
+	  return new SecurityInfo(user.getId(),getAgency(user),taskType);
+	  
+  }
 
-  private LoggedInUser getUser() {
+  private String getAgency(LoggedInUser user) {
+	// TODO Auto-generated method stub
+	if (user.getGroups().size()>0)
+	{
+	   user.getGroups().get(0).getId();
+	}	
+	return null;
+}
+
+private LoggedInUser getUser() {
 	return getSession().getAttribute(LoggedInUser.class);
 }
 

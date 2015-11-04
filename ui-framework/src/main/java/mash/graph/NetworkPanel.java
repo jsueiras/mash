@@ -43,6 +43,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	private Repository mashRep;
 	private NetworkBuilder builder;
 	private TabSheet detailTabSheet;
+	private String taskName;
 
 	public NetworkPanel() {
 		this.runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
@@ -67,6 +68,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 	public void initTask(Task task) {
 		setFirstComponent(null);
+		taskName = task.getName();
 		Object value = runtimeService.getVariable(task.getProcessInstanceId(), TRIAGE_REASON);
 		if (value != null) {
 			TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
@@ -83,7 +85,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	private List<Entity> getPersonPrimaryLinks(String id) {
 
 		List<String> ids = new ArrayList<String>();
-		Person person = mashRep.findPersonById(id, null);
+		Person person = mashRep.findPersonById(id, ExplorerApp.get().getSecurityInfo(taskName));
 		List<Entity> entities;
 
 		if (person.getHomeAddress() != null && person.getHomeAddress().getLocation() != null)
@@ -95,7 +97,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 			}
 		}
 		if (ids.size() > 0)
-			entities = mashRep.findEntitiesById(ids, null);
+			entities = mashRep.findEntitiesById(ids, ExplorerApp.get().getSecurityInfo(taskName));
 		else
 			entities = new ArrayList<Entity>();
 		entities.add(0, person);
@@ -105,7 +107,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 	private List<Entity> getLocationPrimaryLinks(String id) {
 
-		Location location = mashRep.findLocationById(id, null);
+		Location location = mashRep.findLocationById(id, ExplorerApp.get().getSecurityInfo(taskName));
 		List<Entity> entities;
 		if (location.getOccupants() != null && location.getOccupants().size() > 0) {
 			List<String> ids = new ArrayList<String>();
@@ -113,7 +115,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 			for (Occupant person : location.getOccupants()) {
 				ids.add(person.getPerson().getId());
 			}
-			entities = mashRep.findEntitiesById(ids, null);
+			entities = mashRep.findEntitiesById(ids, ExplorerApp.get().getSecurityInfo(taskName));
 		} else {
 			entities = new ArrayList<Entity>();
 		}
@@ -201,7 +203,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 			private List<Entity> expandNetwork(ClickEvent event) {
 				List<String> ids = new ArrayList<String>();
 				ids.add(event.selectedNodeIds[0]);
-				List<Entity> entities = mashRep.findEntitiesById(ids, null);
+				List<Entity> entities = mashRep.findEntitiesById(ids, ExplorerApp.get().getSecurityInfo(taskName));
 				if (isNodeUnexplored(event.selectedNodeIds[0]))
 				{		
 					NetworkState state = new NetworkState();

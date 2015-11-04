@@ -113,32 +113,16 @@ public class MainMenuBar extends HorizontalLayout {
     rootItem.setIcon(FontAwesome.USER);
     rootItem.setStyleName(ExplorerLayout.STYLE_HEADER_PROFILE_MENU);
 
-    if(useProfile()) {
-      // Show profile
-      rootItem.addItem(i18nManager.getMessage(Messages.PROFILE_SHOW), new Command() {
-        public void menuSelected(MenuItem selectedItem) {
-      //    ExplorerApp.get().getViewManager().showProfilePopup(user.getId());
-        }
-      });
+  
+    
+    // Change password
+    rootItem.addItem(i18nManager.getMessage(Messages.PASSWORD_CHANGE), new Command() {
+      public void menuSelected(MenuItem selectedItem) {
+        ExplorerApp.get().getViewManager().showPopupWindow(new ChangePasswordPopupWindow());
+      }
+    });
 
-      // Edit profile
-      rootItem.addItem(i18nManager.getMessage(Messages.PROFILE_EDIT), new Command() {
-
-        public void menuSelected(MenuItem selectedItem) {
-          // TODO: Show in edit-mode
-        //  ExplorerApp.get().getViewManager().showProfilePopup(user.getId());
-        }
-      });
-
-      // Change password
-      rootItem.addItem(i18nManager.getMessage(Messages.PASSWORD_CHANGE), new Command() {
-        public void menuSelected(MenuItem selectedItem) {
-          ExplorerApp.get().getViewManager().showPopupWindow(new ChangePasswordPopupWindow());
-        }
-      });
-
-      rootItem.addSeparator();
-    }
+    rootItem.addSeparator();
 
     // Logout
     rootItem.addItem(i18nManager.getMessage(Messages.HEADER_LOGOUT), new Command() {
@@ -152,9 +136,7 @@ public class MainMenuBar extends HorizontalLayout {
     setExpandRatio(profileMenu, 1.0f);
   }
 
-  protected boolean useProfile() {
-    return true;
-  }
+ 
 
   // Listener classes
   private class ShowTasksClickListener implements ClickListener {
