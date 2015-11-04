@@ -9,6 +9,12 @@ public class Node implements Serializable {
 		FEMALES, FEMALES_UNEXPLORED,
 		MALES, MALES_UNEXPLORED,
 		LOCATIONS, LOCATIONS_UNEXPLORED;
+		
+	     public boolean isUnexplored()
+	     {
+	    	return this.toString().contains("_UNEXPLORED");
+	     }
+	     
 	}
 
 	private static final long serialVersionUID = -2561388826782706977L;

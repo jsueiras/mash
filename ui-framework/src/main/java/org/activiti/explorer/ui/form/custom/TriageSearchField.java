@@ -1,5 +1,6 @@
 package org.activiti.explorer.ui.form.custom;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class TriageSearchField extends CustomField<String> {
 	protected Table table;
 
 	public TriageSearchField(Map<String,String> values, String currentValue, String label) {
+		this.subjects = new ArrayList<TriageSearchValue.TriagePersonSummary>();
 		this.values = values;
 		 if (currentValue!=null)
 		 {
@@ -194,16 +196,17 @@ public class TriageSearchField extends CustomField<String> {
 		@Override
 		protected void handleNetworkChange(NetworkChangeEvent event) {
 			networkState = event.getNewState();
-		    summarizePersonData(event.getPrimaryLinks());
+		    summarizePersonData(event.getPrimaryLinks(),event.isAppend());
 		    TableBuilder.appendResults(subjects, table);
 	   }
 		
 	 };
 	 }
 
-     private void summarizePersonData(List<Entity> links)
+     private void summarizePersonData(List<Entity> links,boolean append)
      {
-    	 subjects = CollectionUtils.transform( 
+    	
+    	  List<TriagePersonSummary> results= CollectionUtils.transform( 
     			    CollectionUtils.filter(links, new Predicate() {	
     					@Override
     					public boolean evaluate(Object arg0) {
@@ -242,6 +245,10 @@ public class TriageSearchField extends CustomField<String> {
     						summary.setHomeAddress(tranformAddress(person));
     						return summary;
     					}});
+    	   if (append)
+    		   this.subjects.addAll(results);
+    	   else
+    		   this.subjects = results;
     			    	 
         }
 

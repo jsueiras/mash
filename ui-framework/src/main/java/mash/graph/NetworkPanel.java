@@ -193,15 +193,35 @@ public class NetworkPanel extends VerticalSplitPanel {
 			@Override
 			public void clicked(ClickEvent event) {
 				if (event.selectedNodeIds.length > 0) {
-					List<String> ids = new ArrayList<String>();
-					ids.add(event.selectedNodeIds[0]);
-					List<Entity> entities = mashRep.findEntitiesById(ids, null);
+					List<Entity> entities = expandNetwork(event);
+					populateDetail(entities.get(0));
+				}
+			}
+
+			private List<Entity> expandNetwork(ClickEvent event) {
+				List<String> ids = new ArrayList<String>();
+				ids.add(event.selectedNodeIds[0]);
+				List<Entity> entities = mashRep.findEntitiesById(ids, null);
+				if (isNodeUnexplored(event.selectedNodeIds[0]))
+				{		
 					NetworkState state = new NetworkState();
 					Node expanded = builder.addNodesToNetwork(state, entities.get(0));
 					network.updateNodes(expanded);
 					network.add(state.nodes, state.edges);
-					populateDetail(entities.get(0));
+					fireEvent(new NetworkChangeEvent(NetworkPanel.this, network.getState(),entities,true));
+
 				}
+				return entities;
+			}
+
+			private boolean isNodeUnexplored(String id) {
+				for (Node node : network.getState().nodes) {
+					if (node.id.equals(id))
+					{
+						return node.group.isUnexplored();
+					}		
+				}
+				return false;
 			}
 		};
     }

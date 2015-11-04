@@ -13,14 +13,21 @@ public class NetworkChangeEvent extends Event {
   
 	private NetworkState newState;
 	private List<Entity> primaryLinks;
+	private boolean append;
 	
+	
+	 public NetworkChangeEvent(Component source, NetworkState newState, List<Entity> primaryLinks)
+	 {
+		 this(source,newState,primaryLinks,false);
+	 }
    
     
     
-    public NetworkChangeEvent(Component source, NetworkState newState, List<Entity> primaryLinks) {
+    public NetworkChangeEvent(Component source, NetworkState newState, List<Entity> primaryLinks,boolean append) {
       super(source);
       this.newState = newState;
       this.primaryLinks = primaryLinks;
+      this.append = append;
     }
     
   
@@ -31,6 +38,11 @@ public class NetworkChangeEvent extends Event {
     public List<Entity> getPrimaryLinks() {
 		return primaryLinks;
 	}
+    
+    public boolean isAppend() {
+		return append;
+	}
+   
     
     
     
