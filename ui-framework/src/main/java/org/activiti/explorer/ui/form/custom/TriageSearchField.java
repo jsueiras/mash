@@ -26,6 +26,7 @@ import org.springframework.cglib.core.Transformer;
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
 import com.mash.model.catalog.Person;
+import com.mash.model.catalog.Relation;
 import com.vaadin.client.ui.Field;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -43,10 +44,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class TriageSearchField extends CustomField<String> {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1L;
 	private Map<String, String> values;
 	private String selectedValue;
 	private SearchPopupWindow searchPopupWindow;
@@ -205,7 +203,16 @@ public class TriageSearchField extends CustomField<String> {
 
      private void summarizePersonData(List<Entity> links,boolean append)
      {
-    	
+    	  final String mainEntityId;
+    	  if (append && subjects.size()>0)
+    	  {
+    		  mainEntityId=subjects.get(0).getId();
+    	  }
+    	  else
+    	  {
+    		  mainEntityId= links.get(0).getId();
+    	  }		  
+    		  
     	  List<TriagePersonSummary> results= CollectionUtils.transform( 
     			    CollectionUtils.filter(links, new Predicate() {	
     					@Override
@@ -213,43 +220,69 @@ public class TriageSearchField extends CustomField<String> {
     						// TODO Auto-generated method stub
     						return arg0 instanceof Person;
     					}
-    				}), new Transformer(){
-
-    			    	private String tranformAddress(Person person)
-    			    	{
-    			    	    String address = "";
-    			    	   if (person.getHomeAddress() !=null && person.getHomeAddress().getLocation()!=null )
-    			    	   {
-    			    		   Location location= person.getHomeAddress().getLocation();
-    			    		   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
-    			    	   }	   
-    			    	   return address;
-    			    	}
-    			    	
-    			    	private String getValue(String s)
-    			    	{
-    			    		return (s!=null)?s:"";
-    			    	}
-    			    
-    					@Override
-    					public Object transform(Object arg0) {
-    						// TODO Auto-generated method stub
-    						Person person = (Person)arg0;
-    						TriagePersonSummary summary = new TriagePersonSummary();
-    						summary.setFirstName(person.getFirstName());
-    						summary.setLastName(person.getLastName());
-    						if (person.getDateOfBirth()!=null)
-    						{
-    							summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
-    						}	
-    						summary.setHomeAddress(tranformAddress(person));
-    						return summary;
-    					}});
+    				}), new SummaryTransformer(mainEntityId));
     	   if (append)
     		   this.subjects.addAll(results);
     	   else
     		   this.subjects = results;
     			    	 
         }
+     
+     private final class SummaryTransformer implements Transformer {
+    	
+ 		private String mainEntityId;
+
+		public SummaryTransformer(String mainEntityId) {
+			this.mainEntityId = mainEntityId;
+		}
+
+		private String tranformAddress(Person person)
+ 		{
+ 		    String address = "";
+ 		   if (person.getHomeAddress() !=null && person.getHomeAddress().getLocation()!=null )
+ 		   {
+ 			   Location location= person.getHomeAddress().getLocation();
+ 			   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
+ 		   }	   
+ 		   return address;
+ 		}
+
+ 		private String getValue(String s)
+ 		{
+ 			return (s!=null)?s:"";
+ 		}
+
+ 		private String getRelation(Person person)
+ 		{
+ 		   for (Relation relation : person.getHousehold().getRelations()) {
+			    if (relation.getPerson().getId().equals(mainEntityId))
+			    {
+			    	return relation.getType();
+			    } 	
+		     }
+ 		   return "";
+ 		}
+
+ 		@Override
+ 		public Object transform(Object arg0) {
+ 			// TODO Auto-generated method stub
+ 			Person person = (Person)arg0;
+ 			TriagePersonSummary summary = new TriagePersonSummary();
+ 			summary.setFirstName(person.getFirstName());
+ 			summary.setLastName(person.getLastName());
+ 			if (person.getDateOfBirth()!=null)
+ 			{
+ 				summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
+ 			}	
+ 			summary.setHomeAddress(tranformAddress(person));
+ 			summary.setRelationship(getRelation(person));
+ 			return summary;
+ 		}
+ 	}
+
+ 	/**
+ 	 *
+ 	 */
+
 
 }
