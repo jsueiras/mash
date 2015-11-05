@@ -18,12 +18,8 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Table;
-
-import mash.graph.Network;
 import mash.graph.NetworkPanel;
-
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.form.StartFormData;
@@ -35,7 +31,6 @@ import org.activiti.explorer.data.LazyLoadingContainer;
 import org.activiti.explorer.data.LazyLoadingQuery;
 import org.activiti.explorer.navigation.UriFragment;
 import org.activiti.explorer.ui.AbstractProcessStartPage;
-import org.activiti.explorer.ui.AbstractTablePage;
 import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.custom.TaskListHeader;
 import org.activiti.explorer.ui.custom.ToolBar;
@@ -183,16 +178,16 @@ private TaskDetailPanel detailComponent;
 	  String labelPage;
 	  if (this instanceof UnassignedPage)
 	  {
-		labelPage  = TaskListHeader.ENTRY_UNASSIGNED;  
+		labelPage  = TaskListHeader.ENTRY_UNASSIGNED;
 	  }
 	  else
 	  {
 		labelPage =  TaskListHeader.ENTRY_INBOX;
-	  }	  
+	  }
     return new TaskListHeader(labelPage);
   }
-  
-  
+
+
 
   @Override
   public void refreshSelectNext() {
@@ -207,21 +202,21 @@ private TaskDetailPanel detailComponent;
   protected abstract LazyLoadingQuery createLazyLoadingQuery();
 
   protected abstract UriFragment getUriFragment(String taskId);
-  
+
   @Override
   public  void showStartForm(ProcessDefinition processDefinition,
-			StartFormData startFormData) 
+			StartFormData startFormData)
 	{
 	  if (detailComponent == null)
 	  {
 		  detailComponent = new TaskDetailPanel(null, TaskPage.this);
 		  setDetailComponent(detailComponent);
-		  
-	  }	  
+
+	  }
 	  	detailComponent.showProcessStartForm(startFormData, processDefinition);
 	}
-	  
-  
-  
+
+
+
 
 }

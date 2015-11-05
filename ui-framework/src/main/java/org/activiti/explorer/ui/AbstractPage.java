@@ -110,7 +110,7 @@ public abstract class AbstractPage extends CustomComponent {
     mainLayout.setExpandRatio(content, 1);
 
     content.addComponent(sideBar);
-    content.setSplitPosition(20 * 12, Unit.PIXELS);
+    content.setSplitPosition(220, Unit.PIXELS);
     sideBar.setHeight(100, Unit.PERCENTAGE);
     sideBar.setId("side-bar");
 
