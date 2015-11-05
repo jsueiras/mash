@@ -85,6 +85,7 @@ public class TriageSearchField extends CustomField<String> {
 		overallLayout.addComponent(comboBox);
 		overallLayout.setExpandRatio(comboBox, 1);
 		comboBox.setWidth(100, Unit.PERCENTAGE);
+		comboBox.setTextInputAllowed(false);
 
 		overallLayout.addComponent(searchButton);
 		overallLayout.setExpandRatio(searchButton, 0);
@@ -144,11 +145,11 @@ public class TriageSearchField extends CustomField<String> {
 			}});
 
 	}
-	
+
 	private void initTable()
 	{
 		table = TableBuilder.createPersonTable();
-		
+
 
 	}
 
@@ -189,7 +190,7 @@ public class TriageSearchField extends CustomField<String> {
 	 {
 		 return new NetworkChangeListener() {
 
-		
+
 			private static final long serialVersionUID = -8340156883977266632L;
 
 		@Override
@@ -198,7 +199,7 @@ public class TriageSearchField extends CustomField<String> {
 		    summarizePersonData(event.getPrimaryLinks(),event.isAppend());
 		    TableBuilder.appendResults(subjects, table);
 	   }
-		
+
 	 };
 	 }
 
@@ -212,11 +213,11 @@ public class TriageSearchField extends CustomField<String> {
     	  else
     	  {
     		  mainEntityId= links.get(0).getId();
-    	  }		  
+    	  }
     		List<Entity> copy = new ArrayList<Entity>();
     		copy.addAll(links);
-    		
-    	  Collection persons = CollectionUtils.filter(copy, new Predicate() {	
+
+    	  Collection persons = CollectionUtils.filter(copy, new Predicate() {
 			@Override
 			public boolean evaluate(Object arg0) {
 				// TODO Auto-generated method stub
@@ -224,19 +225,19 @@ public class TriageSearchField extends CustomField<String> {
 			}
 		});
     	  if (persons.size()>0)
-    	  {		  
-			List<TriagePersonSummary> results= CollectionUtils.transform( 
+    	  {
+			List<TriagePersonSummary> results= CollectionUtils.transform(
 	    			    persons, new SummaryTransformer(mainEntityId));
 	    	   if (append)
 	    		   this.subjects.addAll(results);
 	    	   else
 	    		   this.subjects = results;
     	  }
-    			    	 
+
         }
-     
+
      private final class SummaryTransformer implements Transformer {
-    	
+
  		private String mainEntityId;
 
 		public SummaryTransformer(String mainEntityId) {
@@ -250,7 +251,7 @@ public class TriageSearchField extends CustomField<String> {
  		   {
  			   Location location= person.getHomeAddress().getLocation();
  			   address = String.format("%s %s %s", getValue(location.getNumberOrName()),getValue( location.getStreet()), getValue(location.getPostcode()));
- 		   }	   
+ 		   }
  		   return address;
  		}
 
@@ -265,7 +266,7 @@ public class TriageSearchField extends CustomField<String> {
 			    if (relation.getPerson().getId().equals(mainEntityId))
 			    {
 			    	return relation.getType();
-			    } 	
+			    }
 		     }
  		   return "";
  		}
@@ -280,7 +281,7 @@ public class TriageSearchField extends CustomField<String> {
  			if (person.getDateOfBirth()!=null)
  			{
  				summary.setDateOfBirth(person.getDateOfBirth().toGregorianCalendar().getTime());
- 			}	
+ 			}
  			summary.setHomeAddress(tranformAddress(person));
  			summary.setRelationship(getRelation(person));
  			return summary;
