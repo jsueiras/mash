@@ -45,6 +45,11 @@
     @extend .v-splitpanel-vertical.large;
   }
 
+  .v-table {
+    @extend .v-table-no-vertical-lines;
+    @extend .v-table-no-stripes;
+  }
+
   .vis-network-tooltip {
     @extend .v-tooltip;
 
