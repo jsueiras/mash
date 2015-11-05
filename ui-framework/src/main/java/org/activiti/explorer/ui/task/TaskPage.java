@@ -108,10 +108,6 @@ private TaskDetailPanel detailComponent;
     this.taskListContainer = new LazyLoadingContainer(lazyLoadingQuery, 30);
     taskTable.setContainerDataSource(taskListContainer);
 
-    // Create column header
-    taskTable.addGeneratedColumn("icon", new ThemeImageColumnGenerator(Images.TASK_22));
-    taskTable.setColumnWidth("icon", 22);
-
     taskTable.addContainerProperty("name", String.class, null);
     taskTable.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
 

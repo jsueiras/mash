@@ -168,9 +168,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
 		sourcesTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
 
-		// Create column header
-		sourcesTable.addGeneratedColumn("", new ThemeImageColumnGenerator(Images.TASK_22));
-
+	
 		sourcesTable.addContainerProperty("System", String.class, null);
 		sourcesTable.addContainerProperty("Id", String.class, null);
 
