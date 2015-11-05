@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <person xmlns="http://www.mash.data.com/mashModel" schemaLocation="http://www.mash.data.com/mashModel mashModel.xsd ">
+	     <source>
+    <agency>Police</agency>
+    <systemIds>
+      <system>Guardian</system>
+      <sourceId>h123456</sourceId>
+    </systemIds>
+    <systemIds>
+      <system>Fire Arms</system>
+      <sourceId>h1234567</sourceId>
+    </systemIds>
+  </source>
+     <source>
+    <agency>Stoke</agency>
+    <systemIds>
+      <system>Revs And Bens</system>
+      <sourceId>h123456</sourceId>
+    </systemIds>
+    <systemIds>
+      <system>Housing</system>
+      <sourceId>h1234567</sourceId>
+    </systemIds>
+  </source>
+     <source>
+    <agency>NHS</agency>
+    <systemIds>
+      <system>Spine</system>
+      <sourceId>h123456</sourceId>
+    </systemIds>
+    <systemIds>
+      <system>Social Sec.</system>
+      <sourceId>h1234567</sourceId>
+    </systemIds>
+  </source>
 	 <id>marge2</id>
 	<firstName>Marge</firstName>
 	<lastName>Sampson</lastName>

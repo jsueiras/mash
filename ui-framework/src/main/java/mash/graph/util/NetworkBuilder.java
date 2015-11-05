@@ -99,7 +99,7 @@ public class NetworkBuilder {
 		{
 			newNode = appendNode(state, (Location) entity);
 		}
-		newNode.warning = hasWarning(entity);
+	
 		return newNode;
 	
 	}
@@ -130,6 +130,7 @@ public class NetworkBuilder {
 		}
 		Node node = new Node(getId(entity), getLabel(entity), group);
 		node.age = age;
+		node.warning = hasWarning(entity);
 		return node;
 	}
 
