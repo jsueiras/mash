@@ -29,7 +29,7 @@ public abstract class AbstractPage extends CustomComponent {
   protected AbstractSelect select;
   protected boolean showEvents;
   private VerticalLayout mainLayout = new VerticalLayout();
-  protected HorizontalLayout content;
+  protected HorizontalSplitPanel content;
   private VerticalLayout sideBar = new VerticalLayout();
   private HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
 
@@ -97,7 +97,7 @@ public abstract class AbstractPage extends CustomComponent {
   protected abstract ToolBar createMenuBar();
 
   protected void addMainLayout() {
-    content = new HorizontalLayout();
+    content = new HorizontalSplitPanel();
     content.setId("content");
 
     content.addStyleName(Reindeer.SPLITPANEL_SMALL);
@@ -110,13 +110,11 @@ public abstract class AbstractPage extends CustomComponent {
     mainLayout.setExpandRatio(content, 1);
 
     content.addComponent(sideBar);
-    content.setExpandRatio(sideBar, 0);
-    sideBar.setWidth(20, Unit.EM);
+    content.setSplitPosition(20 * 12, Unit.PIXELS);
     sideBar.setHeight(100, Unit.PERCENTAGE);
     sideBar.setId("side-bar");
 
     content.addComponent(splitPanel);
-    content.setExpandRatio(splitPanel, 1);
     splitPanel.setSizeFull();
     splitPanel.setSplitPosition(505, Unit.PIXELS);
 
