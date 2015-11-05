@@ -86,6 +86,7 @@ public class TriageSearchField extends CustomField<String> {
 		overallLayout.setExpandRatio(comboBox, 1);
 		comboBox.setWidth(100, Unit.PERCENTAGE);
 		comboBox.setTextInputAllowed(false);
+		comboBox.setInputPrompt("Select…");
 
 		overallLayout.addComponent(searchButton);
 		overallLayout.setExpandRatio(searchButton, 0);
