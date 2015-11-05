@@ -1,6 +1,7 @@
 package org.activiti.explorer.ui.form.custom;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -212,19 +213,25 @@ public class TriageSearchField extends CustomField<String> {
     	  {
     		  mainEntityId= links.get(0).getId();
     	  }		  
-    		  
-    	  List<TriagePersonSummary> results= CollectionUtils.transform( 
-    			    CollectionUtils.filter(links, new Predicate() {	
-    					@Override
-    					public boolean evaluate(Object arg0) {
-    						// TODO Auto-generated method stub
-    						return arg0 instanceof Person;
-    					}
-    				}), new SummaryTransformer(mainEntityId));
-    	   if (append)
-    		   this.subjects.addAll(results);
-    	   else
-    		   this.subjects = results;
+    		List<Entity> copy = new ArrayList<Entity>();
+    		copy.addAll(links);
+    		
+    	  Collection persons = CollectionUtils.filter(copy, new Predicate() {	
+			@Override
+			public boolean evaluate(Object arg0) {
+				// TODO Auto-generated method stub
+				return arg0 instanceof Person;
+			}
+		});
+    	  if (persons.size()>0)
+    	  {		  
+			List<TriagePersonSummary> results= CollectionUtils.transform( 
+	    			    persons, new SummaryTransformer(mainEntityId));
+	    	   if (append)
+	    		   this.subjects.addAll(results);
+	    	   else
+	    		   this.subjects = results;
+    	  }
     			    	 
         }
      
