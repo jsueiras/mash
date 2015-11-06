@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.vaadin.ui.*;
-
 import com.vaadin.ui.themes.ValoTheme;
+
 import mash.graph.Network.ClickEvent;
 import mash.graph.Network.ClickListener;
 import mash.graph.util.NetworkBuilder;
@@ -24,6 +24,7 @@ import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 import com.mash.data.service.Repository;
 import com.mash.model.catalog.Entity;
 import com.mash.model.catalog.Location;
+import com.mash.model.catalog.Marker;
 import com.mash.model.catalog.Occupant;
 import com.mash.model.catalog.Person;
 import com.mash.model.catalog.Relation;
@@ -149,6 +150,10 @@ public class NetworkPanel extends VerticalSplitPanel {
 	private void populateDetail(Entity entity)
 	{
 		 detailTabSheet.removeAllComponents();
+		 if (entity.getWarningMarkers().size()>0)
+		 {
+			 detailTabSheet.addTab(createTabDetail(entity.getWarningMarkers()),"Warning Markers");
+		 }	 
 		for (Source source : entity.getSources()) {
 			detailTabSheet.addTab(createTabDetail(source),source.getAgency());
 		}
@@ -158,10 +163,31 @@ public class NetworkPanel extends VerticalSplitPanel {
 			setLocked(false);
 	}
 
+	private Component createTabDetail(List<Marker> warningMarkers) {
+		VerticalLayout tab = createLayout();
+		Table sourcesTable = new Table();
+		sourcesTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
+		sourcesTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
+		sourcesTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+
+	
+		sourcesTable.addContainerProperty("Type", String.class, null);
+		sourcesTable.addContainerProperty("Value", String.class, null);
+		sourcesTable.addContainerProperty("Description", String.class, null);
+		
+		for (Marker marker : warningMarkers) {
+			sourcesTable.addItem(new Object[]{marker.getType(),marker.getValue(),marker.getDescription()},marker.getKey());
+		}
+		sourcesTable.setPageLength(warningMarkers.size());
+
+		tab.addComponent(sourcesTable);
+		sourcesTable.setHeight(100, Unit.PERCENTAGE);
+
+		return tab;
+	}
+
 	private Component createTabDetail(Source source) {
-		VerticalLayout tab =new VerticalLayout();
-		tab.setDefaultComponentAlignment(Alignment.TOP_CENTER);
-		tab.setSizeFull();
+		VerticalLayout tab = createLayout();
 
 		Table sourcesTable = new Table();
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
@@ -171,6 +197,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	
 		sourcesTable.addContainerProperty("System", String.class, null);
 		sourcesTable.addContainerProperty("Id", String.class, null);
+		
 
 		for ( SystemId id : source.getSystemIds()) {
 			sourcesTable.addItem(new Object[]{id.getSystem(), id.getSourceId()},String.format("%s|||%s", id.getSystem() , id.getSourceId()));
@@ -180,6 +207,13 @@ public class NetworkPanel extends VerticalSplitPanel {
 		tab.addComponent(sourcesTable);
 		sourcesTable.setHeight(100, Unit.PERCENTAGE);
 
+		return tab;
+	}
+
+	private VerticalLayout createLayout() {
+		VerticalLayout tab =new VerticalLayout();
+		tab.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+		tab.setSizeFull();
 		return tab;
 	}
 

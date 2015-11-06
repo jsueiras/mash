@@ -34,10 +34,10 @@
     </systemIds>
   </source>
   <warningMarkers>
-    <key>drugs</key>
+    <key>dra</key>
     <value>alcohol</value>
-    <type>warning</type>
-    <description>description</description>
+    <type>drugs</type>
+    <description>Has to much beet at Moe's</description>
   </warningMarkers>
     <id>homer</id>
 	<firstName>Homer</firstName>
