@@ -9,12 +9,12 @@ public class Node implements Serializable {
 		FEMALES, FEMALES_UNEXPLORED,
 		MALES, MALES_UNEXPLORED,
 		LOCATIONS, LOCATIONS_UNEXPLORED;
-		
+
 	     public boolean isUnexplored()
 	     {
 	    	return this.toString().contains("_UNEXPLORED");
 	     }
-	     
+
 	}
 
 	private static final long serialVersionUID = -2561388826782706977L;
@@ -25,7 +25,7 @@ public class Node implements Serializable {
 	public Group group;
 
 	/** Tooltip */
-	public String title;
+	public String title = "";
 
 	public int age = -1;
 	public boolean primary = false;

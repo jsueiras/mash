@@ -15,7 +15,7 @@ public class Edge implements Serializable {
 	public final Arrows arrows = new Arrows();
 
 	/** Tooltip */
-	public String title;
+	public String title = "";
 
 	public Edge(String from, String to, String label) {
 		this.from = from;
