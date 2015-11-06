@@ -292,11 +292,14 @@ window.mash_graph_Network = function () {
     };
 
     function filterNullTitles() {
+        var filteredNodes = [];
         nodes.forEach(function (node) {
             if ("title" in node && node.title == null) {
                 delete node.title;
             }
+            filteredNodes.push(node);
         });
+        nodes.update(filteredNodes);
     }
 
     self.add = function (newNodes, newEdges) {
