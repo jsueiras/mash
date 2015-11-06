@@ -291,14 +291,24 @@ window.mash_graph_Network = function () {
         client_onSelect(network.getSelectedNodes(), network.getSelectedEdges());
     };
 
+    function filterNullTitles() {
+        nodes.forEach(function (node) {
+            if ("title" in node && node.title == null) {
+                delete node.title;
+            }
+        });
+    }
+
     self.add = function (newNodes, newEdges) {
         nodes.add(JSON.parse(newNodes));
         edges.add(JSON.parse(newEdges));
+        filterNullTitles();
         network.redraw();
     };
 
     self.updateNodes = function (newNodes) {
         nodes.update(JSON.parse(newNodes));
+        filterNullTitles();
         network.redraw();
     };
 
@@ -316,6 +326,7 @@ window.mash_graph_Network = function () {
         var state = self.getState();
         nodes = new vis.DataSet(state.nodes);
         edges = new vis.DataSet(state.edges);
+        filterNullTitles();
         data = {
             nodes: nodes,
             edges: edges,
