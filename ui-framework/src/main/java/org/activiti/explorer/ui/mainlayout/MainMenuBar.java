@@ -19,6 +19,7 @@ import java.util.Map;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.explorer.Environments;
 import org.activiti.explorer.ExplorerApp;
 import org.activiti.explorer.I18nManager;
@@ -109,12 +110,13 @@ public class MainMenuBar extends HorizontalLayout {
     // User name + link to profile
     MenuBar profileMenu = new MenuBar();
     profileMenu.addStyleName(ExplorerLayout.STYLE_HEADER_PROFILE_BOX);
+    profileMenu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
     MenuItem rootItem = profileMenu.addItem(user.getFirstName() + " " + user.getLastName(), null);
     rootItem.setIcon(FontAwesome.USER);
     rootItem.setStyleName(ExplorerLayout.STYLE_HEADER_PROFILE_MENU);
 
-  
-    
+
+
     // Change password
     rootItem.addItem(i18nManager.getMessage(Messages.PASSWORD_CHANGE), new Command() {
       public void menuSelected(MenuItem selectedItem) {
@@ -136,7 +138,7 @@ public class MainMenuBar extends HorizontalLayout {
     setExpandRatio(profileMenu, 1.0f);
   }
 
- 
+
 
   // Listener classes
   private class ShowTasksClickListener implements ClickListener {
