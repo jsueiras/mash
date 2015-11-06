@@ -1,45 +1,36 @@
 package mash.graph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
+import com.mash.data.service.Repository;
+import com.mash.model.catalog.*;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-
 import mash.graph.Network.ClickEvent;
 import mash.graph.Network.ClickListener;
 import mash.graph.util.NetworkBuilder;
-
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.ExplorerApp;
-import org.activiti.explorer.ui.Images;
 import org.activiti.explorer.ui.form.custom.TriageSearchValue;
 import org.activiti.explorer.ui.mainlayout.ExplorerLayout;
-import org.activiti.explorer.ui.search.util.Decorator;
-import org.activiti.explorer.ui.util.ThemeImageColumnGenerator;
 
-import com.mash.data.service.Repository;
-import com.mash.model.catalog.Entity;
-import com.mash.model.catalog.Location;
-import com.mash.model.catalog.Marker;
-import com.mash.model.catalog.Occupant;
-import com.mash.model.catalog.Person;
-import com.mash.model.catalog.Relation;
-import com.mash.model.catalog.Source;
-import com.mash.model.catalog.SystemId;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class NetworkPanel extends VerticalSplitPanel {
 
 
 	private static final String TRIAGE_REASON = "triageReason";
 	private RuntimeService runtimeService;
-	private Network network = null;
 	private Repository mashRep;
-	private NetworkBuilder builder;
+
+	private NetworkWrapper networkWrapper;
+	private Network network = null;
 	private TabSheet detailTabSheet;
+
+	private NetworkBuilder builder;
 	private String taskName;
 
 	public NetworkPanel() {
@@ -58,25 +49,24 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	public void setRootEntity(boolean isLocation, String id) {
-		setFirstComponent(null);
 		if (id != null) {
 			network = initNetwork(isLocation, id);
 			network.addClickListener(ClickEvent.Name.selectNode, getNodeSelectionListener());
-			setFirstComponent(network);
+			setFirstComponent(new NetworkWrapper(network));
 		}
 	}
 
 	public void initTask(Task task) {
-		setFirstComponent(null);
 		taskName = task.getName();
 		Object value = runtimeService.getVariable(task.getProcessInstanceId(), TRIAGE_REASON);
 		if (value != null) {
 			TriageSearchValue reason = TriageSearchValue.stringToObject((String) value);
 
 			if (reason != null && reason.getNetworkState() != null) {
+				Network old = network;
 				network = new Network(reason.getNetworkState().nodes, reason.getNetworkState().edges);
 				network.addClickListener(ClickEvent.Name.selectNode, getNodeSelectionListener());
-				setFirstComponent(network);
+				setFirstComponent(new NetworkWrapper(network));
 			}
 		}
 	}
@@ -134,33 +124,30 @@ public class NetworkPanel extends VerticalSplitPanel {
 		List<Entity> primaryLinks;
 		if (isLocation) {
 			primaryLinks = getLocationPrimaryLinks(id);
-			builder.addNodesToNetwork(state, primaryLinks,true);
+			builder.addNodesToNetwork(state, primaryLinks, true);
 
 		} else {
 			primaryLinks = getPersonPrimaryLinks(id);
-			builder.addNodesToNetwork(state, primaryLinks,true);
+			builder.addNodesToNetwork(state, primaryLinks, true);
 		}
 		populateDetail(primaryLinks.get(0));
-		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state,primaryLinks));
+		fireEvent(new NetworkChangeEvent(NetworkPanel.this, state, primaryLinks));
 
 		return new Network(state.nodes, state.edges);
 
 	}
 
-	private void populateDetail(Entity entity)
-	{
-		 detailTabSheet.removeAllComponents();
-		 if (entity.getWarningMarkers().size()>0)
-		 {
-			 detailTabSheet.addTab(createTabDetail(entity.getWarningMarkers()),"Warning Markers");
-		 }	 
-		for (Source source : entity.getSources()) {
-			detailTabSheet.addTab(createTabDetail(source),source.getAgency());
+	private void populateDetail(Entity entity) {
+		detailTabSheet.removeAllComponents();
+		if (entity.getWarningMarkers().size() > 0) {
+			detailTabSheet.addTab(createTabDetail(entity.getWarningMarkers()), "Warning Markers");
 		}
-	     setSecondComponent(detailTabSheet);
+		for (Source source : entity.getSources()) {
+			detailTabSheet.addTab(createTabDetail(source), source.getAgency());
+		}
 
-			setSplitPosition(175, Unit.PIXELS, true);
-			setLocked(false);
+		setSplitPosition(175, Unit.PIXELS, true);
+		setLocked(false);
 	}
 
 	private Component createTabDetail(List<Marker> warningMarkers) {
@@ -168,15 +155,16 @@ public class NetworkPanel extends VerticalSplitPanel {
 		Table sourcesTable = new Table();
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
-		sourcesTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+		sourcesTable.setColumnHeaderMode(Table.ColumnHeaderMode.EXPLICIT_DEFAULTS_ID);
 
-	
+
 		sourcesTable.addContainerProperty("Type", String.class, null);
 		sourcesTable.addContainerProperty("Value", String.class, null);
 		sourcesTable.addContainerProperty("Description", String.class, null);
-		
+
 		for (Marker marker : warningMarkers) {
-			sourcesTable.addItem(new Object[]{marker.getType(),marker.getValue(),marker.getDescription()},marker.getKey());
+			sourcesTable.addItem(new Object[]{marker.getType(), marker.getValue(), marker.getDescription()},
+					marker.getKey());
 		}
 		sourcesTable.setPageLength(warningMarkers.size());
 
@@ -192,15 +180,16 @@ public class NetworkPanel extends VerticalSplitPanel {
 		Table sourcesTable = new Table();
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_TASK_LIST);
 		sourcesTable.addStyleName(ExplorerLayout.STYLE_SCROLLABLE);
-		sourcesTable.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_EXPLICIT_DEFAULTS_ID);
+		sourcesTable.setColumnHeaderMode(Table.ColumnHeaderMode.EXPLICIT_DEFAULTS_ID);
 
-	
+
 		sourcesTable.addContainerProperty("System", String.class, null);
 		sourcesTable.addContainerProperty("Id", String.class, null);
-		
 
-		for ( SystemId id : source.getSystemIds()) {
-			sourcesTable.addItem(new Object[]{id.getSystem(), id.getSourceId()},String.format("%s|||%s", id.getSystem() , id.getSourceId()));
+
+		for (SystemId id : source.getSystemIds()) {
+			sourcesTable.addItem(new Object[]{id.getSystem(), id.getSourceId()},
+					String.format("%s|||%s", id.getSystem(), id.getSourceId()));
 		}
 		sourcesTable.setPageLength(source.getSystemIds().size());
 
@@ -211,7 +200,7 @@ public class NetworkPanel extends VerticalSplitPanel {
 	}
 
 	private VerticalLayout createLayout() {
-		VerticalLayout tab =new VerticalLayout();
+		VerticalLayout tab = new VerticalLayout();
 		tab.setDefaultComponentAlignment(Alignment.TOP_CENTER);
 		tab.setSizeFull();
 		return tab;
@@ -221,9 +210,8 @@ public class NetworkPanel extends VerticalSplitPanel {
 		addListener(listener);
 	}
 
-    public ClickListener getNodeSelectionListener()
-    {
-    	return new ClickListener() {
+	public ClickListener getNodeSelectionListener() {
+		return new ClickListener() {
 
 			@Override
 			public void clicked(ClickEvent event) {
@@ -237,13 +225,12 @@ public class NetworkPanel extends VerticalSplitPanel {
 				List<String> ids = new ArrayList<String>();
 				ids.add(event.selectedNodeIds[0]);
 				List<Entity> entities = mashRep.findEntitiesById(ids, ExplorerApp.get().getSecurityInfo(taskName));
-				if (isNodeUnexplored(event.selectedNodeIds[0]))
-				{
+				if (isNodeUnexplored(event.selectedNodeIds[0])) {
 					NetworkState state = new NetworkState();
 					Node expanded = builder.addNodesToNetwork(state, entities.get(0));
 					network.updateNodes(expanded);
 					network.add(state.nodes, state.edges);
-					fireEvent(new NetworkChangeEvent(NetworkPanel.this, network.getState(),entities,true));
+					fireEvent(new NetworkChangeEvent(NetworkPanel.this, network.getState(), entities, true));
 
 				}
 				return entities;
@@ -251,13 +238,24 @@ public class NetworkPanel extends VerticalSplitPanel {
 
 			private boolean isNodeUnexplored(String id) {
 				for (Node node : network.getState().nodes) {
-					if (node.id.equals(id))
-					{
+					if (node.id.equals(id)) {
 						return node.group.isUnexplored();
 					}
 				}
 				return false;
 			}
 		};
-    }
+	}
+
+	private class NetworkWrapper extends CssLayout {
+
+		public NetworkWrapper(Network network) {
+			setSizeFull();
+			addComponent(new Label("<i class='fa fa-lightbulb-o'></i> Tip: Zoom in/out with the mouse wheel",
+					ContentMode.HTML) {{
+				addStyleName("tip");
+			}});
+			addComponent(network);
+		}
+	}
 }
