@@ -42,7 +42,7 @@ public class NetworkBuilder {
 	private String getLabel(Location location) {
 		if (location == null)
 			return "";
-		return String.format("%s %s %s", location.getNumberOrName(), location.getStreet(), location.getCity());
+		return String.format("%s %s \n %s", location.getNumberOrName(), location.getStreet(), location.getCity());
 	}
 
 	private String getId(Entity entity) {
