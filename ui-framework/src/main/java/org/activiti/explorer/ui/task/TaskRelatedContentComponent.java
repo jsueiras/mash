@@ -95,7 +95,7 @@ public class TaskRelatedContentComponent extends VerticalLayout implements Relat
 
   protected void initActions() {
     HorizontalLayout actionsContainer = new HorizontalLayout();
-    actionsContainer.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+    actionsContainer.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
     actionsContainer.setSizeFull();
     actionsContainer.setSpacing(true);
 

@@ -87,7 +87,7 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
   protected void initHeader() {
     HorizontalLayout headerLayout = new HorizontalLayout();
     headerLayout.setWidth(100, Unit.PERCENTAGE);
-    headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+    headerLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
     headerLayout.setSpacing(true);
     layout.addComponent(headerLayout);
 
