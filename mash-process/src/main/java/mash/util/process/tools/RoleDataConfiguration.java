@@ -89,7 +89,7 @@ private ProcessEngine processEngine;
 
 private static final String[] assignmentIds = new String[] {"children_stf", "children_stk", "adults_stf", "adults_stk", "mentalhealth_north","mentalhealth_south","police"};
 
-private static final String[] otherAssignmentIds = new String[]{"probation","nHS"};
+private static final String[] otherAssignmentIds = new String[]{"r_probation","r_nhs"};
 private static final String[] assignmentGroups = new String[] {"Children Staffordshire", "Children Stoke", "Adults Staffordshire", "Adults Stoke", "Mental Health North","Mental Health South","Police"};
 private static final String[] otherAssignmentGroups= new String[]{"Probation","NHS"};
  
@@ -111,6 +111,12 @@ protected void initGroups() {
       createGroup("d_" + groupId, "Decision " +groupName ,"assignment");
       i++;
     }
+    i=0;
+    for (String groupName : otherAssignmentGroups) {
+        String groupId = otherAssignmentIds[i];
+        createGroup( groupId, groupName ,"assignment");
+        i++;
+      }
     
 
   }
@@ -123,9 +129,31 @@ protected void initGroups() {
 		    	deleteGroup("d_" + groupId);
 	     
 	    }
-	    
-
-	  }
+		    
+		    for (String groupId : otherAssignmentIds) {
+		       deleteGroup(groupId);
+		      }
+		    
+  	  }
+  
+  protected void removeUsers() {
+	  for (String id : assignmentIds) {
+	    	String tempid = "t_" + id;
+	       identityService.deleteUser(tempid);
+	        tempid = "r_" + id;
+	    	  identityService.deleteUser(tempid);
+	    	 tempid = "d_" + id;
+	    	 identityService.deleteUser(tempid);
+	         
+	    }
+	  
+	  for (String id : otherAssignmentIds) {
+	    	
+	       identityService.deleteUser(id);
+	         
+	    }
+	   
+  }
   protected void deleteGroup(String groupId) {
 	    if (identityService.createGroupQuery().groupId(groupId).count() > 0) {
 	     
@@ -144,20 +172,7 @@ protected void initGroups() {
   }
 
   protected void initUsers() {
-//    createUser("kermit", "Kermit", "The Frog", "kermit", "kermit@activiti.org", 
-//            "org/activiti/explorer/images/kermit.jpg",
-//            Arrays.asList("management", "sales", "marketing", "engineering", "user", "admin"),
-//            Arrays.asList("birthDate", "10-10-1955", "jobTitle", "Muppet", "location", "Hollywoord",
-//                          "phone", "+123456789", "twitterName", "alfresco", "skype", "activiti_kermit_frog"));
-//    
-//    createUser("gonzo", "Gonzo", "The Great", "gonzo", "gonzo@activiti.org", 
-//            "org/activiti/explorer/images/gonzo.jpg",
-//            Arrays.asList("management", "sales", "marketing", "user"),
-//            null);
-//    createUser("fozzie", "Fozzie", "Bear", "fozzie", "fozzie@activiti.org", 
-//            "org/activiti/explorer/images/fozzie.jpg",
-//            Arrays.asList("marketing", "engineering", "user"),
-//            null);
+
     
     for (String id : assignmentIds) {
     	String tempid = "t_" + id;
@@ -171,6 +186,12 @@ protected void initGroups() {
     	 identityService.createMembership("kermit", tempid);
          
     }
+    for (String id : otherAssignmentIds) 
+    {
+    	   createUser(id,id, null, "password",null,null, Arrays.asList(id),null);
+           identityService.createMembership("kermit", id);
+        
+    } 	
   }
   
   protected void createUser(String userId, String firstName, String lastName, String password, 
@@ -311,8 +332,19 @@ public static void main(String[] args) {
 	  
 	  RoleDataConfiguration data = new RoleDataConfiguration(processEngine);
 	  
-	  data.initGroups();
-	  data.initUsers();
+	  if ( args.length >0  && args[0].contains("delete"))
+	  {	
+		  data.removeUsers();
+	     data.removeGroups();
+	     System.out.println("auth info deleteted");
+	  }
+	  else
+	  {	  
+		  data.initGroups();
+	      data.initUsers();
+	      System.out.println("auth info created");
+	  }
+	  
 	  
 	  System.out.println("end");
 	
