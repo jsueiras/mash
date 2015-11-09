@@ -54,6 +54,21 @@
     }
   }
 
+  .v-button-link {
+    padding: 0;
+  }
+
+  .v-horizontallayout-wrapping {
+    .v-slot {
+      margin-right: 12px;
+
+      .v-caption {
+        display: inline-block;
+        padding-right: 6px;
+      }
+    }
+  }
+
   .v-splitpanel-horizontal {
     @extend .v-splitpanel-horizontal.large;
   }
