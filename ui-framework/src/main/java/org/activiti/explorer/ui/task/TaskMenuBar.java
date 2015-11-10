@@ -134,19 +134,20 @@ private ProcessDefinition mashDefinition;
   }
 
   protected void initActions() {
-    Button newCaseButton = new Button();
-    newCaseButton.setCaption("Search");
-    newCaseButton.setIcon(FontAwesome.SEARCH);
-    newCaseButton.setHtmlContentAllowed(true);
-    addButton(newCaseButton);
-
-    newCaseButton.addListener(new ClickListener() {
-      public void buttonClick(ClickEvent event) {
-        SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
-        searchPopupWindow.addSearchListener(searchListener);
-        viewManager.showPopupWindow(searchPopupWindow);
-      }
-    });
+	  //The search button is only available from the triage form
+//    Button newCaseButton = new Button();
+//    newCaseButton.setCaption("Search");
+//    newCaseButton.setIcon(FontAwesome.SEARCH);
+//    newCaseButton.setHtmlContentAllowed(true);
+//    addButton(newCaseButton);
+//
+//    newCaseButton.addListener(new ClickListener() {
+//      public void buttonClick(ClickEvent event) {
+//        SearchPopupWindow searchPopupWindow = new SearchPopupWindow();
+//        searchPopupWindow.addSearchListener(searchListener);
+//        viewManager.showPopupWindow(searchPopupWindow);
+//      }
+//    });
 
     addProcessButton( "New Triage", FontAwesome.PLUS, triageDefinition);
     addProcessButton( "Open Triage", FontAwesome.FOLDER_OPEN, mashDefinition);
