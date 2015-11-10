@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,6 +12,7 @@
  */
 package org.activiti.explorer.ui.task;
 
+import com.vaadin.server.FontAwesome;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.I18nManager;
@@ -29,35 +30,37 @@ import com.vaadin.ui.CssLayout;
 public class PriorityComponent extends CssLayout {
 
   private static final long serialVersionUID = 1L;
-  
+
   protected Task task;
   protected I18nManager i18nManager;
   protected transient TaskService taskService;
-  
+
   protected PriorityLabel priorityLabel;
   protected PriorityComboBox priorityComboBox;
-  
+
   public PriorityComponent(Task task, I18nManager i18nManager, TaskService taskService) {
     this.task = task;
     this.i18nManager = i18nManager;
     this.taskService = taskService;
-    
+
     setSizeUndefined();
+    setIcon(FontAwesome.FLAG);
+
     initPriorityLabel();
     initPriorityComboBox();
     initLayoutClickListener();
     initComboBoxListener();
   }
-  
+
   protected void initPriorityLabel() {
     priorityLabel = new PriorityLabel(task, i18nManager);
     addComponent(priorityLabel);
   }
-  
+
   protected void initPriorityComboBox() {
     priorityComboBox = new PriorityComboBox(i18nManager, priorityLabel.getValue());
   }
-  
+
   protected void initLayoutClickListener() {
     addListener(new LayoutClickListener() {
       public void layoutClick(LayoutClickEvent event) {
@@ -68,14 +71,14 @@ public class PriorityComponent extends CssLayout {
       }
     });
   }
-  
+
   protected void initComboBoxListener() {
     priorityComboBox.addListener(new ValueChangeListener() {
       public void valueChange(ValueChangeEvent event) {
         // save new priority
         task.setPriority(priorityComboBox.getPriority());
         taskService.saveTask(task);
-        
+
         // Replace again with label
         priorityLabel.setInnerValue(task.getPriority());
         replaceComponent(priorityComboBox, priorityLabel);

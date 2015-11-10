@@ -1,9 +1,9 @@
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +14,7 @@ package org.activiti.explorer.ui.task;
 
 import java.util.Date;
 
+import com.vaadin.server.FontAwesome;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.explorer.I18nManager;
@@ -34,13 +35,13 @@ import com.vaadin.ui.Label;
  * @author Joram Barrez
  */
 public class DueDateComponent extends CssLayout {
-  
-  
+
+
   private static final long serialVersionUID = 1L;
   protected Task task;
   protected I18nManager i18nManager;
   protected transient TaskService taskService;
-  
+
   protected Label dueDateLabel;
   protected DateField dueDateField;
 
@@ -48,14 +49,16 @@ public class DueDateComponent extends CssLayout {
     this.task = task;
     this.i18nManager = i18nManager;
     this.taskService = taskService;
-    
+
     setSizeUndefined();
+    setIcon(FontAwesome.CALENDAR);
+
     initDueDateLabel();
     initDueDateField();
     initLayoutClickListener();
     initDueDateFieldListener();
   }
-  
+
   protected void initDueDateLabel() {
     dueDateLabel = new PrettyTimeLabel(i18nManager, i18nManager.getMessage(Messages.TASK_DUEDATE_SHORT),
             task.getDueDate(), i18nManager.getMessage(Messages.TASK_DUEDATE_UNKNOWN), false);
@@ -64,7 +67,7 @@ public class DueDateComponent extends CssLayout {
     dueDateLabel.addStyleName(ExplorerLayout.STYLE_CLICKABLE);
     addComponent(dueDateLabel);
   }
-  
+
   protected void initDueDateField() {
     dueDateField = new DateField();
     if (task.getDueDate() != null) {
@@ -76,18 +79,18 @@ public class DueDateComponent extends CssLayout {
     dueDateField.setResolution(DateField.RESOLUTION_DAY);
     dueDateField.setImmediate(true);
   }
-  
+
   protected void initLayoutClickListener() {
     addListener(new LayoutClickListener() {
       public void layoutClick(LayoutClickEvent event) {
-        if (event.getClickedComponent() != null && event.getClickedComponent().equals(dueDateLabel)) { 
+        if (event.getClickedComponent() != null && event.getClickedComponent().equals(dueDateLabel)) {
           // replace label with textfield
           replaceComponent(dueDateLabel, dueDateField);
         }
       }
     });
   }
-  
+
   protected void initDueDateFieldListener() {
     dueDateField.addListener(new ValueChangeListener() {
       public void valueChange(ValueChangeEvent event) {
@@ -95,7 +98,7 @@ public class DueDateComponent extends CssLayout {
           // save new duedate
           task.setDueDate((Date) dueDateField.getValue());
           taskService.saveTask(task);
-          
+
           // replace with new label
           dueDateLabel.setValue(task.getDueDate().toGMTString());
           replaceComponent(dueDateField, dueDateLabel);
@@ -103,5 +106,5 @@ public class DueDateComponent extends CssLayout {
       }
     });
   }
-  
+
 }

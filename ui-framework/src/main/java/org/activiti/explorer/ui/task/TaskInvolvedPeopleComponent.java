@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.IdentityLink;
@@ -34,14 +36,8 @@ import org.activiti.explorer.ui.task.listener.ChangeOwnershipListener;
 import org.activiti.explorer.ui.task.listener.ReassignAssigneeListener;
 import org.activiti.explorer.ui.task.listener.RemoveInvolvedPersonListener;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 
 
 /**
@@ -90,7 +86,9 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
 
   protected void initHeader() {
     HorizontalLayout headerLayout = new HorizontalLayout();
-    headerLayout.setWidth(100, UNITS_PERCENTAGE);
+    headerLayout.setWidth(100, Unit.PERCENTAGE);
+    headerLayout.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
+    headerLayout.setSpacing(true);
     layout.addComponent(headerLayout);
 
     initTitle(headerLayout);
@@ -100,17 +98,20 @@ public class TaskInvolvedPeopleComponent extends CustomComponent {
   protected void initTitle(HorizontalLayout headerLayout) {
     title = new Label(i18nManager.getMessage(Messages.TASK_PEOPLE));
     title.addStyleName(ExplorerLayout.STYLE_H3);
-    title.setWidth(100, UNITS_PERCENTAGE);
+    title.setWidthUndefined();
     headerLayout.addComponent(title);
-    headerLayout.setExpandRatio(title, 1.0f);
+    headerLayout.setExpandRatio(title, 0);
   }
 
   protected void initAddPeopleButton(HorizontalLayout headerLayout) {
-    addPeopleButton = new Button();
+    addPeopleButton = new Button("Add");
     addPeopleButton.setId("add-people-button");
     addPeopleButton.addStyleName(ExplorerLayout.STYLE_ADD);
+    addPeopleButton.addStyleName(ValoTheme.BUTTON_QUIET);
+    addPeopleButton.addStyleName(ValoTheme.BUTTON_TINY);
     addPeopleButton.setIcon(FontAwesome.PLUS);
     headerLayout.addComponent(addPeopleButton);
+    headerLayout.setExpandRatio(addPeopleButton, 1);
 
     addPeopleButton.addListener(new ClickListener() {
 

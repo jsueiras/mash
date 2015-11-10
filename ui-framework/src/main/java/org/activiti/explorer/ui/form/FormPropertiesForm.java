@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.ui.themes.ValoTheme;
 import mash.graph.NetworkChangeListener;
 
 import org.activiti.engine.FormService;
@@ -107,7 +108,7 @@ public FormPropertiesForm() {
 
   protected void initTitle() {
     formTitle = new Label();
-    formTitle.addStyleName(ExplorerLayout.STYLE_H4);
+    formTitle.addStyleName(ValoTheme.LABEL_H3);
     formTitle.setVisible(false);
     addComponent(formTitle);
   }

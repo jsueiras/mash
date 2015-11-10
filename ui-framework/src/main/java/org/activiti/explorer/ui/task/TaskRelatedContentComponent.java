@@ -16,6 +16,7 @@ package org.activiti.explorer.ui.task;
 import java.util.List;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.themes.ValoTheme;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Attachment;
@@ -94,20 +95,23 @@ public class TaskRelatedContentComponent extends VerticalLayout implements Relat
 
   protected void initActions() {
     HorizontalLayout actionsContainer = new HorizontalLayout();
+    actionsContainer.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
     actionsContainer.setSizeFull();
+    actionsContainer.setSpacing(true);
 
     // Title
     Label processTitle = new Label(i18nManager.getMessage(Messages.TASK_RELATED_CONTENT));
     processTitle.addStyleName(ExplorerLayout.STYLE_H3);
-    processTitle.setSizeFull();
+    processTitle.setWidthUndefined();
     actionsContainer.addComponent(processTitle);
-    actionsContainer.setComponentAlignment(processTitle, Alignment.MIDDLE_LEFT);
-    actionsContainer.setExpandRatio(processTitle, 1.0f);
+    actionsContainer.setExpandRatio(processTitle, 0);
 
     // Add content button
-    Button addRelatedContentButton = new Button();
+    Button addRelatedContentButton = new Button("Add");
     addRelatedContentButton.setId("add-related-content-button");
     addRelatedContentButton.addStyleName(ExplorerLayout.STYLE_ADD);
+    addRelatedContentButton.addStyleName(ValoTheme.BUTTON_QUIET);
+    addRelatedContentButton.addStyleName(ValoTheme.BUTTON_TINY);
     addRelatedContentButton.setIcon(FontAwesome.PLUS);
     addRelatedContentButton.addClickListener(new com.vaadin.ui.Button.ClickListener() {
       private static final long serialVersionUID = 1L;
@@ -142,8 +146,7 @@ public class TaskRelatedContentComponent extends VerticalLayout implements Relat
     });
 
     actionsContainer.addComponent(addRelatedContentButton);
-    actionsContainer.setComponentAlignment(processTitle, Alignment.MIDDLE_RIGHT);
-
+    actionsContainer.setExpandRatio(addRelatedContentButton, 1);
 
     addComponent(actionsContainer);
   }
