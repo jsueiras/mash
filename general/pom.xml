@@ -6,8 +6,9 @@
   <packaging>pom</packaging>
   <modules>
    <module>../mash-model</module>
-   <module>../persistance</module>
   	<module>../mash-data-services</module>
+  	<module>../mash-process-util</module>
+  	<module>../mash-process</module>
   	<module>../ui-framework</module>
   </modules>
 </project>
